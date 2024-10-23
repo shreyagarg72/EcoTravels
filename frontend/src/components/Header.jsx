@@ -22,7 +22,7 @@ const Header = () => {
     <>
       <header className="bg-white shadow-md">
         <div
-          className={`container mx-auto flex justify-between items-center h-24 px-4 text-black ${
+          className={`container mx-auto flex justify-between items-center h-20 px-4 text-black ${
             showLoginModal ? "filter blur-md" : ""
           }`}
         >

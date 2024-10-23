@@ -40,7 +40,7 @@ const Home = () => {
       </div>
       <SearchBar />
 
-      <div className="flex items-center px-4">
+      <div className="flex items-center px-8 py-5">
         <PopularTrips />
       </div>
     </>

@@ -74,7 +74,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="mt-10 flex flex-col items-center">
+    <div className="mt-5 mb-5 flex flex-col items-center">
       <div className="relative w-1/3 flex flex-col items-center">
         {inputFields.map((field, index) => (
           <div key={field.id} className="relative w-full mb-4">
