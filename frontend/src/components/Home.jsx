@@ -2,10 +2,10 @@ import React from "react";
 import SearchBar from "./SearchBar";
 import PopularTrips from "./PopularTrips";
 
-const Home = () => {
+const Home = ({ showLoginModal }) => {
   return (
     <>
-      <div className="bg-gradient-to-r from-green-300 to-blue-300 py-16">
+      <div className={`bg-gradient-to-r from-green-300 to-blue-300 py-16 ${showLoginModal ? "blur-sm" : ""}`}>
       <div className="text-center">
   <div className="flex justify-center items-center space-x-2">
     <div className="flex flex-col items-center">
@@ -38,10 +38,10 @@ const Home = () => {
 </div>
 
       </div>
-      <SearchBar />
+      <SearchBar showLoginModal={showLoginModal} />
 
       <div className="flex items-center px-8 py-5">
-        <PopularTrips />
+        <PopularTrips showLoginModal={showLoginModal}/>
       </div>
     </>
   );

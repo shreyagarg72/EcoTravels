@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-const SearchBar = () => {
+const SearchBar = ({showLoginModal}) => {
   const [inputFields, setInputFields] = useState([
     { id: Date.now(), value: "", showDropdown: false },
   ]);
@@ -74,7 +74,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="mt-5 mb-5 flex flex-col items-center">
+    <div className={`mt-5 mb-5 flex flex-col items-center  ${showLoginModal ? 'blur-sm' : ''}`}>
       <div className="relative w-1/3 flex flex-col items-center">
         {inputFields.map((field, index) => (
           <div key={field.id} className="relative w-full mb-4">

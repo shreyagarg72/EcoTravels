@@ -14,19 +14,55 @@
 // }
 
 // export default App
-import React from 'react';
+// import React from 'react';
+// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// import Header from './components/Header';
+// import Home from './components/Home';
+
+// function App() {
+//   return (
+//     <Router>
+//       <div>
+//         <Header />
+//         <Routes>
+//           {/* Define route for the home page */}
+//           <Route path="/" element={<Home />} />
+//         </Routes>
+//       </div>
+//     </Router>
+//   );
+// }
+
+// export default App;
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
 
 function App() {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const handleLoginClick = () => {
+    setShowLoginModal(true);
+  };
+
+  const closeModal = () => {
+    setShowLoginModal(false);
+  };
+
   return (
     <Router>
       <div>
-        <Header />
+        {/* Pass modal state and functions to Header */}
+        <Header 
+          showLoginModal={showLoginModal} 
+          handleLoginClick={handleLoginClick} 
+          closeModal={closeModal} 
+        />
+        
         <Routes>
-          {/* Define route for the home page */}
-          <Route path="/" element={<Home />} />
+          {/* Pass modal state to Home */}
+          <Route path="/" element={<Home showLoginModal={showLoginModal} />} />
         </Routes>
       </div>
     </Router>
