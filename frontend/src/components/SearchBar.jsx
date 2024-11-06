@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 const SearchBar = ({showLoginModal}) => {
+  const navigate = useNavigate(); 
   const [inputFields, setInputFields] = useState([
     { id: Date.now(), value: "", showDropdown: false },
   ]);
@@ -72,7 +73,11 @@ const SearchBar = ({showLoginModal}) => {
       { id: Date.now(), value: "", showDropdown: false },
     ]);
   };
-
+  const handleSearchClick = () => {
+    if (selectedCities.length > 0) {
+      navigate("/travel-options"); // Navigate to TravelOptions page
+    }
+  };
   return (
     <div className={`mt-5 mb-5 flex flex-col items-center  ${showLoginModal ? 'blur-sm' : ''}`}>
       <div className="relative w-1/3 flex flex-col items-center">
@@ -145,7 +150,7 @@ const SearchBar = ({showLoginModal}) => {
         ))}
 
         {selectedCities.length > 0 && (
-          <button className="mt-4 bg-green-700 text-white py-2 px-4 rounded-full">
+          <button  onClick={handleSearchClick} className="mt-4 bg-green-700 text-white py-2 px-4 rounded-full">
             Search
           </button>
         )}
