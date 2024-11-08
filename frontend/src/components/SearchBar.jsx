@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-const SearchBar = ({showLoginModal}) => {
-  const navigate = useNavigate(); 
+import { useNavigate } from "react-router-dom";
+
+const SearchBar = ({ showLoginModal }) => {
+  const navigate = useNavigate();
   const [inputFields, setInputFields] = useState([
     { id: Date.now(), value: "", showDropdown: false },
   ]);
@@ -27,7 +27,7 @@ const SearchBar = ({showLoginModal}) => {
       setLoading(true); // Show loading state
       try {
         const response = await fetch(
-          "https://api.countrystatecity.in/v1/countries/IN/cities", // Fetch city names
+          "https://api.countrystatecity.in/v1/countries/IN/cities",
           requestOptions
         );
         const data = await response.json();
@@ -59,12 +59,17 @@ const SearchBar = ({showLoginModal}) => {
   };
 
   const handleCitySelect = (id, cityName) => {
-    setSelectedCities((prev) => [...prev, cityName]);
+    const updatedCities = [...selectedCities, cityName];
+    setSelectedCities(updatedCities);
     setInputFields(
       inputFields.map((field) =>
         field.id === id ? { ...field, value: cityName, showDropdown: false } : field
       )
     );
+
+    // Store the updated selected cities in localStorage and log it to the console
+    localStorage.setItem("selectedCities", JSON.stringify(updatedCities));
+    console.log("Selected Cities:", updatedCities);
   };
 
   const handlePlusClick = () => {
@@ -73,13 +78,15 @@ const SearchBar = ({showLoginModal}) => {
       { id: Date.now(), value: "", showDropdown: false },
     ]);
   };
+
   const handleSearchClick = () => {
     if (selectedCities.length > 0) {
       navigate("/travel-options"); // Navigate to TravelOptions page
     }
   };
+
   return (
-    <div className={`mt-5 mb-5 flex flex-col items-center  ${showLoginModal ? 'blur-sm' : ''}`}>
+    <div className={`mt-5 mb-5 flex flex-col items-center ${showLoginModal ? 'blur-sm' : ''}`}>
       <div className="relative w-1/3 flex flex-col items-center">
         {inputFields.map((field, index) => (
           <div key={field.id} className="relative w-full mb-4">
@@ -130,17 +137,17 @@ const SearchBar = ({showLoginModal}) => {
                   cities
                     .filter(
                       (city) =>
-                        city.name && // Ensure city.name is defined
-                        city.name.toLowerCase().includes(field.value.toLowerCase()) && // Match with input
-                        !selectedCities.includes(city.name) // Exclude already selected cities
+                        city.name &&
+                        city.name.toLowerCase().includes(field.value.toLowerCase()) &&
+                        !selectedCities.includes(city.name)
                     )
                     .map((city) => (
                       <div
-                        key={city.id} // Use city.id as the unique key
+                        key={city.id}
                         className="cursor-pointer p-2 hover:bg-gray-200"
                         onClick={() => handleCitySelect(field.id, city.name)}
                       >
-                        {city.name} {/* Display city name */}
+                        {city.name}
                       </div>
                     ))
                 )}
@@ -150,7 +157,7 @@ const SearchBar = ({showLoginModal}) => {
         ))}
 
         {selectedCities.length > 0 && (
-          <button  onClick={handleSearchClick} className="mt-4 bg-green-700 text-white py-2 px-4 rounded-full">
+          <button onClick={handleSearchClick} className="mt-4 bg-green-700 text-white py-2 px-4 rounded-full">
             Search
           </button>
         )}
