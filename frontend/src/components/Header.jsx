@@ -271,6 +271,66 @@
 // };
 
 // export default Header;
+// import React from 'react';
+// import { Link } from 'react-router-dom';
+// import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+// import LoginModal from './LoginModal'; // Import the modal component
+
+// const Header = ({ showLoginModal, handleLoginClick, closeModal }) => {
+//   const [nav, setNav] = React.useState(false);
+
+//   const handleNav = () => {
+//     setNav(!nav);
+//   };
+
+//   return (
+//     <>
+//       <header className={`bg-white shadow-md ${showLoginModal ? "blur-sm" : ""}`}>
+//         <div className="container mx-auto flex justify-between items-center h-20 px-4 text-black">
+//           <div className="flex items-center">
+//             <span className="font-poppins font-bold text-2xl text-black-500">
+//               EcoTravels
+//             </span>
+//             <img src="/ecotravel_globe.png" alt="Logo" className="w-10 h-10 ml-2" />
+//           </div>
+
+//           <nav className="hidden md:flex space-x-6">
+//             <Link to="/" className="text-gray-700 hover:text-green-500">Discover</Link>
+//             <Link to="/trips" className="text-gray-700 hover:text-green-500">Trips</Link>
+//             <Link to="/rewards" className="text-gray-700 hover:text-green-500">Rewards</Link>
+//             <Link to="/reviews" className="text-gray-700 hover:text-green-500">Reviews</Link>
+//           </nav>
+
+//           <div className="hidden md:block">
+//             <button className="bg-green-500 text-white py-2 px-4 rounded-full" onClick={handleLoginClick}>
+//               Log In / Sign Up
+//             </button>
+//           </div>
+
+//           <div onClick={handleNav} className="block md:hidden">
+//             {nav ? <AiOutlineClose size={24} /> : <AiOutlineMenu size={24} />}
+//           </div>
+
+//           <ul className={nav ? "fixed left-0 top-0 w-[60%] h-full border-r bg-black" : "fixed left-[-100%]"}>
+//             <li className="p-4 border-b border-gray-600"><Link to="/" onClick={handleNav}>Discover</Link></li>
+//             <li className="p-4 border-b border-gray-600"><Link to="/trips" onClick={handleNav}>Trips</Link></li>
+//             <li className="p-4 border-b border-gray-600"><Link to="/rewards" onClick={handleNav}>Rewards</Link></li>
+//             <li className="p-4 border-b border-gray-600"><Link to="/reviews" onClick={handleNav}>Reviews</Link></li>
+//             <li className="p-4">
+//               <button className="bg-green-500 text-white py-2 px-4 rounded-full" onClick={handleLoginClick}>
+//                 Log In / Sign Up
+//               </button>
+//             </li>
+//           </ul>
+//         </div>
+//       </header>
+
+//       <LoginModal showModal={showLoginModal} closeModal={closeModal} />
+//     </>
+//   );
+// };
+
+// export default Header;
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
@@ -291,7 +351,11 @@ const Header = ({ showLoginModal, handleLoginClick, closeModal }) => {
             <span className="font-poppins font-bold text-2xl text-black-500">
               EcoTravels
             </span>
-            <img src="/ecotravel_globe.png" alt="Logo" className="w-10 h-10 ml-2" />
+            <img 
+              src="/ecotravel_globe.png" 
+              alt="EcoTravels logo" 
+              className="w-10 h-10 ml-2" 
+            />
           </div>
 
           <nav className="hidden md:flex space-x-6">
@@ -302,22 +366,31 @@ const Header = ({ showLoginModal, handleLoginClick, closeModal }) => {
           </nav>
 
           <div className="hidden md:block">
-            <button className="bg-green-500 text-white py-2 px-4 rounded-full" onClick={handleLoginClick}>
+            <button 
+              className="bg-green-500 text-white py-2 px-4 rounded-full" 
+              onClick={handleLoginClick}
+              aria-label="Open Login Modal"
+            >
               Log In / Sign Up
             </button>
           </div>
 
-          <div onClick={handleNav} className="block md:hidden">
+          <div onClick={handleNav} className="block md:hidden cursor-pointer">
             {nav ? <AiOutlineClose size={24} /> : <AiOutlineMenu size={24} />}
           </div>
 
-          <ul className={nav ? "fixed left-0 top-0 w-[60%] h-full border-r bg-black" : "fixed left-[-100%]"}>
+          {/* Mobile Menu */}
+          <ul className={`fixed left-0 top-0 w-[60%] h-full bg-black text-white transition-transform duration-300 ease-in-out ${nav ? 'transform-none' : 'transform -translate-x-full'}`}>
             <li className="p-4 border-b border-gray-600"><Link to="/" onClick={handleNav}>Discover</Link></li>
             <li className="p-4 border-b border-gray-600"><Link to="/trips" onClick={handleNav}>Trips</Link></li>
             <li className="p-4 border-b border-gray-600"><Link to="/rewards" onClick={handleNav}>Rewards</Link></li>
             <li className="p-4 border-b border-gray-600"><Link to="/reviews" onClick={handleNav}>Reviews</Link></li>
             <li className="p-4">
-              <button className="bg-green-500 text-white py-2 px-4 rounded-full" onClick={handleLoginClick}>
+              <button 
+                className="bg-green-500 text-white py-2 px-4 rounded-full" 
+                onClick={handleLoginClick}
+                aria-label="Open Login Modal"
+              >
                 Log In / Sign Up
               </button>
             </li>
@@ -325,6 +398,7 @@ const Header = ({ showLoginModal, handleLoginClick, closeModal }) => {
         </div>
       </header>
 
+      {/* Login Modal */}
       <LoginModal showModal={showLoginModal} closeModal={closeModal} />
     </>
   );
