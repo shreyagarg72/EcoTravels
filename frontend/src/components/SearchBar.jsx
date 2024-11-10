@@ -209,7 +209,7 @@ const SearchBar = ({ showLoginModal }) => {
   useEffect(() => {
     const fetchCities = async () => {
       const headers = new Headers();
-      headers.append("X-CSCAPI-KEY", "V2xQekpMdk9SWkdjSmQ1NjRrd0FEM2JQdmo3TnBjUjNyVFhoT0lmVw=="); // Replace with your actual API key
+      headers.append("X-CSCAPI-KEY", `${import.meta.env.VITE_CITY_SECRET}`); // Replace with your actual API key
 
       const requestOptions = {
         method: "GET",
@@ -237,7 +237,7 @@ const SearchBar = ({ showLoginModal }) => {
 
   // Fetch coordinates for a selected city using Geoapify Geocoding API
   const fetchCoordinates = async (cityName) => {
-    const apiKey = "eb5f940831094f09b1e6bad3018bec9c"; // Replace with your actual Geoapify API key
+    const apiKey = import.meta.env.VITE_GEO_API; // Replace with your actual Geoapify API key
     const geocodeUrl = `https://api.geoapify.com/v1/geocode/search?text=${cityName}&apiKey=${apiKey}`;
     try {
       const response = await fetch(geocodeUrl);

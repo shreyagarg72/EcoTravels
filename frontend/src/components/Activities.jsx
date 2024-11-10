@@ -77,7 +77,7 @@ const Activities = () => {
   const [selectedCities, setSelectedCities] = useState([]);
   const [activities, setActivities] = useState({});
   
-  const geoapifyApiKey = "eb5f940831094f09b1e6bad3018bec9c"; // Replace with your Geoapify API key
+  const geoapifyApiKey = import.meta.env.VITE_GEO_API; // Replace with your Geoapify API key
 
   useEffect(() => {
     // Retrieve selected cities from localStorage
