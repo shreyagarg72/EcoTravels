@@ -26,7 +26,7 @@ function App() {
         
         <Routes>
           <Route path="/" element={<Home showLoginModal={showLoginModal} />} />
-          <Route path="/travel-options" element={<TravelOptions />} /> {/* New Route */}
+          <Route path="/travel-options" element={<TravelOptions showLoginModal={showLoginModal}/>} /> {/* New Route */}
         </Routes>
       </div>
     </Router>
