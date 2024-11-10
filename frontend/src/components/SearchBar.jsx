@@ -42,6 +42,28 @@
 //     fetchCities();
 //   }, []);
 
+//   // Fetch coordinates for a selected city using Geoapify Geocoding API
+//   const fetchCoordinates = async (cityName) => {
+//     const apiKey = "eb5f940831094f09b1e6bad3018bec9c"; // Replace with your actual Geoapify API key
+//     const geocodeUrl = `https://api.geoapify.com/v1/geocode/search?text=${cityName}&apiKey=${apiKey}`;
+//     try {
+//       const response = await fetch(geocodeUrl);
+//       const data = await response.json();
+//       if (data.features && data.features.length > 0) {
+//         const city = data.features[0];
+//         return {
+//           cityName,
+//           latitude: city.geometry.coordinates[1],
+//           longitude: city.geometry.coordinates[0],
+//         };
+//       } else {
+//         throw new Error("City not found");
+//       }
+//     } catch (error) {
+//       console.error("Error fetching city coordinates:", error);
+//     }
+//   };
+
 //   const handleInputFocus = (id) => {
 //     setInputFields(
 //       inputFields.map((field) =>
@@ -58,18 +80,21 @@
 //     );
 //   };
 
-//   const handleCitySelect = (id, cityName) => {
-//     const updatedCities = [...selectedCities, cityName];
-//     setSelectedCities(updatedCities);
-//     setInputFields(
-//       inputFields.map((field) =>
-//         field.id === id ? { ...field, value: cityName, showDropdown: false } : field
-//       )
-//     );
+//   const handleCitySelect = async (id, cityName) => {
+//     const cityCoordinates = await fetchCoordinates(cityName);
+//     if (cityCoordinates) {
+//       const updatedCities = [...selectedCities, cityCoordinates];
+//       setSelectedCities(updatedCities);
+//       setInputFields(
+//         inputFields.map((field) =>
+//           field.id === id ? { ...field, value: cityName, showDropdown: false } : field
+//         )
+//       );
 
-//     // Store the updated selected cities in localStorage and log it to the console
-//     localStorage.setItem("selectedCities", JSON.stringify(updatedCities));
-//     console.log("Selected Cities:", updatedCities);
+//       // Store the updated selected cities (with coordinates) in localStorage
+//       localStorage.setItem("selectedCities", JSON.stringify(updatedCities));
+//       console.log("Selected Cities with Coordinates:", updatedCities);
+//     }
 //   };
 
 //   const handlePlusClick = () => {
@@ -81,7 +106,7 @@
 
 //   const handleSearchClick = () => {
 //     if (selectedCities.length > 0) {
-//       navigate("/travel-options"); // Navigate to TravelOptions page
+//       navigate("/activities", { state: { selectedCities } }); // Pass selected cities as state to activities page
 //     }
 //   };
 
@@ -110,13 +135,6 @@
 //               </div>
 //             )}
 
-//             {/* Arrow between input boxes */}
-//             {index > 0 && field.value === "" && (
-//               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-//                 <div className="w-6 h-6">➔</div>
-//               </div>
-//             )}
-
 //             {/* Plus icon */}
 //             {field.value && (
 //               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
@@ -139,7 +157,7 @@
 //                       (city) =>
 //                         city.name &&
 //                         city.name.toLowerCase().includes(field.value.toLowerCase()) &&
-//                         !selectedCities.includes(city.name)
+//                         !selectedCities.some((selectedCity) => selectedCity.cityName === city.name)
 //                     )
 //                     .map((city) => (
 //                       <div
@@ -281,7 +299,11 @@ const SearchBar = ({ showLoginModal }) => {
 
   const handleSearchClick = () => {
     if (selectedCities.length > 0) {
-      navigate("/activities", { state: { selectedCities } }); // Pass selected cities as state to activities page
+      // Store selected cities in localStorage before navigating
+      localStorage.setItem("selectedCities", JSON.stringify(selectedCities));
+
+      // Navigate to the travel-options page with the selected cities passed as state
+      navigate("/travel-options", { state: { selectedCities } });
     }
   };
 
