@@ -64,7 +64,7 @@ const TravelOptions = ({ showLoginModal }) => {
     localStorage.setItem("selectedTravelType", type);
 
     // Navigate to the activities page with the travel type stored in localStorage
-    navigate("/activities");
+    navigate("/duration");
   };
 
   return (
