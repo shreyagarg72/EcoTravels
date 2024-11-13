@@ -29,8 +29,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home showLoginModal={showLoginModal} />} />
           <Route path="/travel-options" element={<TravelOptions showLoginModal={showLoginModal}/>} />
-          <Route path="/duration" element={<Duration />} />
-          <Route path="/activities" element={<Activities />} />
+          <Route path="/duration" element={<Duration showLoginModal={showLoginModal} />} />
+          <Route path="/activities" element={<Activities  showLoginModal={showLoginModal}/>} />
 
         </Routes>
       </div>
