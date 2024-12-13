@@ -116,7 +116,7 @@ const Duration = ({ showLoginModal }) => {
   };
 
   const handleNext = () => {
-    navigate("/activities");
+    navigate("/itinerary");
   };
 
   return (
