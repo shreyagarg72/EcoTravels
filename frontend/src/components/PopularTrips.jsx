@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from './Card';
@@ -72,8 +71,8 @@ const PopularTrips = ({ showLoginModal }) => {
   };
 
   return (
-    <div>
-      <h2>Popular Trips</h2>
+    <div className={`container mx-auto ${showLoginModal ? "blur-sm" : ""}`}>
+       <h2 className="text-3xl font-bold mb-6">Popular Trips</h2>
       <div className="flex flex-wrap gap-4">
         {trips.map((trip, index) => (
           <div 
