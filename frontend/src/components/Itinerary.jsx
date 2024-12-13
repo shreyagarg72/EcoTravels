@@ -460,7 +460,6 @@
 
 // export default Itinerary;
 
-
 import React, { useEffect, useState } from "react";
 import { MapPin, Calendar, Tag } from "lucide-react";
 import ItineraryCard from "./ItineraryCard";
