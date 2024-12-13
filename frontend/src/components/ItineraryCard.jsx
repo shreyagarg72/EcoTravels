@@ -27,3 +27,4 @@ const ItineraryCard = ({ activity }) => {
   );
 };
 export default ItineraryCard;
+
