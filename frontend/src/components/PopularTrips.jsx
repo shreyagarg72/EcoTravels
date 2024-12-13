@@ -163,7 +163,7 @@ const PopularTrips = ({ showLoginModal }) => {
     localStorage.setItem('selectedCities', JSON.stringify([newSelectedCity]));
 
     // Navigate to duration selection page
-    navigate('/duration');
+    navigate('/travel-options');
   };
 
   return (
