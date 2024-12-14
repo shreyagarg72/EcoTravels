@@ -1,16 +1,15 @@
-import { Router } from 'express';
-const router = Router();
-import Trip from '../model/Trip.js'; // Ensure this path is correct
+import express from "express";
+import Trip from "../model/Trip.js";
 
-// Endpoint to fetch trips
-router.get('/trips', async (req, res) => {
+const router = express.Router();
+
+// Get all trips
+router.get("/", async (req, res) => {
   try {
-    // Use Trip model to fetch all trips
-    const trips = await Trip.find(); // Ensure Trip is a Mongoose model
+    const trips = await Trip.find();
     res.status(200).json(trips);
-  } catch (error) {
-    console.error('Error fetching trips:', error);
-    res.status(500).send({ message: 'Error fetching trips', error: error.message });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch trips", error: err });
   }
 });
 

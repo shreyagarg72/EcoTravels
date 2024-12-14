@@ -7,6 +7,7 @@ import TravelOptions from './components/TravelOptions';
 import Duration from './components/Duration';
 //  import Activities from './components/Activities';
 import Itinerary from './components/Itinerary';
+import InbuiltTrip from './components/InbuiltTrip';
 function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
@@ -29,6 +30,7 @@ function App() {
         
         <Routes>
           <Route path="/" element={<Home showLoginModal={showLoginModal} />} />
+          <Route path="/trips" element={<InbuiltTrip showLoginModal={showLoginModal} />} />
           <Route path="/travel-options" element={<TravelOptions showLoginModal={showLoginModal}/>} />
           <Route path="/duration" element={<Duration showLoginModal={showLoginModal} />} />
           <Route path="/itinerary" element={<Itinerary showLoginModal={showLoginModal}/>} />

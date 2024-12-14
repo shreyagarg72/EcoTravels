@@ -4,8 +4,10 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import tripRoutes from './routes/TripRouter.js'
 dotenv.config();
-
 const app = express();
+app.use(cors());
+
+app.use(express.json());
 connectDB();
 const port = process.env.PORT || 5000;
 
@@ -14,6 +16,6 @@ app.listen(process.env.PORT,()=>{
 })
 
  // Adjust the path as necessary
-app.use('/api', tripRoutes);
+ app.use("/trips", tripRoutes);
 
 
