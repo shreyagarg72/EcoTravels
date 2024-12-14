@@ -1,11 +1,20 @@
-
 import React, { useEffect, useState } from "react";
-import { MapPin, Calendar } from "lucide-react";
+import {
+  MapPin,
+  Calendar,
+  Plane,
+  Globe,
+  Mountain,
+  Sunset,
+  ArrowRight,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import TripCard from "../components/TripCard";
 
 const InbuiltTrip = ({ showLoginModal }) => {
   const [trips, setTrips] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,8 +22,10 @@ const InbuiltTrip = ({ showLoginModal }) => {
       try {
         const response = await axios.get("http://localhost:5000/trips");
         setTrips(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching trips:", error);
+        setIsLoading(false);
       }
     };
     fetchTrips();
@@ -26,41 +37,59 @@ const InbuiltTrip = ({ showLoginModal }) => {
     navigate("/itinerary");
   };
 
-  return (
-    <div className={`container mx-auto px-4 py-4 ${showLoginModal ? "blur-sm" : ""}`}>
-      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-        Explore Inbuilt Trips
-      </h1>
-      {trips.length === 0 ? (
-        <p className="text-center text-gray-500">Loading trips...</p>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trips.map((trip) => (
-            <div
-              key={trip._id}
-              className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
-              onClick={() => handleTripSelect(trip)}
-            >
-              <h2 className="text-lg font-bold text-gray-800 mb-2">
-                {trip.tripName}
-              </h2>
-              <p className="text-sm text-gray-600 mb-4">{trip.description}</p>
-              <div className="space-y-2 text-sm text-gray-600">
-                <div className="flex items-center">
-                  <MapPin className="mr-2 w-4 h-4 text-green-500" />
-                  <span>
-                    {trip.locations.map((loc) => loc.cityName).join(", ")}
-                  </span>
-                </div>
-                <div className="flex items-center">
-                  <Calendar className="mr-2 w-4 h-4 text-blue-500" />
-                  <span>{trip.duration} Days</span>
-                </div>
-              </div>
-            </div>
-          ))}
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-100 to-green-200">
+        <div className="text-center">
+          <Mountain className="w-24 h-24 mx-auto text-green-600 animate-bounce" />
+          <p className="text-2xl font-semibold text-gray-700 mt-4">
+            Crafting Your Perfect Journey...
+          </p>
+          <p className="text-gray-500 mt-2">Discovering amazing destinations</p>
         </div>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`min-h-screen bg-gray-50 py-16 px-4 ${
+        showLoginModal ? "blur-sm" : ""
+      }`}
+    >
+      <div className="container mx-auto">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-teal-600 mb-6">
+            Discover Your Dream Escape
+          </h1>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+            Explore handpicked journeys designed to inspire and awaken your
+            adventurous spirit.
+          </p>
+        </div>
+
+        {trips.length === 0 ? (
+          <div className="text-center">
+            <Sunset className="w-24 h-24 mx-auto text-gray-400 mb-6" />
+            <p className="text-2xl text-gray-600">
+              No trips available right now
+            </p>
+            <p className="text-gray-500 mt-2">
+              Check back soon for new adventures!
+            </p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {trips.map((trip) => (
+              <TripCard
+                key={trip._id}
+                trip={trip}
+                onSelect={() => handleTripSelect(trip)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
