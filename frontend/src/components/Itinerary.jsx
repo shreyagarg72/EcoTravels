@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from "react";
-import { MapPin, Loader, RefreshCcw } from "lucide-react";
+import { MapPin, Loader, RefreshCcw,Clock } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -18,13 +17,13 @@ L.Icon.Default.mergeOptions({
 
 const MapCenterHandler = ({ center }) => {
   const map = useMap();
-  
+
   useEffect(() => {
     if (center) {
       map.setView(center, 12);
     }
   }, [center, map]);
-  
+
   return null;
 };
 
@@ -49,12 +48,23 @@ const Itinerary = ({ showLoginModal }) => {
     const shuffledActivities = [...activities].sort(() => 0.5 - Math.random());
 
     // Separate different types of activities
-    const restaurants = shuffledActivities.filter((activity) =>
-      activity.properties?.categories?.some(
-        (cat) => cat.includes("restaurant") || cat.includes("cafe")
-      )
-    );
-
+    const restaurants = {
+      breakfast: shuffledActivities.filter((activity) =>
+        activity.properties?.categories?.some(
+          (cat) => cat.includes("cafe") || cat.includes("breakfast")
+        )
+      ),
+      lunch: shuffledActivities.filter((activity) =>
+        activity.properties?.categories?.some(
+          (cat) => cat.includes("restaurant") || cat.includes("lunch")
+        )
+      ),
+      dinner: shuffledActivities.filter((activity) =>
+        activity.properties?.categories?.some(
+          (cat) => cat.includes("restaurant") || cat.includes("dinner")
+        )
+      ),
+    };
     const otherActivities = shuffledActivities.filter(
       (activity) =>
         !activity.properties?.categories?.some(
@@ -66,29 +76,122 @@ const Itinerary = ({ showLoginModal }) => {
     console.log("Other Activities:", otherActivities);
 
     const activitiesPerDay = [];
+    //   for (let day = 0; day < duration; day++) {
+    //     const dayActivities = [];
+
+    //     // Add a restaurant for lunch or dinner
+    //     if (restaurants.length > 0) {
+    //       const lunchOrDinner = restaurants.pop();
+    //       dayActivities.push({
+    //         ...lunchOrDinner,
+    //         day: day + 1,
+    //         type: "meal",
+    //       });
+    //     }
+
+    //     // Add 3-4 other activities
+    //     const dayOtherActivities = otherActivities
+    //       .splice(0, Math.min(4, otherActivities.length))
+    //       .map((activity) => ({
+    //         ...activity,
+    //         day: day + 1,
+    //         type: "activity",
+    //       }));
+
+    //     dayActivities.push(...dayOtherActivities);
+
+    //     activitiesPerDay.push(dayActivities);
+
+    //     console.log(`Day ${day + 1} Activities:`, dayActivities);
+    //   }
+
+    //   return activitiesPerDay;
+    // };
+    const timeSlots = [
+      { name: "Early Morning", time: "06:00 AM", sortOrder: 1, type: "early_morning" },
+      { name: "Breakfast", time: "08:00 AM", sortOrder: 2, type: "breakfast" },
+      { name: "Morning Activity", time: "09:30 AM", sortOrder: 3, type: "morning" },
+      { name: "Late Morning Activity", time: "11:00 AM", sortOrder: 4, type: "late_morning" },
+      { name: "Lunch", time: "01:00 PM", sortOrder: 5, type: "lunch" },
+      { name: "Afternoon Activity", time: "02:30 PM", sortOrder: 6, type: "afternoon" },
+      { name: "Late Afternoon Activity", time: "04:00 PM", sortOrder: 7, type: "late_afternoon" },
+      { name: "Evening Activity", time: "06:00 PM", sortOrder: 8, type: "evening" },
+      { name: "Dinner", time: "07:30 PM", sortOrder: 9, type: "dinner" },
+      { name: "Night Activity", time: "09:00 PM", sortOrder: 10, type: "night" }
+    ];
+    
+    // In the distributeActivities function, modify the sorting logic
+  
+
     for (let day = 0; day < duration; day++) {
       const dayActivities = [];
 
-      // Add a restaurant for lunch or dinner
-      if (restaurants.length > 0) {
-        const lunchOrDinner = restaurants.pop();
-        dayActivities.push({
-          ...lunchOrDinner,
-          day: day + 1,
-          type: "meal",
-        });
-      }
+      // Distribute meals
+      const dayMeals = [
+        {
+          type: "breakfast",
+          slot: timeSlots.find((slot) => slot.type === "breakfast"),
+        },
+        {
+          type: "lunch",
+          slot: timeSlots.find((slot) => slot.type === "lunch"),
+        },
+        {
+          type: "dinner",
+          slot: timeSlots.find((slot) => slot.type === "dinner"),
+        },
+      ];
 
-      // Add 3-4 other activities
-      const dayOtherActivities = otherActivities
-        .splice(0, Math.min(4, otherActivities.length))
-        .map((activity) => ({
-          ...activity,
-          day: day + 1,
-          type: "activity",
-        }));
+      dayMeals.forEach((mealType) => {
+        if (restaurants[mealType.type].length > 0) {
+          const selectedRestaurant = restaurants[mealType.type].pop();
+          dayActivities.push({
+            ...selectedRestaurant,
+            day: day + 1,
+            type: mealType.type,
+            timeSlot: mealType.slot,
+          });
+        }
+      });
 
-      dayActivities.push(...dayOtherActivities);
+      // Distribute other activities
+      const activitySlots = [
+        {
+          type: "morning",
+          slot: timeSlots.find((slot) => slot.type === "morning"),
+        },
+        {
+          type: "late_morning",
+          slot: timeSlots.find((slot) => slot.type === "late_morning"),
+        },
+        {
+          type: "afternoon",
+          slot: timeSlots.find((slot) => slot.type === "afternoon"),
+        },
+        {
+          type: "evening",
+          slot: timeSlots.find((slot) => slot.type === "evening"),
+        },
+      ];
+
+      activitySlots.forEach((activitySlot) => {
+        if (otherActivities.length > 0) {
+          const selectedActivity = otherActivities.pop();
+          dayActivities.push({
+            ...selectedActivity,
+            day: day + 1,
+            type: "activity",
+            timeSlot: activitySlot.slot,
+          });
+        }
+      });
+
+      // Sort activities by time
+      dayActivities.sort((a, b) => {
+        const timeSlotA = a.timeSlot || { sortOrder: Infinity };
+        const timeSlotB = b.timeSlot || { sortOrder: Infinity };
+        return timeSlotA.sortOrder - timeSlotB.sortOrder;
+      });
 
       activitiesPerDay.push(dayActivities);
 
@@ -97,7 +200,6 @@ const Itinerary = ({ showLoginModal }) => {
 
     return activitiesPerDay;
   };
-
   useEffect(() => {
     // Reset loading state and clear previous data
     setIsLoading(true);
@@ -235,9 +337,13 @@ const Itinerary = ({ showLoginModal }) => {
                 zoom={12}
                 style={{ height: "400px", width: "100%" }}
               >
-                <MapCenterHandler 
-                  center={selectedLocation || 
-                    [selectedCity.latitude, selectedCity.longitude]} 
+                <MapCenterHandler
+                  center={
+                    selectedLocation || [
+                      selectedCity.latitude,
+                      selectedCity.longitude,
+                    ]
+                  }
                 />
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -253,20 +359,20 @@ const Itinerary = ({ showLoginModal }) => {
                 {selectedCityActivities.flat().map((activity, index) => {
                   const [lon, lat] = activity.geometry?.coordinates || [];
                   return lon && lat ? (
-                    <Marker 
-                    key={index} 
-                    position={[lat, lon]}
-                    eventHandlers={{
-                      click: () => handleLocationClick(activity)
-                    }}
-                  >
+                    <Marker
+                      key={index}
+                      position={[lat, lon]}
+                      eventHandlers={{
+                        click: () => handleLocationClick(activity),
+                      }}
+                    >
                       <Popup>
                         <div>
                           <h3>
                             {activity.properties?.name || "Unnamed Place"}
                           </h3>
                           <p>{activity.properties?.categories?.join(", ")}</p>
-                          <button 
+                          <button
                             onClick={() => handleLocationClick(activity)}
                             className="text-blue-500 underline"
                           >
@@ -292,18 +398,29 @@ const Itinerary = ({ showLoginModal }) => {
                         key={activityIndex}
                         className="bg-white shadow rounded-lg p-3 mb-2"
                       >
-                        <h4 className="font-bold">
-                          {activity.properties?.name || "Unnamed Activity"}
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          {activity.properties?.categories?.join(", ") ||
-                            "No categories"}
-                        </p>
-                        {activity.type && (
-                          <p className="text-xs text-blue-500">
-                            {activity.type}
+                       
+                        <div>
+                        {/* <Clock className="mr-3 text-blue-500" size={24} /> */}
+                          <div className="flex justify-between items-center">
+                            <h4 className="font-bold">
+                              {activity.properties?.name || "Unnamed Activity"}
+                            </h4>
+                            {activity.timeSlot && (
+                              <span className="text-sm text-gray-600">
+                                {activity.timeSlot.time}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600">
+                            {activity.properties?.categories?.join(", ") ||
+                              "No categories"}
                           </p>
-                        )}
+                          {activity.type && (
+                            <p className="text-xs text-blue-500">
+                              {activity.type}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     ))
                   )}
