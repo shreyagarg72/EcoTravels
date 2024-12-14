@@ -169,7 +169,7 @@ const PopularTrips = ({ showLoginModal }) => {
   return (
     <div className={`container mx-auto ${showLoginModal ? "blur-sm" : ""}`}>
        <h2 className="text-3xl font-bold mb-6">Popular Trips</h2>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap py-4 px-4 gap-4">
         {trips.map((trip, index) => (
           <div 
             key={index} 

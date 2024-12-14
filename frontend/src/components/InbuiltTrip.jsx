@@ -20,7 +20,7 @@ const InbuiltTrip = ({ showLoginModal }) => {
   useEffect(() => {
     const fetchTrips = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/trips");
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/trips`);
         setTrips(response.data);
         setIsLoading(false);
       } catch (error) {
