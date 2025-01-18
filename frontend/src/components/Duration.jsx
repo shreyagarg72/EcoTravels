@@ -5,6 +5,7 @@ import { addDays, differenceInDays, isSameDay, isWithinInterval } from "date-fns
 import { useNavigate } from "react-router-dom";
 import "./Duration.css";
 
+
 const Duration = ({ showLoginModal }) => {
   const [locations, setLocations] = useState([]);
   const [selectedDates, setSelectedDates] = useState({});
