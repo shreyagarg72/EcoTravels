@@ -3,10 +3,13 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import tripRoutes from './routes/TripRouter.js'
-import Trip from './model/Trip.js';
+
+import User from './model/User.js';
+import UserRouter from './routes/UserRouter.js';
 dotenv.config();
 const app = express();
 app.use(cors());
+
 
 app.use(express.json());
 connectDB();
@@ -18,14 +21,4 @@ app.listen(process.env.PORT,()=>{
 
  // Adjust the path as necessary
  app.use("/trips", tripRoutes);
-
-// Backend route example (Node.js/Express)
-// app.get('/trip-images/:id', async (req, res) => {
-//     try {
-//       const trip = await Trip.findById(req.params.id); // Assuming Trip is your model
-//       res.json({ image: trip.image }); // Send the image URL
-//     } catch (error) {
-//       res.status(500).send('Error fetching trip image');
-//     }
-//   });
-  
+app.use("/api",UserRouter);
