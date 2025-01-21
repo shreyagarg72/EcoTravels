@@ -68,12 +68,7 @@ export default SignUp;
 // import { Link } from 'react-router-dom';
 // import { X } from 'lucide-react';
 
-// // VITE_FIREBASE_API_KEY="AIzaSyCKavqP_5Tfal_f_tP2FvHaL83PThMI10M",
-// // VITE_FIREBASE_AUTH_DOMAIN="ecotravels-cff71.firebaseapp.com",
-// // VITE_FIREBASE_PROJECT_ID="ecotravels-cff71",
-// // VITE_FIREBASE_STORAGE_BUCKET="ecotravels-cff71.firebasestorage.app",
-// // VITE_FIREBASE_MESSAGING_SENDER_ID="427098922650",
-// // VITE_FIREBASE_APP_ID="1:427098922650:web:8fc1b14d02ee9b9cd7c923"
+
 
 // // Replace with your Firebase config
 // const firebaseConfig = {
