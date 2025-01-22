@@ -332,8 +332,6 @@
 
 // export default Header;
 
-
-
 // import React from 'react';
 // import { Link } from 'react-router-dom';
 // import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
@@ -354,10 +352,10 @@
 //             <span className="font-poppins font-bold text-2xl text-black-500">
 //               EcoTravels
 //             </span>
-//             <img 
-//               src="/ecotravel_globe.png" 
-//               alt="EcoTravels logo" 
-//               className="w-10 h-10 ml-2" 
+//             <img
+//               src="/ecotravel_globe.png"
+//               alt="EcoTravels logo"
+//               className="w-10 h-10 ml-2"
 //             />
 //           </div>
 
@@ -369,8 +367,8 @@
 //           </nav>
 
 //           <div className="hidden md:block">
-//             <button 
-//               className="bg-green-500 text-white py-2 px-4 rounded-full" 
+//             <button
+//               className="bg-green-500 text-white py-2 px-4 rounded-full"
 //               onClick={handleLoginClick}
 //               aria-label="Open Login Modal"
 //             >
@@ -389,8 +387,8 @@
 //             <li className="p-4 border-b border-gray-600"><Link to="/rewards" onClick={handleNav}>Rewards</Link></li>
 //             <li className="p-4 border-b border-gray-600"><Link to="/reviews" onClick={handleNav}>Reviews</Link></li>
 //             <li className="p-4">
-//               <button 
-//                 className="bg-green-500 text-white py-2 px-4 rounded-full" 
+//               <button
+//                 className="bg-green-500 text-white py-2 px-4 rounded-full"
 //                 onClick={handleLoginClick}
 //                 aria-label="Open Login Modal"
 //               >
@@ -411,14 +409,14 @@
 // import React, { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom';
 // import { motion, AnimatePresence } from 'framer-motion';
-// import { 
-//   Menu, 
-//   X, 
-//   Home, 
-//   MapPin, 
-//   Award, 
-//   MessageSquare, 
-//   LogIn 
+// import {
+//   Menu,
+//   X,
+//   Home,
+//   MapPin,
+//   Award,
+//   MessageSquare,
+//   LogIn
 // } from 'lucide-react';
 // import LoginModal from './LoginModal';
 
@@ -426,25 +424,25 @@
 //   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 //   const navLinks = [
-//     { 
-//       name: 'Discover', 
-//       path: '/', 
-//       icon: Home 
+//     {
+//       name: 'Discover',
+//       path: '/',
+//       icon: Home
 //     },
-//     { 
-//       name: 'Trips', 
-//       path: '/trips', 
-//       icon: MapPin 
+//     {
+//       name: 'Trips',
+//       path: '/trips',
+//       icon: MapPin
 //     },
-//     { 
-//       name: 'Rewards', 
-//       path: '/rewards', 
-//       icon: Award 
+//     {
+//       name: 'Rewards',
+//       path: '/rewards',
+//       icon: Award
 //     },
-//     { 
-//       name: 'Reviews', 
-//       path: '/reviews', 
-//       icon: MessageSquare 
+//     {
+//       name: 'Reviews',
+//       path: '/reviews',
+//       icon: MessageSquare
 //     }
 //   ];
 
@@ -488,9 +486,9 @@
 //           {/* Desktop Navigation */}
 //           <nav className="hidden md:flex space-x-6">
 //             {navLinks.map((link) => (
-//               <Link 
-//                 key={link.path} 
-//                 to={link.path} 
+//               <Link
+//                 key={link.path}
+//                 to={link.path}
 //                 className="text-gray-700 hover:text-green-500 transition-colors duration-300 flex items-center"
 //               >
 //                 <link.icon className="mr-2" size={20} />
@@ -511,8 +509,8 @@
 //           </div>
 
 //           {/* Mobile Menu Toggle */}
-//           <div 
-//             onClick={toggleSidebar} 
+//           <div
+//             onClick={toggleSidebar}
 //             className="block md:hidden cursor-pointer z-50"
 //           >
 //             {isSidebarOpen ? (
@@ -558,10 +556,10 @@
 //                       className="w-8 h-8 ml-2"
 //                     />
 //                   </div>
-//                   <X 
-//                     size={24} 
-//                     className="text-gray-600 cursor-pointer" 
-//                     onClick={toggleSidebar} 
+//                   <X
+//                     size={24}
+//                     className="text-gray-600 cursor-pointer"
+//                     onClick={toggleSidebar}
 //                   />
 //                 </div>
 
@@ -574,9 +572,9 @@
 //                       onClick={toggleSidebar}
 //                       className="flex items-center p-3 rounded-lg hover:bg-green-50 transition-colors duration-300 group"
 //                     >
-//                       <link.icon 
-//                         className="mr-4 text-green-600 group-hover:text-green-700" 
-//                         size={24} 
+//                       <link.icon
+//                         className="mr-4 text-green-600 group-hover:text-green-700"
+//                         size={24}
 //                       />
 //                       <span className="text-gray-800 font-medium group-hover:text-green-700">
 //                         {link.name}
@@ -790,10 +788,20 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Home, MapPin, Award, MessageSquare, LogIn, User, LogOut } from "lucide-react";
-import { getAuth, signOut } from 'firebase/auth';
-import { toast } from 'react-toastify';
-import {  onAuthStateChanged } from "firebase/auth";
+import {
+  Menu,
+  X,
+  Home,
+  MapPin,
+  Award,
+  MessageSquare,
+  LogIn,
+  User,
+  LogOut,
+} from "lucide-react";
+import { getAuth, signOut } from "firebase/auth";
+import { toast } from "react-toastify";
+import { onAuthStateChanged } from "firebase/auth";
 const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -809,11 +817,11 @@ const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
     const auth = getAuth();
     try {
       await signOut(auth);
-      toast.success('Logged out successfully!', { position: 'top-center' });
+      toast.success("Logged out successfully!", { position: "top-center" });
       setShowDropdown(false);
     } catch (error) {
-      toast.error('Error logging out', { position: 'top-center' });
-      console.error('Logout error:', error);
+      toast.error("Error logging out", { position: "top-center" });
+      console.error("Logout error:", error);
     }
   };
 
@@ -843,7 +851,7 @@ const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
       <header className="bg-white shadow-md">
         <div className="container mx-auto flex justify-between items-center h-20 px-4">
           {/* Logo Section */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <span className="font-poppins font-bold text-2xl text-black-500">
               EcoTravels
             </span>
@@ -852,8 +860,20 @@ const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
               alt="EcoTravels logo"
               className="w-10 h-10 ml-2"
             />
-          </div>
-
+          </div> */}
+          <Link
+            to="/"
+            className="flex items-center hover:opacity-80 transition-duration-300"
+          >
+            <span className="font-poppins font-bold text-2xl text-black-500">
+              EcoTravels
+            </span>
+            <img
+              src="/ecotravel_globe.png"
+              alt="EcoTravels logo"
+              className="w-10 h-10 ml-2"
+            />
+          </Link>
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-6">
             {navLinks.map((link) => (
@@ -940,7 +960,7 @@ const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
             >
               <div className="p-6">
                 {/* Sidebar Header */}
-                <div className="flex justify-between items-center mb-8">
+                {/* <div className="flex justify-between items-center mb-8">
                   <div className="flex items-center">
                     <span className="font-poppins font-bold text-xl text-green-700">
                       EcoTravels
@@ -951,6 +971,28 @@ const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
                       className="w-8 h-8 ml-2"
                     />
                   </div>
+                  <X
+                    size={24}
+                    className="text-gray-600 cursor-pointer"
+                    onClick={toggleSidebar}
+                  />
+                </div> */}
+                {/* Sidebar Header */}
+                <div className="flex justify-between items-center mb-8">
+                  <Link
+                    to="/"
+                    className="flex items-center hover:opacity-80 transition-duration-300"
+                    onClick={toggleSidebar}
+                  >
+                    <span className="font-poppins font-bold text-xl text-green-700">
+                      EcoTravels
+                    </span>
+                    <img
+                      src="/ecotravel_globe.png"
+                      alt="EcoTravels logo"
+                      className="w-8 h-8 ml-2"
+                    />
+                  </Link>
                   <X
                     size={24}
                     className="text-gray-600 cursor-pointer"
@@ -984,7 +1026,9 @@ const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
                     <div className="space-y-4">
                       <div className="flex items-center p-3 rounded-lg bg-green-50">
                         <User size={24} className="text-green-600 mr-4" />
-                        <span className="text-gray-800 font-medium">{userEmail}</span>
+                        <span className="text-gray-800 font-medium">
+                          {userEmail}
+                        </span>
                       </div>
                       <button
                         className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors duration-300 flex items-center justify-center"
