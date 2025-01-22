@@ -29,7 +29,7 @@
 //           handleLoginClick={handleLoginClick}
 //           closeModal={closeModal}
 //         />
-        
+
 //         {/* <Signup isOpen={showLoginModal} onClose={closeModal} /> */}
 //         <Routes>
 //           <Route path="/" element={<Home showLoginModal={showLoginModal} />} />
@@ -58,6 +58,7 @@
 // export default App;
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import TravelOptions from "./components/TravelOptions";
@@ -65,10 +66,20 @@ import Duration from "./components/Duration";
 import Itinerary from "./components/Itinerary";
 import InbuiltTrip from "./components/InbuiltTrip";
 import LoginSignupModel from "./components/LoginSignupModel";
-
+import { ToastContainer } from "react-toastify";
 function App() {
   const [showModal, setShowModal] = useState(false); // State for showing modal
+  const [user, setUser] = useState(null);
 
+  React.useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
   const handleLoginClick = () => {
     setShowModal(true); // Show modal on login button click
   };
@@ -81,18 +92,27 @@ function App() {
     <Router>
       <div>
         {/* Pass the modal controls to Header */}
-        <Header handleLoginClick={handleLoginClick} />
+        <Header
+          handleLoginClick={handleLoginClick}
+          isLoggedIn={!!user}
+          userEmail={user?.email}
+        />
 
         {/* Login and Signup Modal */}
-        <LoginSignupModel showModal={showModal} closeModal={closeModal} />
+        <LoginSignupModel
+          showModal={showModal}
+          closeModal={() => setShowModal(false)}
+        />
 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/trips" element={<InbuiltTrip />} />
           <Route path="/travel-options" element={<TravelOptions />} />
+          {/* <Route path="/duration"  element={<Duration setShowModal={setShowModal} />} /> */}
           <Route path="/duration" element={<Duration />} />
           <Route path="/itinerary" element={<Itinerary />} />
         </Routes>
+        <ToastContainer />
       </div>
     </Router>
   );
