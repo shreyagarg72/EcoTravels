@@ -109,7 +109,7 @@ function App() {
           <Route path="/trips" element={<InbuiltTrip />} />
           <Route path="/travel-options" element={<TravelOptions />} />
           {/* <Route path="/duration"  element={<Duration setShowModal={setShowModal} />} /> */}
-          <Route path="/duration" element={<Duration />} />
+          <Route path="/duration" element={<Duration handleLoginClick={handleLoginClick}/>} />
           <Route path="/itinerary" element={<Itinerary />} />
         </Routes>
         <ToastContainer />
