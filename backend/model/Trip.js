@@ -5,11 +5,12 @@ const tripSchema = new mongoose.Schema({
   locations: [
     {
       cityName: { type: String, required: true },
+      duration:{type: Number,required:true},
       latitude: { type: Number, required: true },
       longitude: { type: Number, required: true },
     },
   ],
-  duration: { type: Number, required: true },
+  totalDuration: { type: Number, required: true },
   description: { type: String, required: true },
 });
 

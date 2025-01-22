@@ -35,7 +35,7 @@ const TripCard = ({ trip, onSelect }) => {
             </div>
             <div className="flex items-center">
               <Calendar className="mr-2 w-5 h-5 text-blue-400" />
-              <span className="text-sm">{trip.duration} Days Adventure</span>
+              <span className="text-sm">{trip.totalDuration} Days Adventure</span>
             </div>
           </div>
 
