@@ -360,7 +360,7 @@ const Duration = ({ handleLoginClick }) => {
               className="next-btn" 
               onClick={handleNext}
             >
-              Next
+              Generate Itinerary
             </button>
           </div>
         )}
