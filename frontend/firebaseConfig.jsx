@@ -1,6 +1,6 @@
 // src/firebase/config.js
 import { initializeApp } from 'firebase/app';
-import { getAuth,createUserWithEmailAndPassword } from 'firebase/auth';
+import {getFireStore} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -11,4 +11,6 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
+
 export const app = initializeApp(firebaseConfig);
+export const db = getFireStore(app);

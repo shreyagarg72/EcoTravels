@@ -5,7 +5,6 @@
 // import { useNavigate } from "react-router-dom";
 // import "./Duration.css";
 
-
 // const Duration = ({ showLoginModal }) => {
 //   const [locations, setLocations] = useState([]);
 //   const [selectedDates, setSelectedDates] = useState({});
@@ -341,8 +340,8 @@
 //               </div>
 //             </div>
 //             <div className="actions">
-//               <button 
-//                 className="reset-btn" 
+//               <button
+//                 className="reset-btn"
 //                 onClick={() => handleReset(location.cityName)}
 //               >
 //                 Reset
@@ -356,8 +355,8 @@
 //         {allDatesSelected && (
 //           <div className="next-btn-container">
 //             <p>Total Duration: {totalDuration} days</p>
-//             <button 
-//               className="next-btn" 
+//             <button
+//               className="next-btn"
 //               onClick={handleNext}
 //             >
 //               Generate Itinerary
@@ -373,14 +372,25 @@
 
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import 'react-calendar/dist/Calendar.css';
-import { addDays, differenceInDays, isSameDay, isWithinInterval } from "date-fns";
+import "react-calendar/dist/Calendar.css";
+import {
+  addDays,
+  differenceInDays,
+  isSameDay,
+  isWithinInterval,
+} from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "./Duration.css";
+import { AI_PROMPT } from "../constants/options";
+import { chatSession } from "../service/AIModal";
 
 const Duration = ({ handleLoginClick }) => {
-  const [selectedCitiesData, setSelectedCitiesData] = useState({ selectedCities: [], travelType: '', travelCount: 0 });
+  const [selectedCitiesData, setSelectedCitiesData] = useState({
+    selectedCities: [],
+    travelType: "",
+    travelCount: 0,
+  });
   const [selectedDates, setSelectedDates] = useState({});
   const [disabledDates, setDisabledDates] = useState([]);
   const [totalDuration, setTotalDuration] = useState(0);
@@ -411,12 +421,12 @@ const Duration = ({ handleLoginClick }) => {
         ...selectedCitiesData,
         selectedCities: selectedCitiesData.selectedCities.map((city) => ({
           ...city,
-          duration: selectedDates[city.cityName]?.duration || 0
-        }))
+          duration: selectedDates[city.cityName]?.duration || 0,
+        })),
       };
-      
+
       localStorage.setItem("selectedCitiesData", JSON.stringify(updatedData));
-      console.log('Updated localStorage with durations:', updatedData);
+      console.log("Updated localStorage with durations:", updatedData);
     }
   }, [selectedDates]);
 
@@ -446,7 +456,8 @@ const Duration = ({ handleLoginClick }) => {
         setDisabledDates([...disabledDates, ...range]);
       }
 
-      const duration = newTo && newFrom ? differenceInDays(newTo, newFrom) + 1 : 0;
+      const duration =
+        newTo && newFrom ? differenceInDays(newTo, newFrom) + 1 : 0;
 
       const newSelectedDates = {
         ...prevDates,
@@ -469,13 +480,11 @@ const Duration = ({ handleLoginClick }) => {
       setAllDatesSelected(allSelected);
 
       // Update selectedCitiesData with new duration
-      setSelectedCitiesData(prevData => ({
+      setSelectedCitiesData((prevData) => ({
         ...prevData,
-        selectedCities: prevData.selectedCities.map(city => 
-          city.cityName === cityName 
-            ? { ...city, duration: duration }
-            : city
-        )
+        selectedCities: prevData.selectedCities.map((city) =>
+          city.cityName === cityName ? { ...city, duration: duration } : city
+        ),
       }));
 
       return newSelectedDates;
@@ -509,28 +518,106 @@ const Duration = ({ handleLoginClick }) => {
       delete newDates[cityName];
       return newDates;
     });
-    
+
     // Reset duration in selectedCitiesData
-    setSelectedCitiesData(prevData => ({
+    setSelectedCitiesData((prevData) => ({
       ...prevData,
-      selectedCities: prevData.selectedCities.map(city => 
-        city.cityName === cityName 
-          ? { ...city, duration: 0 }
-          : city
-      )
+      selectedCities: prevData.selectedCities.map((city) =>
+        city.cityName === cityName ? { ...city, duration: 0 } : city
+      ),
     }));
-    
+
     setDisabledDates([]);
     setAllDatesSelected(false);
     setTotalDuration(0);
   };
 
-  const handleNext = () => {
+  // const handleNext = () => {
+  //   if (!isLoggedIn) {
+  //     handleLoginClick();
+  //     return;
+  //   }
+  //   navigate("/itinerary");
+  // };
+  // const handleNext = async () => {
+  //   if (!isLoggedIn) {
+  //     handleLoginClick();
+  //     return;
+  //   }
+  
+  //   // Retrieve selectedCitiesData and other required details from local storage
+  //   const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
+  
+  //   if (data && Array.isArray(data.selectedCities)) {
+  //     const { selectedCities, travelType, travelCount } = data;
+  
+  //     // Generate the cities part of the prompt
+  //     const citiesDetails = selectedCities
+  //       .map(
+  //         (city) =>
+  //           `{${city.cityName}, for ${city.duration} Days, latitude of ${city.latitude}, longitude of ${city.longitude}}`
+  //       )
+  //       .join(", ");
+  
+  //     // Create the final prompt
+  //     const FINAL_PROMPT = `Generate Travel Plan for multiple location based on length of cities - for each Location: ${citiesDetails} for ${travelType} of ${travelCount} people with a Cheap budget. 
+  //     Give me a Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and suggest itinerary with placeName, Place Details, Place Image Url, Geo Coordinates, ticket Pricing, rating, Time travel, and suggest some restaurants, cafes for all breakfast, lunch, dinner and snacks for each location for each city duration with each day plan with best time to visit in JSON format.`;
+  
+  //     console.log("FINAL_PROMPT:", FINAL_PROMPT);
+  //     const result = await chatSession.sendMessage(FINAL_PROMPT);
+  //     console.log(result?.response?.text());
+  //   } else {
+  //     console.error("Invalid or missing data in selectedCitiesData.");
+  //   }
+  //   navigate("/itinerary", { state: { travelPlans: fetchedTravelPlans } });
+  // };
+
+  const handleNext = async () => {
     if (!isLoggedIn) {
       handleLoginClick();
       return;
     }
-    navigate("/itinerary");
+  
+    // Retrieve selectedCitiesData and other required details from local storage
+    const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
+  
+    if (data && Array.isArray(data.selectedCities)) {
+      const { selectedCities, travelType, travelCount } = data;
+  
+      // Generate the cities part of the prompt
+      const citiesDetails = selectedCities
+        .map(
+          (city) =>
+            `{${city.cityName}, for ${city.duration} Days, latitude of ${city.latitude}, longitude of ${city.longitude}}`
+        )
+        .join(", ");
+  
+      // Create the final prompt
+      const FINAL_PROMPT = `Generate Travel Plan for multiple location based on length of cities - for each Location: ${citiesDetails} for ${travelType} of ${travelCount} people with a Cheap budget. 
+      Give me a Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and suggest itinerary with placeName, Place Details, Place Image Url, Geo Coordinates, ticket Pricing, rating, Time travel, and suggest some restaurants, cafes for all breakfast, lunch, dinner and snacks for each location for each city duration with each day plan with best time to visit in JSON format.`;
+  
+      try {
+        console.log("FINAL_PROMPT:", FINAL_PROMPT);
+        const result = await chatSession.sendMessage(FINAL_PROMPT);
+        const responseText = result?.response?.text();
+        console.log("AI Response:", responseText);
+  
+        // Parse the JSON response
+        const travelPlans = JSON.parse(responseText);
+        localStorage.setItem("travelPlans", JSON.stringify(travelPlans));
+        console.log(travelPlans);
+        // Store the travel plans in localStorage
+       // localStorage.setItem("travelPlans", JSON.stringify(travelPlans));
+  
+        // Navigate to itinerary page
+        navigate("/itinerary");
+      } catch (error) {
+        console.error("Error processing travel plans:", error);
+        // You might want to show an error message to the user here
+      }
+    } else {
+      console.error("Invalid or missing data in selectedCitiesData.");
+    }
   };
 
   return (
@@ -546,11 +633,16 @@ const Duration = ({ handleLoginClick }) => {
                   view="month"
                   showDoubleView
                   defaultValue={new Date()}
-                  onClickDay={(date) => handleDateChange(location.cityName, date)}
+                  onClickDay={(date) =>
+                    handleDateChange(location.cityName, date)
+                  }
                   minDate={getEarliestAvailableDate(index)}
                   maxDate={addDays(new Date(), 60)}
                   tileClassName={({ date, view }) => {
-                    if (view === "month" && isDateInRange(date, location.cityName)) {
+                    if (
+                      view === "month" &&
+                      isDateInRange(date, location.cityName)
+                    ) {
                       return "highlighted-date";
                     }
                     if (view === "month" && isDateDisabled(date)) {
@@ -563,8 +655,8 @@ const Duration = ({ handleLoginClick }) => {
               </div>
             </div>
             <div className="actions">
-              <button 
-                className="reset-btn" 
+              <button
+                className="reset-btn"
                 onClick={() => handleReset(location.cityName)}
               >
                 Reset
@@ -578,10 +670,7 @@ const Duration = ({ handleLoginClick }) => {
         {allDatesSelected && (
           <div className="next-btn-container">
             <p>Total Duration: {totalDuration} days</p>
-            <button 
-              className="next-btn" 
-              onClick={handleNext}
-            >
+            <button className="next-btn" onClick={handleNext}>
               Generate Itinerary
             </button>
           </div>
