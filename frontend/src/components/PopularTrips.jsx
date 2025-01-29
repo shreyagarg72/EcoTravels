@@ -147,23 +147,24 @@ const PopularTrips = ({ showLoginModal }) => {
   const navigate = useNavigate();
 
   const handleCardClick = (trip) => {
-    // Clear previous selections completely
-    localStorage.removeItem('selectedCities');
+    localStorage.removeItem('selectedCitiesData');
     localStorage.removeItem('selectedLocation');
-
-    // Create a new selected city object
     const newSelectedCity = {
       cityName: trip.cityName,
       latitude: trip.latitude,
       longitude: trip.longitude,
-      duration: 0
     };
 
-    // Save to local storage with new, clean data
-    localStorage.setItem('selectedCities', JSON.stringify([newSelectedCity]));
+    // Retrieve previously selected cities from localStorage
+    const storedData = localStorage.getItem("selectedCitiesData");
+    const selectedCitiesData = storedData ? JSON.parse(storedData) : { selectedCities: [] };
 
-    // Navigate to duration selection page
-    navigate('/travel-options');
+    // Append new city to the list
+    selectedCitiesData.selectedCities.push(newSelectedCity);
+    localStorage.setItem("selectedCitiesData", JSON.stringify(selectedCitiesData));
+    
+    console.log("Selected Cities Data:", selectedCitiesData);
+    navigate("/travel-options", { state: { selectedCitiesData } });
   };
 
   return (
@@ -187,5 +188,4 @@ const PopularTrips = ({ showLoginModal }) => {
     </div>
   );
 };
-
 export default PopularTrips;
