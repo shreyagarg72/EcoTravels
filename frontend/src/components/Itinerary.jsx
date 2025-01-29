@@ -36,170 +36,169 @@
 //   const [isLoading, setIsLoading] = useState(true);
 //   const geoapifyApiKey = import.meta.env.VITE_GEO_API;
 
-  // const distributeActivities = (activities, duration) => {
-  //   console.log("Raw activities:", activities);
+//   const distributeActivities = (activities, duration) => {
+//     console.log("Raw activities:", activities);
 
-  //   if (!activities || activities.length === 0) {
-  //     console.log("No activities to distribute");
-  //     return [];
-  //   }
+//     if (!activities || activities.length === 0) {
+//       console.log("No activities to distribute");
+//       return [];
+//     }
 
-  //   // Shuffle activities
-  //   const shuffledActivities = [...activities].sort(() => 0.5 - Math.random());
+//     // Shuffle activities
+//     const shuffledActivities = [...activities].sort(() => 0.5 - Math.random());
 
-  //   // Separate different types of activities
-  //   const restaurants = {
-  //     breakfast: shuffledActivities.filter((activity) =>
-  //       activity.properties?.categories?.some(
-  //         (cat) => cat.includes("cafe") || cat.includes("breakfast")
-  //       )
-  //     ),
-  //     lunch: shuffledActivities.filter((activity) =>
-  //       activity.properties?.categories?.some(
-  //         (cat) => cat.includes("restaurant") || cat.includes("lunch")
-  //       )
-  //     ),
-  //     dinner: shuffledActivities.filter((activity) =>
-  //       activity.properties?.categories?.some(
-  //         (cat) => cat.includes("restaurant") || cat.includes("dinner")
-  //       )
-  //     ),
-  //   };
-  //   const otherActivities = shuffledActivities.filter(
-  //     (activity) =>
-  //       !activity.properties?.categories?.some(
-  //         (cat) => cat.includes("restaurant") || cat.includes("cafe")
-  //       )
-  //   );
+//     // Separate different types of activities
+//     const restaurants = {
+//       breakfast: shuffledActivities.filter((activity) =>
+//         activity.properties?.categories?.some(
+//           (cat) => cat.includes("cafe") || cat.includes("breakfast")
+//         )
+//       ),
+//       lunch: shuffledActivities.filter((activity) =>
+//         activity.properties?.categories?.some(
+//           (cat) => cat.includes("restaurant") || cat.includes("lunch")
+//         )
+//       ),
+//       dinner: shuffledActivities.filter((activity) =>
+//         activity.properties?.categories?.some(
+//           (cat) => cat.includes("restaurant") || cat.includes("dinner")
+//         )
+//       ),
+//     };
+//     const otherActivities = shuffledActivities.filter(
+//       (activity) =>
+//         !activity.properties?.categories?.some(
+//           (cat) => cat.includes("restaurant") || cat.includes("cafe")
+//         )
+//     );
 
-  //   console.log("Restaurants:", restaurants);
-  //   console.log("Other Activities:", otherActivities);
+//     console.log("Restaurants:", restaurants);
+//     console.log("Other Activities:", otherActivities);
 
-  //   const activitiesPerDay = [];
-  //   //   for (let day = 0; day < duration; day++) {
-  //   //     const dayActivities = [];
+//     const activitiesPerDay = [];
+//     //   for (let day = 0; day < duration; day++) {
+//     //     const dayActivities = [];
 
-  //   //     // Add a restaurant for lunch or dinner
-  //   //     if (restaurants.length > 0) {
-  //   //       const lunchOrDinner = restaurants.pop();
-  //   //       dayActivities.push({
-  //   //         ...lunchOrDinner,
-  //   //         day: day + 1,
-  //   //         type: "meal",
-  //   //       });
-  //   //     }
+//     //     // Add a restaurant for lunch or dinner
+//     //     if (restaurants.length > 0) {
+//     //       const lunchOrDinner = restaurants.pop();
+//     //       dayActivities.push({
+//     //         ...lunchOrDinner,
+//     //         day: day + 1,
+//     //         type: "meal",
+//     //       });
+//     //     }
 
-  //   //     // Add 3-4 other activities
-  //   //     const dayOtherActivities = otherActivities
-  //   //       .splice(0, Math.min(4, otherActivities.length))
-  //   //       .map((activity) => ({
-  //   //         ...activity,
-  //   //         day: day + 1,
-  //   //         type: "activity",
-  //   //       }));
+//     //     // Add 3-4 other activities
+//     //     const dayOtherActivities = otherActivities
+//     //       .splice(0, Math.min(4, otherActivities.length))
+//     //       .map((activity) => ({
+//     //         ...activity,
+//     //         day: day + 1,
+//     //         type: "activity",
+//     //       }));
 
-  //   //     dayActivities.push(...dayOtherActivities);
+//     //     dayActivities.push(...dayOtherActivities);
 
-  //   //     activitiesPerDay.push(dayActivities);
+//     //     activitiesPerDay.push(dayActivities);
 
-  //   //     console.log(`Day ${day + 1} Activities:`, dayActivities);
-  //   //   }
+//     //     console.log(`Day ${day + 1} Activities:`, dayActivities);
+//     //   }
 
-  //   //   return activitiesPerDay;
-  //   // };
-  //   const timeSlots = [
-  //     { name: "Early Morning", time: "06:00 AM", sortOrder: 1, type: "early_morning" },
-  //     { name: "Breakfast", time: "08:00 AM", sortOrder: 2, type: "breakfast" },
-  //     { name: "Morning Activity", time: "09:30 AM", sortOrder: 3, type: "morning" },
-  //     { name: "Late Morning Activity", time: "11:00 AM", sortOrder: 4, type: "late_morning" },
-  //     { name: "Lunch", time: "01:00 PM", sortOrder: 5, type: "lunch" },
-  //     { name: "Afternoon Activity", time: "02:30 PM", sortOrder: 6, type: "afternoon" },
-  //     { name: "Late Afternoon Activity", time: "04:00 PM", sortOrder: 7, type: "late_afternoon" },
-  //     { name: "Evening Activity", time: "06:00 PM", sortOrder: 8, type: "evening" },
-  //     { name: "Dinner", time: "07:30 PM", sortOrder: 9, type: "dinner" },
-  //     { name: "Night Activity", time: "09:00 PM", sortOrder: 10, type: "night" }
-  //   ];
-    
-  //   // In the distributeActivities function, modify the sorting logic
-  
+//     //   return activitiesPerDay;
+//     // };
+//     const timeSlots = [
+//       { name: "Early Morning", time: "06:00 AM", sortOrder: 1, type: "early_morning" },
+//       { name: "Breakfast", time: "08:00 AM", sortOrder: 2, type: "breakfast" },
+//       { name: "Morning Activity", time: "09:30 AM", sortOrder: 3, type: "morning" },
+//       { name: "Late Morning Activity", time: "11:00 AM", sortOrder: 4, type: "late_morning" },
+//       { name: "Lunch", time: "01:00 PM", sortOrder: 5, type: "lunch" },
+//       { name: "Afternoon Activity", time: "02:30 PM", sortOrder: 6, type: "afternoon" },
+//       { name: "Late Afternoon Activity", time: "04:00 PM", sortOrder: 7, type: "late_afternoon" },
+//       { name: "Evening Activity", time: "06:00 PM", sortOrder: 8, type: "evening" },
+//       { name: "Dinner", time: "07:30 PM", sortOrder: 9, type: "dinner" },
+//       { name: "Night Activity", time: "09:00 PM", sortOrder: 10, type: "night" }
+//     ];
 
-  //   for (let day = 0; day < duration; day++) {
-  //     const dayActivities = [];
+//     // In the distributeActivities function, modify the sorting logic
 
-  //     // Distribute meals
-  //     const dayMeals = [
-  //       {
-  //         type: "breakfast",
-  //         slot: timeSlots.find((slot) => slot.type === "breakfast"),
-  //       },
-  //       {
-  //         type: "lunch",
-  //         slot: timeSlots.find((slot) => slot.type === "lunch"),
-  //       },
-  //       {
-  //         type: "dinner",
-  //         slot: timeSlots.find((slot) => slot.type === "dinner"),
-  //       },
-  //     ];
+//     for (let day = 0; day < duration; day++) {
+//       const dayActivities = [];
 
-  //     dayMeals.forEach((mealType) => {
-  //       if (restaurants[mealType.type].length > 0) {
-  //         const selectedRestaurant = restaurants[mealType.type].pop();
-  //         dayActivities.push({
-  //           ...selectedRestaurant,
-  //           day: day + 1,
-  //           type: mealType.type,
-  //           timeSlot: mealType.slot,
-  //         });
-  //       }
-  //     });
+//       // Distribute meals
+//       const dayMeals = [
+//         {
+//           type: "breakfast",
+//           slot: timeSlots.find((slot) => slot.type === "breakfast"),
+//         },
+//         {
+//           type: "lunch",
+//           slot: timeSlots.find((slot) => slot.type === "lunch"),
+//         },
+//         {
+//           type: "dinner",
+//           slot: timeSlots.find((slot) => slot.type === "dinner"),
+//         },
+//       ];
 
-  //     // Distribute other activities
-  //     const activitySlots = [
-  //       {
-  //         type: "morning",
-  //         slot: timeSlots.find((slot) => slot.type === "morning"),
-  //       },
-  //       {
-  //         type: "late_morning",
-  //         slot: timeSlots.find((slot) => slot.type === "late_morning"),
-  //       },
-  //       {
-  //         type: "afternoon",
-  //         slot: timeSlots.find((slot) => slot.type === "afternoon"),
-  //       },
-  //       {
-  //         type: "evening",
-  //         slot: timeSlots.find((slot) => slot.type === "evening"),
-  //       },
-  //     ];
+//       dayMeals.forEach((mealType) => {
+//         if (restaurants[mealType.type].length > 0) {
+//           const selectedRestaurant = restaurants[mealType.type].pop();
+//           dayActivities.push({
+//             ...selectedRestaurant,
+//             day: day + 1,
+//             type: mealType.type,
+//             timeSlot: mealType.slot,
+//           });
+//         }
+//       });
 
-  //     activitySlots.forEach((activitySlot) => {
-  //       if (otherActivities.length > 0) {
-  //         const selectedActivity = otherActivities.pop();
-  //         dayActivities.push({
-  //           ...selectedActivity,
-  //           day: day + 1,
-  //           type: "activity",
-  //           timeSlot: activitySlot.slot,
-  //         });
-  //       }
-  //     });
+//       // Distribute other activities
+//       const activitySlots = [
+//         {
+//           type: "morning",
+//           slot: timeSlots.find((slot) => slot.type === "morning"),
+//         },
+//         {
+//           type: "late_morning",
+//           slot: timeSlots.find((slot) => slot.type === "late_morning"),
+//         },
+//         {
+//           type: "afternoon",
+//           slot: timeSlots.find((slot) => slot.type === "afternoon"),
+//         },
+//         {
+//           type: "evening",
+//           slot: timeSlots.find((slot) => slot.type === "evening"),
+//         },
+//       ];
 
-  //     // Sort activities by time
-  //     dayActivities.sort((a, b) => {
-  //       const timeSlotA = a.timeSlot || { sortOrder: Infinity };
-  //       const timeSlotB = b.timeSlot || { sortOrder: Infinity };
-  //       return timeSlotA.sortOrder - timeSlotB.sortOrder;
-  //     });
+//       activitySlots.forEach((activitySlot) => {
+//         if (otherActivities.length > 0) {
+//           const selectedActivity = otherActivities.pop();
+//           dayActivities.push({
+//             ...selectedActivity,
+//             day: day + 1,
+//             type: "activity",
+//             timeSlot: activitySlot.slot,
+//           });
+//         }
+//       });
 
-  //     activitiesPerDay.push(dayActivities);
+//       // Sort activities by time
+//       dayActivities.sort((a, b) => {
+//         const timeSlotA = a.timeSlot || { sortOrder: Infinity };
+//         const timeSlotB = b.timeSlot || { sortOrder: Infinity };
+//         return timeSlotA.sortOrder - timeSlotB.sortOrder;
+//       });
 
-  //     console.log(`Day ${day + 1} Activities:`, dayActivities);
-  //   }
+//       activitiesPerDay.push(dayActivities);
 
-  //   return activitiesPerDay;
-  // };
+//       console.log(`Day ${day + 1} Activities:`, dayActivities);
+//     }
+
+//     return activitiesPerDay;
+//   };
 //   useEffect(() => {
 //     // Reset loading state and clear previous data
 //     setIsLoading(true);
@@ -398,7 +397,7 @@
 //                         key={activityIndex}
 //                         className="bg-white shadow rounded-lg p-3 mb-2"
 //                       >
-                       
+
 //                         <div>
 //                         {/* <Clock className="mr-3 text-blue-500" size={24} /> */}
 //                           <div className="flex justify-between items-center">
@@ -435,7 +434,6 @@
 // };
 
 // export default Itinerary;
-
 
 //REAL CODE
 
@@ -563,9 +561,8 @@
 //       { name: "Dinner", time: "07:30 PM", sortOrder: 9, type: "dinner" },
 //       { name: "Night Activity", time: "09:00 PM", sortOrder: 10, type: "night" }
 //     ];
-    
+
 //     // In the distributeActivities function, modify the sorting logic
-  
 
 //     for (let day = 0; day < duration; day++) {
 //       const dayActivities = [];
@@ -887,7 +884,6 @@
 
 // export default Itinerary;
 
-
 // import React, { useEffect, useState } from "react";
 // import { MapPin, Loader, RefreshCcw, Clock } from "lucide-react";
 // import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
@@ -944,11 +940,11 @@
 //       if (storedTravelPlans && cities.length > 0) {
 //         const parsedTravelPlans = JSON.parse(storedTravelPlans);
 //         console.log("Parsed Travel Plans:", parsedTravelPlans); // Debug log
-        
+
 //         setTravelPlans(parsedTravelPlans);
 //         setSelectedCities(cities);
 //         setTravelDetails({ count: travelCount, type: travelType });
-        
+
 //         if (cities.length > 0) {
 //           setSelectedCity(cities[0]);
 //         }
@@ -1000,7 +996,7 @@
 //     return (
 //       <div key={dayIndex} className="mb-6 bg-white rounded-lg shadow p-4">
 //         <h3 className="text-xl font-semibold mb-4">Day {dayIndex + 1}</h3>
-        
+
 //         {/* Activities */}
 //         {dayPlan.activities?.map((activity, index) => (
 //           <div key={index} className="mb-4 border-b pb-4">
@@ -1195,9 +1191,10 @@
 
 // export default Itinerary;
 
+// WORKING CODE FOR ONE LOCATION
 
 import React, { useEffect, useState } from "react";
-import { MapPin, RefreshCcw, Clock } from "lucide-react";
+import { MapPin, Loader, RefreshCcw, Clock } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -1205,7 +1202,7 @@ import L from "leaflet";
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
-import { Link } from "react-router-dom";
+import { chatSession } from "../service/AIModal";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -1216,167 +1213,599 @@ L.Icon.Default.mergeOptions({
 
 const MapCenterHandler = ({ center }) => {
   const map = useMap();
+
   useEffect(() => {
     if (center) {
       map.setView(center, 12);
     }
   }, [center, map]);
+
   return null;
 };
 
 const Itinerary = ({ showLoginModal }) => {
-  const [travelPlans, setTravelPlans] = useState({});
+  const [itineraryData, setItineraryData] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setIsLoading(true);
-    try {
-      const storedTravelPlans = JSON.parse(localStorage.getItem("travelPlans")) || {};
-      console.log("Loaded Travel Plans:", storedTravelPlans);
-      
-      if (Object.keys(storedTravelPlans).length > 0) {
-        setTravelPlans(storedTravelPlans);
-        const firstCity = Object.keys(storedTravelPlans)[0];
-        setSelectedCity(storedTravelPlans[firstCity]);
+    const fetchItinerary = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
+
+        if (data && Array.isArray(data.selectedCities)) {
+          const { selectedCities, travelType, travelCount } = data;
+
+          const citiesDetails = selectedCities
+            .map(
+              (city) =>
+                `{${city.cityName}, for ${city.duration} Days, latitude of ${city.latitude}, longitude of ${city.longitude}}`
+            )
+            .join(", ");
+
+          const FINAL_PROMPT = `Generate Travel Plan for multiple location based on length of cities - for each Location: ${citiesDetails} for ${travelType} of ${travelCount} people with a Cheap budget. 
+          Give me a Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and suggest itinerary with placeName, Place Details, Place Image Url, Geo Coordinates, ticket Pricing, rating, Time travel, and include some restaurants, cafes for all breakfast, lunch, dinner and snacks for each location for each city duration with each day plan with best time to visit in JSON format.`;
+          console.log(FINAL_PROMPT);
+
+          const result = await chatSession.sendMessage(FINAL_PROMPT);
+
+          const responseText = result?.response?.text();
+console.log(responseText);
+          // Try to parse the response text into JSON
+          let parsedData;
+          try {
+            parsedData = JSON.parse(responseText);
+          } catch (parseError) {
+            console.error("JSON parse error:", parseError);
+            throw new Error("Failed to parse API response");
+          }
+
+          const transformedData = transformTravelPlans(parsedData);
+          setItineraryData(transformedData);
+
+          if (transformedData.cities && transformedData.cities.length > 0) {
+            setSelectedCity(transformedData.cities[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching itinerary:", error);
+        setError("Failed to fetch itinerary. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Error loading travel plans:", error);
-    }
-    setIsLoading(false);
+    };
+
+    fetchItinerary();
   }, []);
+
+  const transformTravelPlans = (data) => {
+    if (!data?.travelPlans || !Array.isArray(data.travelPlans)) {
+      return null;
+    }
+
+    const selectedCitiesData = JSON.parse(
+      localStorage.getItem("selectedCitiesData")
+    );
+
+    return {
+      travelType: selectedCitiesData?.travelType || "Unknown",
+      travelCount: selectedCitiesData?.travelCount || 1,
+      cities: data.travelPlans.map((plan) => ({
+        cityName: plan.location,
+        duration: parseInt(plan.duration),
+        latitude: plan.latitude,
+        longitude: plan.longitude,
+        hotels: plan.hotelOptions.map((hotel) => ({
+          name: hotel.hotelName,
+          address: hotel.hotelAddress,
+          price: hotel.price,
+          imageUrl: hotel.hotelImageUrl,
+          coordinates: [
+            hotel.geoCoordinates.latitude,
+            hotel.geoCoordinates.longitude,
+          ],
+          rating: hotel.rating,
+          description: hotel.description,
+        })),
+        restaurantSuggestions: {
+          breakfastOptions: (plan.restaurantSuggestions?.breakfastOptions || []).map(option => ({
+            name: option.name,
+            cuisine: option.cuisine,
+            priceRange: option.priceRange,
+            description: option.description,
+            locationDetails: option.locationDetails,
+          })),
+          cafeOptions: (plan.restaurantSuggestions?.cafeOptions || []).map(option => ({
+            name: option.name,
+            cuisine: option.cuisine,
+            priceRange: option.priceRange,
+            description: option.description,
+            locationDetails: option.locationDetails,
+          })),
+          snackOptions: (plan.restaurantSuggestions?.snackOptions || []).map(option => ({
+            name: option.name,
+            cuisine: option.cuisine,
+            priceRange: option.priceRange,
+            description: option.description,
+            locationDetails: option.locationDetails,
+          })),
+        },
+        itinerary: Object.entries(plan.itinerary)
+          .filter(([key]) => key.startsWith("day"))
+          .map(([key, dayData]) => ({
+            day: parseInt(key.replace("day", "")),
+            theme: dayData.theme,
+            bestTimeToVisit: dayData.bestTimeToVisit,
+            activities: [
+              // Morning activity
+              dayData.morning && {
+                placeName: dayData.morning.activity,
+                placeDetails: dayData.morning.description,
+                type: "breakfast",
+                timeToVisit: "Morning",
+              },
+              // Midday activities
+              dayData.midday && {
+                placeName: dayData.midday.activity,
+                placeDetails: dayData.midday.placeDetails,
+                imageUrl: dayData.midday.placeImageUrl,
+                coordinates: [
+                  dayData.midday.geoCoordinates.latitude,
+                  dayData.midday.geoCoordinates.longitude,
+                ],
+                ticketPrice: dayData.midday.ticketPricing,
+                rating: dayData.midday.rating,
+                timeToVisit: dayData.midday.timeTravel,
+                type: "activity",
+              },
+              // Lunch if available
+              dayData.midday?.diningSuggestion?.lunch && {
+                placeName: dayData.midday.diningSuggestion.lunch,
+                placeDetails: dayData.midday.diningSuggestion.lunchDetails,
+                ticketPrice: dayData.midday.diningSuggestion.priceRange,
+                type: "lunch",
+                timeToVisit: "Lunch",
+              },
+              // Afternoon activity
+              dayData.afternoon && {
+                placeName: dayData.afternoon.activity,
+                placeDetails: dayData.afternoon.placeDetails,
+                imageUrl: dayData.afternoon.placeImageUrl,
+                coordinates: [
+                  dayData.afternoon.geoCoordinates.latitude,
+                  dayData.afternoon.geoCoordinates.longitude,
+                ],
+                ticketPrice: dayData.afternoon.ticketPricing,
+                rating: dayData.afternoon.rating,
+                timeToVisit: dayData.afternoon.timeTravel,
+                type: "activity",
+              },
+              // Evening activity
+              dayData.evening && {
+                placeName: dayData.evening.activity,
+                placeDetails: dayData.evening.placeDetails,
+                imageUrl: dayData.evening.placeImageUrl,
+                coordinates: dayData.evening.geoCoordinates && [
+                  dayData.evening.geoCoordinates.latitude,
+                  dayData.evening.geoCoordinates.longitude,
+                ],
+                ticketPrice: dayData.evening.ticketPricing,
+                rating: dayData.evening.rating,
+                timeToVisit: dayData.evening.timeTravel,
+                type: "activity",
+              },
+              // Dinner if available
+              dayData.evening?.diningSuggestion?.dinner && {
+                placeName: dayData.evening.diningSuggestion.dinner,
+                placeDetails: dayData.evening.diningSuggestion.dinnerDetails,
+                ticketPrice: dayData.evening.diningSuggestion.priceRange,
+                type: "dinner",
+                timeToVisit: "Dinner",
+              },
+            ].filter(Boolean),
+          })),
+      })),
+    };
+  };
+
+  const ActivityCard = ({ activity }) => (
+    <div className="bg-white shadow rounded-lg p-4 mb-4">
+      {activity.imageUrl && (
+        <div className="aspect-w-16 aspect-h-9 mb-4">
+          <img
+            src={activity.imageUrl}
+            alt={activity.placeName}
+            className="object-cover rounded-lg w-full h-48"
+            onError={(e) => {
+              e.target.src = "/api/placeholder/400/300";
+            }}
+          />
+        </div>
+      )}
+      <div className="flex justify-between items-center mb-2">
+        <div>
+          <h4 className="font-bold text-lg">{activity.placeName}</h4>
+          <span
+            className={`text-sm px-2 py-1 rounded ${
+              activity.type === "breakfast"
+                ? "bg-yellow-100 text-yellow-800"
+                : activity.type === "lunch"
+                ? "bg-green-100 text-green-800"
+                : activity.type === "dinner"
+                ? "bg-purple-100 text-purple-800"
+                : "bg-blue-100 text-blue-800"
+            }`}
+          >
+            {activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
+          </span>
+        </div>
+        <span className="text-sm text-gray-600">{activity.timeToVisit}</span>
+      </div>
+      <p className="text-gray-700 mb-2">{activity.placeDetails}</p>
+      <div className="flex items-center justify-between">
+        {activity.rating && (
+          <div className="flex items-center">
+            <span className="text-yellow-400">★</span>
+            <span className="ml-1">{activity.rating}</span>
+          </div>
+        )}
+        {activity.ticketPrice && (
+          <span className="text-green-600">{activity.ticketPrice}</span>
+        )}
+      </div>
+    </div>
+  );
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <RefreshCcw className="animate-spin w-16 h-16 text-blue-500 mb-4" />
+        <p className="text-xl font-semibold text-gray-700">
+          Please wait, generating your itinerary...
+        </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  if (!itineraryData || !itineraryData.cities || itineraryData.cities.length === 0) {
+    return (
+      <div className="p-4 text-red-500">
+        No itinerary data available. Please try again.
+      </div>
+    );
+  }
 
   const handleCitySelect = (city) => {
     setSelectedCity(city);
     setSelectedLocation(null);
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <RefreshCcw className="animate-spin w-16 h-16 text-blue-500 mb-4" />
-        <p className="text-xl font-semibold text-gray-700">
-          Please wait, loading your itinerary...
-        </p>
-      </div>
-    );
-  }
+  const handleLocationClick = (location) => {
+    if (location.coordinates) {
+      const [lat, lon] = location.coordinates;
+      setSelectedLocation([lat, lon]);
+    }
+  };
 
-  if (!selectedCity) {
-    return (
-      <div className="p-4 text-red-500">
-        No travel plans found. Please select a city first.
-      </div>
-    );
-  }
-
-  const renderDayPlan = (dayPlan, dayIndex) => (
-    <div key={dayIndex} className="mb-6 bg-white rounded-lg shadow p-4">
-      <h3 className="text-xl font-semibold mb-4">Day {dayIndex + 1}</h3>
-
-      {["morning", "midday", "afternoon", "evening"].map((timeOfDay) => {
-        const activity = dayPlan[timeOfDay];
-        if (!activity) return null;
-
-        return (
-          <div key={timeOfDay} className="mb-4 border-b pb-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <h4 className="font-bold text-lg">{activity.activity}</h4>
-                {activity.placeDetails && (
-                  <p className="text-sm text-gray-600 mt-1">{activity.placeDetails}</p>
-                )}
-                <div className="flex items-center mt-2">
-                  <Clock className="w-4 h-4 mr-2" />
-                  <span className="text-sm">{activity.bestTimeToVisit || "Anytime"}</span>
-                </div>
-                {activity.ticketPricing && (
-                  <p className="text-sm text-gray-700 mt-1">Ticket: {activity.ticketPricing}</p>
-                )}
-              </div>
-              {activity.placeImageUrl && (
-                <img
-                  src={activity.placeImageUrl}
-                  alt={activity.activity}
-                  className="w-24 h-24 object-cover rounded-lg"
-                />
-              )}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-
+  
   return (
     <div className={`container mx-auto p-4 ${showLoginModal ? "blur-sm" : ""}`}>
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Your Travel Plan</h1>
         <p className="text-gray-600">
-          {selectedCity.travelers} Traveler{selectedCity.travelers > 1 ? "s" : ""} • {selectedCity.duration}
+          {itineraryData.travelType} Trip • {itineraryData.travelCount}{" "}
+          {itineraryData.travelCount > 1 ? "Travelers" : "Traveler"}
         </p>
       </div>
 
-      {Object.keys(travelPlans).length > 1 && (
+      {itineraryData.cities.length > 1 && (
         <div className="flex flex-wrap gap-4 mb-4">
-          {Object.values(travelPlans).map((city, index) => (
+          {itineraryData.cities.map((city, index) => (
             <button
               key={index}
               onClick={() => handleCitySelect(city)}
-              className={`px-4 py-2 rounded ${selectedCity.location === city.location ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+              className={`px-4 py-2 rounded ${
+                selectedCity?.cityName === city.cityName
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200"
+              }`}
             >
-              {city.location} ({city.duration})
+              {city.cityName} ({city.duration} days)
             </button>
           ))}
         </div>
       )}
 
-      {selectedCity && (
+      {/* {selectedCity && (
         <div>
           <h2 className="text-2xl font-bold mb-4">
-            Itinerary for {selectedCity.location} - {selectedCity.duration}
+            Itinerary for {selectedCity.cityName} - {selectedCity.duration} days
           </h2>
 
-          {/* Hotels Section */}
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Recommended Hotels</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {selectedCity.hotelOptions.map((hotel, index) => (
-                <Link to={'https://www.google.com/maps/search/?api=1&query='+hotel.hotelName+","+hotel.hotelAddress} target='_blank'>
-                <div key={index} className="bg-white rounded-lg shadow p-4">
-                  <img src="/ecotravel_globe.png" alt={hotel.hotelName} className="w-full h-48 object-cover rounded-lg mb-4" />
-                  <h4 className="font-bold text-lg">{hotel.hotelName}</h4>
-                  <p className="text-sm text-gray-600 mb-2">{hotel.hotelAddress}</p>
-                  <p className="text-lg font-semibold text-blue-600 mb-2">${hotel.price}/night</p>
-                </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Map Section */}
             <div>
-              <MapContainer center={[selectedCity.latitude, selectedCity.longitude]} zoom={12} style={{ height: "400px", width: "100%" }}>
-                <MapCenterHandler center={selectedLocation || [selectedCity.latitude, selectedCity.longitude]} />
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
+              <div className="mb-6">
+                <h3 className="text-xl font-bold mb-4">Hotels</h3>
+                <div className="space-y-4">
+                  {(selectedCity.hotels || []).map((hotel, index) => (
+                    <div key={index} className="bg-white shadow rounded-lg p-4">
+                      {hotel.imageUrl && (
+                        <div className="aspect-w-16 aspect-h-9 mb-4">
+                          <img
+                            src={hotel.imageUrl}
+                            alt={hotel.name}
+                            className="object-cover rounded-lg w-full h-48"
+                          />
+                        </div>
+                      )}
+                      <h4 className="font-bold text-lg">{hotel.name}</h4>
+                      <p className="text-gray-600">{hotel.address}</p>
+                      <p className="text-green-600 font-bold">{hotel.price}</p>
+                      {hotel.rating && (
+                        <div className="flex items-center mt-2">
+                          <span className="text-yellow-400">★</span>
+                          <span className="ml-1">{hotel.rating}</span>
+                        </div>
+                      )}
+                      <p className="text-gray-700 mt-2">{hotel.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-                <Marker position={[selectedCity.latitude, selectedCity.longitude]}>
-                  <Popup>{selectedCity.location}</Popup>
-                </Marker>
+              <MapContainer
+                center={[selectedCity.latitude, selectedCity.longitude]}
+                zoom={12}
+                style={{ height: "400px", width: "100%" }}
+              >
+                <MapCenterHandler
+                  center={
+                    selectedLocation || [
+                      selectedCity.latitude,
+                      selectedCity.longitude,
+                    ]
+                  }
+                />
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution="&copy; OpenStreetMap contributors"
+                />
+
+                {(selectedCity.itinerary || []).flatMap((day) =>
+                  (day.activities || []).map((activity, index) => {
+                    if (!activity.coordinates) return null;
+                    return (
+                      <Marker
+                        key={`${day.day}-${index}`}
+                        position={activity.coordinates}
+                        eventHandlers={{
+                          click: () => handleLocationClick(activity),
+                        }}
+                      >
+                        <Popup>
+                          <div>
+                            <h3 className="font-bold">{activity.placeName}</h3>
+                            <p className="text-sm">{activity.placeDetails}</p>
+                            <p className="text-sm text-gray-600">
+                              {activity.timeToVisit}
+                            </p>
+                            {activity.ticketPrice && (
+                              <p className="text-sm text-green-600">
+                                Price: {activity.ticketPrice}
+                              </p>
+                            )}
+                          </div>
+                        </Popup>
+                      </Marker>
+                    );
+                  })
+                )}
               </MapContainer>
             </div>
 
-            {/* Daily Plans Section */}
-            <div className="overflow-y-auto max-h-[600px]">
-              {Object.keys(selectedCity.itinerary).map((day, index) =>
-                renderDayPlan(selectedCity.itinerary[day], index)
-              )}
+            <div>
+              {(selectedCity.itinerary || []).map((day) => (
+                <div key={day.day} className="mb-6">
+                  <h3 className="text-xl font-semibold mb-4">Day {day.day}</h3>
+                  {(day.activities || []).map((activity, index) => (
+                    <div
+                      key={index}
+                      className="bg-white shadow rounded-lg p-4 mb-4"
+                    >
+                      {activity.imageUrl && (
+                        <div className="aspect-w-16 aspect-h-9 mb-4">
+                          <img
+                            src={activity.imageUrl}
+                            alt={activity.placeName}
+                            className="object-cover rounded-lg w-full h-48"
+                            onError={(e) => {
+                              e.target.src = "/api/placeholder/400/300";
+                            }}
+                          />
+                        </div>
+                      )}
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="font-bold text-lg">
+                          {activity.placeName}
+                        </h4>
+                        <span className="text-sm text-gray-600">
+                          {activity.timeToVisit}
+                        </span>
+                      </div>
+                      <p className="text-gray-700 mb-2">
+                        {activity.placeDetails}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        {activity.rating && (
+                          <div className="flex items-center">
+                            <span className="text-yellow-400">★</span>
+                            <span className="ml-1">{activity.rating}</span>
+                          </div>
+                        )}
+                        {activity.ticketPrice && (
+                          <span className="text-green-600">
+                            Price: {activity.ticketPrice}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      )}
+      )} */}
+      {selectedCity && (
+  <div>
+    <h2 className="text-2xl font-bold mb-4">
+      Itinerary for {selectedCity.cityName} - {selectedCity.duration} days
+    </h2>
+
+    {/* Hotels Section */}
+    <div>
+      <h3 className="text-xl font-bold mb-4">Hotels Recommendation</h3>
+      <div className="flex justify-between">
+        {(selectedCity.hotels || []).map((hotel, index) => (
+          <div
+            key={index}
+            className="w-1/4 bg-white shadow rounded-lg p-4 mx-2"
+          >
+            {hotel.imageUrl && (
+              <div className="aspect-w-1 aspect-h-1 mb-4">
+                <img
+                  src={hotel.imageUrl}
+                  alt={hotel.name}
+                  className="object-cover rounded-lg w-full"
+                />
+              </div>
+            )}
+            <h4 className="font-bold text-lg">{hotel.name}</h4>
+            <p className="text-gray-600">{hotel.address}</p>
+            <p className="text-green-600 font-bold">{hotel.price}</p>
+            {hotel.rating && (
+              <p className="text-sm text-gray-600">{hotel.rating} Star</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Map and Itinerary Section */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      {/* Map */}
+      <div>
+        <MapContainer
+          center={[selectedCity.latitude, selectedCity.longitude]}
+          zoom={12}
+          style={{ height: "400px", width: "100%" }}
+        >
+          <MapCenterHandler
+            center={
+              selectedLocation || [
+                selectedCity.latitude,
+                selectedCity.longitude,
+              ]
+            }
+          />
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="&copy; OpenStreetMap contributors"
+          />
+          {(selectedCity.itinerary || []).flatMap((day) =>
+            (day.activities || []).map((activity, index) => {
+              if (!activity.coordinates) return null;
+              return (
+                <Marker
+                  key={`${day.day}-${index}`}
+                  position={activity.coordinates}
+                  eventHandlers={{
+                    click: () => handleLocationClick(activity),
+                  }}
+                >
+                  <Popup>
+                    <div>
+                      <h3 className="font-bold">{activity.placeName}</h3>
+                      <p className="text-sm">{activity.placeDetails}</p>
+                      <p className="text-sm text-gray-600">
+                        {activity.timeToVisit}
+                      </p>
+                      {activity.ticketPrice && (
+                        <p className="text-sm text-green-600">
+                          Price: {activity.ticketPrice}
+                        </p>
+                      )}
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })
+          )}
+        </MapContainer>
+      </div>
+
+      {/* Itinerary */}
+      <div>
+        {(selectedCity.itinerary || []).map((day) => (
+          <div key={day.day} className="mb-6">
+            <h3 className="text-xl font-semibold mb-4">Day {day.day}</h3>
+            {(day.activities || []).map((activity, index) => (
+              <div
+                key={index}
+                className="bg-white shadow rounded-lg p-4 mb-4"
+              >
+                {activity.imageUrl && (
+                  <div className="aspect-w-16 aspect-h-9 mb-4">
+                    <img
+                      src={activity.imageUrl}
+                      alt={activity.placeName}
+                      className="object-cover rounded-lg w-full h-48"
+                      onError={(e) => {
+                        e.target.src = "/api/placeholder/400/300";
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-bold text-lg">{activity.placeName}</h4>
+                  <span className="text-sm text-gray-600">
+                    {activity.timeToVisit}
+                  </span>
+                </div>
+                <p className="text-gray-700 mb-2">{activity.placeDetails}</p>
+                <div className="flex items-center justify-between">
+                  {activity.rating && (
+                    <div className="flex items-center">
+                      <span className="text-yellow-400">★</span>
+                      <span className="ml-1">{activity.rating}</span>
+                    </div>
+                  )}
+                  {activity.ticketPrice && (
+                    <span className="text-green-600">
+                      Price: {activity.ticketPrice}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

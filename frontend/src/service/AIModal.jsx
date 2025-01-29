@@ -26,7 +26,7 @@ import {GoogleGenerativeAI} from "@google/generative-ai";
         {
           role: "user",
           parts: [
-            {text: "Generate Travel Plan for multiple location based on length of cities - for each Location: {Faridabad, for 3 Days , latitude of 28.4031478 , longitude of 77.3105561} for family of 4 people with a Cheap budget, Give me a Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and suggest itinerary with placeName, Place Details, Place Image Url, Geo Coordinates, ticket Pricing, rating, Time travel, and suggest some restaurants, cafes for all breakfast,lunch,dinner and snacks  each of the location for each city duration with each day plan with best time to visit in JSON format."},
+            {text: "Generate Travel Plan for multiple location based on length of cities - for each Location: {Faridabad, for 3 Days , latitude of 28.4031478 , longitude of 77.3105561} for family of 4 people with a Cheap budget, Give me a Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and suggest itinerary with placeName, Place Details, Place Image Url, Geo Coordinates, ticket Pricing, rating, Time travel, and include some restaurants, cafes for all breakfast,lunch,dinner and snacks  each of the location for each city duration with each day plan with best time to visit in JSON format."},
           ],
         },
         {
