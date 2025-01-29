@@ -1254,7 +1254,7 @@ const Itinerary = ({ showLoginModal }) => {
           const result = await chatSession.sendMessage(FINAL_PROMPT);
 
           const responseText = result?.response?.text();
-console.log(responseText);
+          console.log(responseText);
           // Try to parse the response text into JSON
           let parsedData;
           try {
@@ -1262,7 +1262,6 @@ console.log(responseText);
             if (!parsedData) {
               throw new Error("Parsed data is null or undefined");
             }
-
           } catch (parseError) {
             console.error("JSON parse error:", parseError);
             throw new Error("Failed to parse API response");
@@ -1289,195 +1288,377 @@ console.log(responseText);
     fetchItinerary();
   }, []);
 
+  // const transformTravelPlans = (data) => {
+  //   // Check if data exists and has the expected structure
+  //   if (!data) {
+  //     console.error('No data provided to transformTravelPlans');
+  //     return null;
+  //   }
+
+  //   // Handle single location case
+  //   let travelPlans;
+  //   if (data.travelPlans) {
+  //     // If data comes wrapped in travelPlans array
+  //     travelPlans = Array.isArray(data.travelPlans) ? data.travelPlans : [data.travelPlans];
+  //   } else {
+  //     // If data is direct object or array
+  //     travelPlans = Array.isArray(data) ? data : [data];
+  //   }
+  //   const selectedCitiesData = JSON.parse(
+  //     localStorage.getItem("selectedCitiesData")
+  //   );
+  //   return {
+  //     travelType: selectedCitiesData?.travelType || "Unknown",
+  //     travelCount: selectedCitiesData?.travelCount || 1,
+  //     cities: travelPlans.map((plan, index) => ({
+  //       cityName: plan.location || selectedCitiesData?.selectedCities[index]?.cityName || "Unknown City",
+  //       duration: parseInt(plan.duration) || selectedCitiesData?.selectedCities[index]?.duration || 1,
+  //       latitude: parseFloat(plan.latitude) || selectedCitiesData?.selectedCities[index]?.latitude || 0,
+  //       longitude: parseFloat(plan.longitude) || selectedCitiesData?.selectedCities[index]?.longitude || 0,
+  //       hotels: (plan.hotelOptions || []).map((hotel) => ({
+  //         name: hotel.hotelName,
+  //         address: hotel.hotelAddress,
+  //         price: hotel.price,
+  //         imageUrl: hotel.hotelImageUrl,
+  //         coordinates: [
+  //           parseFloat(hotel.geoCoordinates?.latitude),
+  //           parseFloat(hotel.geoCoordinates?.longitude),
+  //         ],
+  //         rating: hotel.rating,
+  //         description: hotel.description,
+  //       })),
+  //       restaurantSuggestions: {
+  //         breakfastOptions: (plan.restaurantSuggestions?.breakfastOptions || []).map(option => ({
+  //           name: option.name,
+  //           cuisine: option.cuisine,
+  //           priceRange: option.priceRange,
+  //           description: option.description,
+  //           locationDetails: option.locationDetails,
+  //         })),
+  //         cafeOptions: (plan.restaurantSuggestions?.cafeOptions || []).map(option => ({
+  //           name: option.name,
+  //           cuisine: option.cuisine,
+  //           priceRange: option.priceRange,
+  //           description: option.description,
+  //           locationDetails: option.locationDetails,
+  //         })),
+  //         snackOptions: (plan.restaurantSuggestions?.snackOptions || []).map(option => ({
+  //           name: option.name,
+  //           cuisine: option.cuisine,
+  //           priceRange: option.priceRange,
+  //           description: option.description,
+  //           locationDetails: option.locationDetails,
+  //         })),
+  //       },
+  //       itinerary: plan.itinerary
+  //         ? Object.entries(plan.itinerary)
+  //             .filter(([key]) => key.startsWith("day"))
+  //             .map(([key, dayData]) => {
+  //               const activities = [];
+
+  //               // Breakfast
+  //               if (dayData?.morning?.breakfast) {
+  //                 activities.push({
+  //                   placeName: dayData.morning.breakfast,
+  //                   placeDetails: dayData.morning.breakfastDetails || "Start your day with breakfast",
+  //                   type: "breakfast",
+  //                   timeToVisit: "8:00 AM - 9:00 AM",
+  //                   order: 1
+  //                 });
+  //               }
+
+  //               // Morning activity
+  //               if (dayData?.morning?.activity) {
+  //                 activities.push({
+  //                   placeName: dayData.morning.activity,
+  //                   placeDetails: dayData.morning.description || "",
+  //                   imageUrl: dayData.morning.placeImageUrl,
+  //                   coordinates: dayData.morning?.geoCoordinates ? [
+  //                     parseFloat(dayData.morning.geoCoordinates.latitude),
+  //                     parseFloat(dayData.morning.geoCoordinates.longitude),
+  //                   ] : null,
+  //                   ticketPrice: dayData.morning.ticketPricing,
+  //                   rating: dayData.morning.rating,
+  //                   type: "activity",
+  //                   timeToVisit: "9:30 AM - 12:00 PM",
+  //                   order: 2
+  //                 });
+  //               }
+
+  //               // Lunch
+  //               if (dayData?.midday?.diningSuggestion?.lunch) {
+  //                 activities.push({
+  //                   placeName: dayData.midday.diningSuggestion.lunch,
+  //                   placeDetails: dayData.midday.diningSuggestion.lunchDetails || "Lunch break",
+  //                   type: "lunch",
+  //                   timeToVisit: "12:00 PM - 1:30 PM",
+  //                   ticketPrice: dayData.midday.diningSuggestion.priceRange,
+  //                   order: 3
+  //                 });
+  //               }
+
+  //               // Afternoon activity
+  //               if (dayData?.afternoon?.activity) {
+  //                 activities.push({
+  //                   placeName: dayData.afternoon.activity,
+  //                   placeDetails: dayData.afternoon.placeDetails || "",
+  //                   imageUrl: dayData.afternoon.placeImageUrl,
+  //                   coordinates: dayData.afternoon?.geoCoordinates ? [
+  //                     parseFloat(dayData.afternoon.geoCoordinates.latitude),
+  //                     parseFloat(dayData.afternoon.geoCoordinates.longitude),
+  //                   ] : null,
+  //                   ticketPrice: dayData.afternoon.ticketPricing,
+  //                   rating: dayData.afternoon.rating,
+  //                   type: "activity",
+  //                   timeToVisit: "2:00 PM - 5:00 PM",
+  //                   order: 4
+  //                 });
+  //               }
+
+  //               // Evening snack
+  //               if (dayData?.evening?.snack) {
+  //                 activities.push({
+  //                   placeName: dayData.evening.snack,
+  //                   placeDetails: dayData.evening.snackDetails || "Evening refreshments",
+  //                   type: "snack",
+  //                   timeToVisit: "5:00 PM - 5:30 PM",
+  //                   order: 5
+  //                 });
+  //               }
+
+  //               // Evening activity
+  //               if (dayData?.evening?.activity) {
+  //                 activities.push({
+  //                   placeName: dayData.evening.activity,
+  //                   placeDetails: dayData.evening.placeDetails || "",
+  //                   imageUrl: dayData.evening.placeImageUrl,
+  //                   coordinates: dayData.evening?.geoCoordinates ? [
+  //                     parseFloat(dayData.evening.geoCoordinates.latitude),
+  //                     parseFloat(dayData.evening.geoCoordinates.longitude),
+  //                   ] : null,
+  //                   ticketPrice: dayData.evening.ticketPricing,
+  //                   rating: dayData.evening.rating,
+  //                   type: "activity",
+  //                   timeToVisit: "5:30 PM - 7:30 PM",
+  //                   order: 6
+  //                 });
+  //               }
+
+  //               // Dinner
+  //               if (dayData?.evening?.diningSuggestion?.dinner) {
+  //                 activities.push({
+  //                   placeName: dayData.evening.diningSuggestion.dinner,
+  //                   placeDetails: dayData.evening.diningSuggestion.dinnerDetails || "Dinner time",
+  //                   type: "dinner",
+  //                   timeToVisit: "7:30 PM - 9:00 PM",
+  //                   ticketPrice: dayData.evening.diningSuggestion.priceRange,
+  //                   order: 7
+  //                 });
+  //               }
+
+  //               // Add checkout message for the last day
+  //               if (parseInt(key.replace("day", "")) === plan.duration) {
+  //                 activities.push({
+  //                   placeName: "Hotel Checkout",
+  //                   placeDetails: "Time to say goodbye! Please ensure you check out from your hotel by 11:00 AM.",
+  //                   type: "checkout",
+  //                   timeToVisit: "11:00 AM",
+  //                   order: 8
+  //                 });
+  //               }
+
+  //               return {
+  //                 day: parseInt(key.replace("day", "")) || 1,
+  //                 theme: dayData?.theme || "",
+  //                 bestTimeToVisit: dayData?.bestTimeToVisit || "",
+  //                 activities: activities.sort((a, b) => a.order - b.order)
+  //               };
+  //             })
+  //         : [] // Return empty array if plan.itinerary is null or undefined
+  //     })),
+  //   };
+  // };
   const transformTravelPlans = (data) => {
-    // Check if data exists and has the expected structure
+    // Check if data exists
     if (!data) {
-      console.error('No data provided to transformTravelPlans');
+      console.error("No data provided to transformTravelPlans");
       return null;
     }
-
-    // Handle single location case
-    const travelPlans = Array.isArray(data.travelPlans) 
-      ? data.travelPlans 
-      : Array.isArray(data) 
-        ? data 
-        : [data];
-
+  
+    // Normalize the data structure
+    let travelPlans;
+    if (data.travelPlan) {
+      // If data comes with a single travelPlan object
+      travelPlans = [data.travelPlan];
+    } else if (data.travelPlans) {
+      // If data comes wrapped in travelPlans array
+      travelPlans = Array.isArray(data.travelPlans) ? data.travelPlans : [data.travelPlans];
+    } else {
+      // If data is direct object or array
+      travelPlans = Array.isArray(data) ? data : [data];
+    }
+  
     const selectedCitiesData = JSON.parse(
       localStorage.getItem("selectedCitiesData")
     );
+  
     return {
       travelType: selectedCitiesData?.travelType || "Unknown",
       travelCount: selectedCitiesData?.travelCount || 1,
-      cities: travelPlans.map((plan, index) => ({
-        cityName: plan.location || selectedCitiesData?.selectedCities[index]?.cityName || "Unknown City",
-        duration: parseInt(plan.duration) || selectedCitiesData?.selectedCities[index]?.duration || 1,
-        latitude: parseFloat(plan.latitude) || selectedCitiesData?.selectedCities[index]?.latitude || 0,
-        longitude: parseFloat(plan.longitude) || selectedCitiesData?.selectedCities[index]?.longitude || 0,
-        hotels: (plan.hotelOptions || []).map((hotel) => ({
-          name: hotel.hotelName,
-          address: hotel.hotelAddress,
-          price: hotel.price,
-          imageUrl: hotel.hotelImageUrl,
-          coordinates: [
-            parseFloat(hotel.geoCoordinates?.latitude),
-            parseFloat(hotel.geoCoordinates?.longitude),
-          ],
-          rating: hotel.rating,
-          description: hotel.description,
-        })),
-        restaurantSuggestions: {
-          breakfastOptions: (plan.restaurantSuggestions?.breakfastOptions || []).map(option => ({
-            name: option.name,
-            cuisine: option.cuisine,
-            priceRange: option.priceRange,
-            description: option.description,
-            locationDetails: option.locationDetails,
+      cities: travelPlans.map((plan, index) => {
+        // Get the corresponding city data from localStorage if available
+        const cityData = selectedCitiesData?.selectedCities?.[index] || {};
+  
+        return {
+          cityName: plan.location || cityData.cityName || "Unknown City",
+          duration: parseInt(String(plan.duration)) || parseInt(cityData.duration) || 1,
+          latitude: parseFloat(plan.latitude) || parseFloat(cityData.latitude) || 0,
+          longitude: parseFloat(plan.longitude) || parseFloat(cityData.longitude) || 0,
+          hotels: (plan.hotelOptions || []).map((hotel) => ({
+            name: hotel.hotelName,
+            address: hotel.hotelAddress,
+            price: hotel.price,
+            imageUrl: hotel.hotelImageUrl,
+            coordinates: hotel.geoCoordinates ? [
+              parseFloat(hotel.geoCoordinates.latitude),
+              parseFloat(hotel.geoCoordinates.longitude),
+            ] : null,
+            rating: hotel.rating,
+            description: hotel.description,
           })),
-          cafeOptions: (plan.restaurantSuggestions?.cafeOptions || []).map(option => ({
-            name: option.name,
-            cuisine: option.cuisine,
-            priceRange: option.priceRange,
-            description: option.description,
-            locationDetails: option.locationDetails,
-          })),
-          snackOptions: (plan.restaurantSuggestions?.snackOptions || []).map(option => ({
-            name: option.name,
-            cuisine: option.cuisine,
-            priceRange: option.priceRange,
-            description: option.description,
-            locationDetails: option.locationDetails,
-          })),
-        },
-        itinerary: plan.itinerary 
-          ? Object.entries(plan.itinerary)
-              .filter(([key]) => key.startsWith("day"))
-              .map(([key, dayData]) => {
-                const activities = [];
-                
-                // Breakfast
-                if (dayData?.morning?.breakfast) {
-                  activities.push({
-                    placeName: dayData.morning.breakfast,
-                    placeDetails: dayData.morning.breakfastDetails || "Start your day with breakfast",
-                    type: "breakfast",
-                    timeToVisit: "8:00 AM - 9:00 AM",
-                    order: 1
-                  });
-                }
-
-                // Morning activity
-                if (dayData?.morning?.activity) {
-                  activities.push({
-                    placeName: dayData.morning.activity,
-                    placeDetails: dayData.morning.description || "",
-                    imageUrl: dayData.morning.placeImageUrl,
-                    coordinates: dayData.morning?.geoCoordinates ? [
-                      parseFloat(dayData.morning.geoCoordinates.latitude),
-                      parseFloat(dayData.morning.geoCoordinates.longitude),
-                    ] : null,
-                    ticketPrice: dayData.morning.ticketPricing,
-                    rating: dayData.morning.rating,
-                    type: "activity",
-                    timeToVisit: "9:30 AM - 12:00 PM",
-                    order: 2
-                  });
-                }
-
-                // Lunch
-                if (dayData?.midday?.diningSuggestion?.lunch) {
-                  activities.push({
-                    placeName: dayData.midday.diningSuggestion.lunch,
-                    placeDetails: dayData.midday.diningSuggestion.lunchDetails || "Lunch break",
-                    type: "lunch",
-                    timeToVisit: "12:00 PM - 1:30 PM",
-                    ticketPrice: dayData.midday.diningSuggestion.priceRange,
-                    order: 3
-                  });
-                }
-
-                // Afternoon activity
-                if (dayData?.afternoon?.activity) {
-                  activities.push({
-                    placeName: dayData.afternoon.activity,
-                    placeDetails: dayData.afternoon.placeDetails || "",
-                    imageUrl: dayData.afternoon.placeImageUrl,
-                    coordinates: dayData.afternoon?.geoCoordinates ? [
-                      parseFloat(dayData.afternoon.geoCoordinates.latitude),
-                      parseFloat(dayData.afternoon.geoCoordinates.longitude),
-                    ] : null,
-                    ticketPrice: dayData.afternoon.ticketPricing,
-                    rating: dayData.afternoon.rating,
-                    type: "activity",
-                    timeToVisit: "2:00 PM - 5:00 PM",
-                    order: 4
-                  });
-                }
-
-                // Evening snack
-                if (dayData?.evening?.snack) {
-                  activities.push({
-                    placeName: dayData.evening.snack,
-                    placeDetails: dayData.evening.snackDetails || "Evening refreshments",
-                    type: "snack",
-                    timeToVisit: "5:00 PM - 5:30 PM",
-                    order: 5
-                  });
-                }
-
-                // Evening activity
-                if (dayData?.evening?.activity) {
-                  activities.push({
-                    placeName: dayData.evening.activity,
-                    placeDetails: dayData.evening.placeDetails || "",
-                    imageUrl: dayData.evening.placeImageUrl,
-                    coordinates: dayData.evening?.geoCoordinates ? [
-                      parseFloat(dayData.evening.geoCoordinates.latitude),
-                      parseFloat(dayData.evening.geoCoordinates.longitude),
-                    ] : null,
-                    ticketPrice: dayData.evening.ticketPricing,
-                    rating: dayData.evening.rating,
-                    type: "activity",
-                    timeToVisit: "5:30 PM - 7:30 PM",
-                    order: 6
-                  });
-                }
-
-                // Dinner
-                if (dayData?.evening?.diningSuggestion?.dinner) {
-                  activities.push({
-                    placeName: dayData.evening.diningSuggestion.dinner,
-                    placeDetails: dayData.evening.diningSuggestion.dinnerDetails || "Dinner time",
-                    type: "dinner",
-                    timeToVisit: "7:30 PM - 9:00 PM",
-                    ticketPrice: dayData.evening.diningSuggestion.priceRange,
-                    order: 7
-                  });
-                }
-
-                // Add checkout message for the last day
-                if (parseInt(key.replace("day", "")) === plan.duration) {
-                  activities.push({
-                    placeName: "Hotel Checkout",
-                    placeDetails: "Time to say goodbye! Please ensure you check out from your hotel by 11:00 AM.",
-                    type: "checkout",
-                    timeToVisit: "11:00 AM",
-                    order: 8
-                  });
-                }
-
-                return {
-                  day: parseInt(key.replace("day", "")) || 1,
-                  theme: dayData?.theme || "",
-                  bestTimeToVisit: dayData?.bestTimeToVisit || "",
-                  activities: activities.sort((a, b) => a.order - b.order)
-                };
-              })
-          : [] // Return empty array if plan.itinerary is null or undefined
-      })),
+          restaurantSuggestions: {
+            breakfastOptions: (plan.restaurantSuggestions?.breakfastOptions || []).map((option) => ({
+              name: option.name,
+              cuisine: option.cuisine,
+              priceRange: option.priceRange,
+              description: option.description,
+              locationDetails: option.locationDetails,
+            })),
+            cafeOptions: (plan.restaurantSuggestions?.cafeOptions || []).map((option) => ({
+              name: option.name,
+              cuisine: option.cuisine,
+              priceRange: option.priceRange,
+              description: option.description,
+              locationDetails: option.locationDetails,
+            })),
+            snackOptions: (plan.restaurantSuggestions?.snackOptions || []).map((option) => ({
+              name: option.name,
+              cuisine: option.cuisine,
+              priceRange: option.priceRange,
+              description: option.description,
+              locationDetails: option.locationDetails,
+            })),
+          },
+          itinerary: Object.entries(plan.itinerary || {})
+            .filter(([key]) => key.startsWith("day"))
+            .map(([key, dayData]) => {
+              const activities = [];
+  
+              // Morning activities
+              if (dayData?.morning?.activity) {
+                activities.push({
+                  placeName: dayData.morning.activity,
+                  placeDetails: dayData.morning.description || "Start your day with morning activity",
+                  imageUrl: dayData.morning.placeImageUrl,
+                  coordinates: dayData.morning.geoCoordinates ? [
+                    parseFloat(dayData.morning.geoCoordinates.latitude),
+                    parseFloat(dayData.morning.geoCoordinates.longitude),
+                  ] : null,
+                  ticketPrice: dayData.morning.ticketPricing,
+                  rating: dayData.morning.rating,
+                  type: "activity",
+                  timeToVisit: "8:00 AM - 9:30 PM",
+                  order: 1,
+                });
+              }
+              if (dayData?.midday?.activity) {
+                activities.push({
+                  placeName: dayData.midday.activity,
+                  placeDetails: dayData.midday.placeDetails || "",
+                  imageUrl: dayData.midday.placeImageUrl,
+                  coordinates: dayData.midday.geoCoordinates
+                    ? [
+                        parseFloat(dayData.midday.geoCoordinates.latitude),
+                        parseFloat(dayData.midday.geoCoordinates.longitude),
+                      ]
+                    : null,
+                  ticketPrice: dayData.midday.ticketPricing,
+                  rating: dayData.midday.rating,
+                  type: "activity",
+                  timeToVisit: "9:30 PM - 12:00 PM",
+                  order: 2,
+                });
+              }
+              // Lunch
+              if (dayData?.midday?.diningSuggestion?.lunch) {
+                activities.push({
+                  placeName: dayData.midday.diningSuggestion.lunch,
+                  placeDetails: dayData.midday.diningSuggestion.lunchDetails || "Lunch break",
+                  type: "lunch",
+                  timeToVisit: "12:00 PM - 1:30 PM",
+                  ticketPrice: dayData.midday.diningSuggestion.priceRange,
+                  order: 3,
+                });
+              }
+  
+              // Afternoon activity
+              if (dayData?.afternoon?.activity) {
+                activities.push({
+                  placeName: dayData.afternoon.activity,
+                  placeDetails: dayData.afternoon.placeDetails || "",
+                  imageUrl: dayData.afternoon.placeImageUrl,
+                  coordinates: dayData.afternoon.geoCoordinates ? [
+                    parseFloat(dayData.afternoon.geoCoordinates.latitude),
+                    parseFloat(dayData.afternoon.geoCoordinates.longitude),
+                  ] : null,
+                  ticketPrice: dayData.afternoon.ticketPricing,
+                  rating: dayData.afternoon.rating,
+                  type: "activity",
+                  timeToVisit: "2:00 PM - 5:00 PM",
+                  order: 4,
+                });
+              }
+  
+              // Evening activity and dinner
+              if (dayData?.evening?.activity) {
+                activities.push({
+                  placeName: dayData.evening.activity,
+                  placeDetails: dayData.evening.placeDetails || "",
+                  imageUrl: dayData.evening.placeImageUrl,
+                  coordinates: dayData.evening.geoCoordinates ? [
+                    parseFloat(dayData.evening.geoCoordinates.latitude),
+                    parseFloat(dayData.evening.geoCoordinates.longitude),
+                  ] : null,
+                  ticketPrice: dayData.evening.ticketPricing,
+                  rating: dayData.evening.rating,
+                  type: "activity",
+                  timeToVisit: "5:00 PM - 7:30 PM",
+                  order: 5,
+                });
+              }
+  
+              if (dayData?.evening?.diningSuggestion?.dinner) {
+                activities.push({
+                  placeName: dayData.evening.diningSuggestion.dinner,
+                  placeDetails: dayData.evening.diningSuggestion.dinnerDetails || "Dinner time",
+                  type: "dinner",
+                  timeToVisit: "7:30 PM - 9:00 PM",
+                  ticketPrice: dayData.evening.diningSuggestion.priceRange,
+                  order: 6,
+                });
+              }
+  
+              return {
+                day: parseInt(key.replace("day", "")) || 1,
+                theme: dayData?.theme || "",
+                bestTimeToVisit: dayData?.bestTimeToVisit || "",
+                activities: activities.sort((a, b) => a.order - b.order),
+              };
+            }),
+        };
+      }),
     };
   };
-
   const ActivityCard = ({ activity }) => (
     <div className="bg-white shadow rounded-lg p-4 mb-4">
       {activity.imageUrl && (
@@ -1537,14 +1718,14 @@ console.log(responseText);
   }
 
   if (error) {
-    return (
-      <div className="p-4 text-red-500">
-        {error}
-      </div>
-    );
+    return <div className="p-4 text-red-500">{error}</div>;
   }
 
-  if (!itineraryData || !itineraryData.cities || itineraryData.cities.length === 0) {
+  if (
+    !itineraryData ||
+    !itineraryData.cities ||
+    itineraryData.cities.length === 0
+  ) {
     return (
       <div className="p-4 text-red-500">
         No itinerary data available. Please try again.
@@ -1564,7 +1745,6 @@ console.log(responseText);
     }
   };
 
-  
   return (
     <div className={`container mx-auto p-4 ${showLoginModal ? "blur-sm" : ""}`}>
       <div className="mb-6">
@@ -1593,156 +1773,45 @@ console.log(responseText);
         </div>
       )}
 
-      
       {selectedCity && (
-  <div>
-    <h2 className="text-2xl font-bold mb-4">
-      Itinerary for {selectedCity.cityName} - {selectedCity.duration} days
-    </h2>
-
-    {/* Hotels Section */}
-    <div>
-      <h3 className="text-xl font-bold mb-4">Hotels Recommendation</h3>
-      <div className="flex justify-between">
-        {(selectedCity.hotels || []).map((hotel, index) => (
-          <div
-            key={index}
-            className="w-1/4 bg-white shadow rounded-lg p-4 mx-2"
-          >
-            {hotel.imageUrl && (
-              <div className="aspect-w-1 aspect-h-1 mb-4">
-                <img
-                  src={hotel.imageUrl}
-                  alt={hotel.name}
-                  className="object-cover rounded-lg w-full"
-                />
-              </div>
-            )}
-            <h4 className="font-bold text-lg">{hotel.name}</h4>
-            <p className="text-gray-600">{hotel.address}</p>
-            <p className="text-green-600 font-bold">{hotel.price}</p>
-            {hotel.rating && (
-              <p className="text-sm text-gray-600">{hotel.rating} Star</p>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-
-    {/* Map and Itinerary Section */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      {/* Map */}
-      <div>
-        <MapContainer
-          center={[selectedCity.latitude, selectedCity.longitude]}
-          zoom={12}
-          style={{ height: "400px", width: "100%" }}
-        >
-          <MapCenterHandler
-            center={
-              selectedLocation || [
-                selectedCity.latitude,
-                selectedCity.longitude,
-              ]
-            }
-          />
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="&copy; OpenStreetMap contributors"
-          />
-          {(selectedCity.itinerary || []).flatMap((day) =>
-            (day.activities || []).map((activity, index) => {
-              if (!activity.coordinates) return null;
-              return (
-                <Marker
-                  key={`${day.day}-${index}`}
-                  position={activity.coordinates}
-                  eventHandlers={{
-                    click: () => handleLocationClick(activity),
-                  }}
-                >
-                  <Popup>
-                    <div>
-                      <h3 className="font-bold">{activity.placeName}</h3>
-                      <p className="text-sm">{activity.placeDetails}</p>
-                      <p className="text-sm text-gray-600">
-                        {activity.timeToVisit}
-                      </p>
-                      {activity.ticketPrice && (
-                        <p className="text-sm text-green-600">
-                          Price: {activity.ticketPrice}
-                        </p>
-                      )}
-                    </div>
-                  </Popup>
-                </Marker>
-              );
-            })
-          )}
-        </MapContainer>
-      </div>
-
-      {/* Itinerary */}
-      <div>
-        {selectedCity.itinerary.map((day) => (
-                <div key={day.day} className="bg-white shadow rounded-lg p-6">
-                  <h3 className="text-xl font-semibold mb-4">Day {day.day}</h3>
-                  <div className="space-y-4">
-                    {day.activities.map((activity, index) => (
-                      <ActivityCard key={index} activity={activity} />
-                    ))}
-                  </div>
-                </div>
-              ))}
-      </div>
-    </div>
-  </div>
-)}
-
-    </div>
-  );
-};
-
-export default Itinerary;
-
-
-{/* {selectedCity && (
         <div>
           <h2 className="text-2xl font-bold mb-4">
             Itinerary for {selectedCity.cityName} - {selectedCity.duration} days
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <div className="mb-6">
-                <h3 className="text-xl font-bold mb-4">Hotels</h3>
-                <div className="space-y-4">
-                  {(selectedCity.hotels || []).map((hotel, index) => (
-                    <div key={index} className="bg-white shadow rounded-lg p-4">
-                      {hotel.imageUrl && (
-                        <div className="aspect-w-16 aspect-h-9 mb-4">
-                          <img
-                            src={hotel.imageUrl}
-                            alt={hotel.name}
-                            className="object-cover rounded-lg w-full h-48"
-                          />
-                        </div>
-                      )}
-                      <h4 className="font-bold text-lg">{hotel.name}</h4>
-                      <p className="text-gray-600">{hotel.address}</p>
-                      <p className="text-green-600 font-bold">{hotel.price}</p>
-                      {hotel.rating && (
-                        <div className="flex items-center mt-2">
-                          <span className="text-yellow-400">★</span>
-                          <span className="ml-1">{hotel.rating}</span>
-                        </div>
-                      )}
-                      <p className="text-gray-700 mt-2">{hotel.description}</p>
+          {/* Hotels Section */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">Hotels Recommendation</h3>
+            <div className="flex justify-between">
+              {(selectedCity.hotels || []).map((hotel, index) => (
+                <div
+                  key={index}
+                  className="w-1/4 bg-white shadow rounded-lg p-4 mx-2"
+                >
+                  {hotel.imageUrl && (
+                    <div className="aspect-w-1 aspect-h-1 mb-4">
+                      <img
+                        src={hotel.imageUrl}
+                        alt={hotel.name}
+                        className="object-cover rounded-lg w-full"
+                      />
                     </div>
-                  ))}
+                  )}
+                  <h4 className="font-bold text-lg">{hotel.name}</h4>
+                  <p className="text-gray-600">{hotel.address}</p>
+                  <p className="text-green-600 font-bold">{hotel.price}</p>
+                  {hotel.rating && (
+                    <p className="text-sm text-gray-600">{hotel.rating} Star</p>
+                  )}
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
 
+          {/* Map and Itinerary Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            {/* Map */}
+            <div>
               <MapContainer
                 center={[selectedCity.latitude, selectedCity.longitude]}
                 zoom={12}
@@ -1760,7 +1829,6 @@ export default Itinerary;
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution="&copy; OpenStreetMap contributors"
                 />
-
                 {(selectedCity.itinerary || []).flatMap((day) =>
                   (day.activities || []).map((activity, index) => {
                     if (!activity.coordinates) return null;
@@ -1793,56 +1861,167 @@ export default Itinerary;
               </MapContainer>
             </div>
 
+            {/* Itinerary */}
             <div>
-              {(selectedCity.itinerary || []).map((day) => (
-                <div key={day.day} className="mb-6">
+              {selectedCity.itinerary.map((day) => (
+                <div key={day.day} className="bg-white shadow rounded-lg p-6">
                   <h3 className="text-xl font-semibold mb-4">Day {day.day}</h3>
-                  {(day.activities || []).map((activity, index) => (
-                    <div
-                      key={index}
-                      className="bg-white shadow rounded-lg p-4 mb-4"
-                    >
-                      {activity.imageUrl && (
-                        <div className="aspect-w-16 aspect-h-9 mb-4">
-                          <img
-                            src={activity.imageUrl}
-                            alt={activity.placeName}
-                            className="object-cover rounded-lg w-full h-48"
-                            onError={(e) => {
-                              e.target.src = "/api/placeholder/400/300";
-                            }}
-                          />
-                        </div>
-                      )}
-                      <div className="flex justify-between items-center mb-2">
-                        <h4 className="font-bold text-lg">
-                          {activity.placeName}
-                        </h4>
-                        <span className="text-sm text-gray-600">
-                          {activity.timeToVisit}
-                        </span>
-                      </div>
-                      <p className="text-gray-700 mb-2">
-                        {activity.placeDetails}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        {activity.rating && (
-                          <div className="flex items-center">
-                            <span className="text-yellow-400">★</span>
-                            <span className="ml-1">{activity.rating}</span>
-                          </div>
-                        )}
-                        {activity.ticketPrice && (
-                          <span className="text-green-600">
-                            Price: {activity.ticketPrice}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                  <div className="space-y-4">
+                    {day.activities.map((activity, index) => (
+                      <ActivityCard key={index} activity={activity} />
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
-      )} */}
+      )}
+    </div>
+  );
+};
+
+export default Itinerary;
+
+// {
+//   /* {selectedCity && (
+//         <div>
+//           <h2 className="text-2xl font-bold mb-4">
+//             Itinerary for {selectedCity.cityName} - {selectedCity.duration} days
+//           </h2>
+
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//             <div>
+//               <div className="mb-6">
+//                 <h3 className="text-xl font-bold mb-4">Hotels</h3>
+//                 <div className="space-y-4">
+//                   {(selectedCity.hotels || []).map((hotel, index) => (
+//                     <div key={index} className="bg-white shadow rounded-lg p-4">
+//                       {hotel.imageUrl && (
+//                         <div className="aspect-w-16 aspect-h-9 mb-4">
+//                           <img
+//                             src={hotel.imageUrl}
+//                             alt={hotel.name}
+//                             className="object-cover rounded-lg w-full h-48"
+//                           />
+//                         </div>
+//                       )}
+//                       <h4 className="font-bold text-lg">{hotel.name}</h4>
+//                       <p className="text-gray-600">{hotel.address}</p>
+//                       <p className="text-green-600 font-bold">{hotel.price}</p>
+//                       {hotel.rating && (
+//                         <div className="flex items-center mt-2">
+//                           <span className="text-yellow-400">★</span>
+//                           <span className="ml-1">{hotel.rating}</span>
+//                         </div>
+//                       )}
+//                       <p className="text-gray-700 mt-2">{hotel.description}</p>
+//                     </div>
+//                   ))}
+//                 </div>
+//               </div>
+
+//               <MapContainer
+//                 center={[selectedCity.latitude, selectedCity.longitude]}
+//                 zoom={12}
+//                 style={{ height: "400px", width: "100%" }}
+//               >
+//                 <MapCenterHandler
+//                   center={
+//                     selectedLocation || [
+//                       selectedCity.latitude,
+//                       selectedCity.longitude,
+//                     ]
+//                   }
+//                 />
+//                 <TileLayer
+//                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+//                   attribution="&copy; OpenStreetMap contributors"
+//                 />
+
+//                 {(selectedCity.itinerary || []).flatMap((day) =>
+//                   (day.activities || []).map((activity, index) => {
+//                     if (!activity.coordinates) return null;
+//                     return (
+//                       <Marker
+//                         key={`${day.day}-${index}`}
+//                         position={activity.coordinates}
+//                         eventHandlers={{
+//                           click: () => handleLocationClick(activity),
+//                         }}
+//                       >
+//                         <Popup>
+//                           <div>
+//                             <h3 className="font-bold">{activity.placeName}</h3>
+//                             <p className="text-sm">{activity.placeDetails}</p>
+//                             <p className="text-sm text-gray-600">
+//                               {activity.timeToVisit}
+//                             </p>
+//                             {activity.ticketPrice && (
+//                               <p className="text-sm text-green-600">
+//                                 Price: {activity.ticketPrice}
+//                               </p>
+//                             )}
+//                           </div>
+//                         </Popup>
+//                       </Marker>
+//                     );
+//                   })
+//                 )}
+//               </MapContainer>
+//             </div>
+
+//             <div>
+//               {(selectedCity.itinerary || []).map((day) => (
+//                 <div key={day.day} className="mb-6">
+//                   <h3 className="text-xl font-semibold mb-4">Day {day.day}</h3>
+//                   {(day.activities || []).map((activity, index) => (
+//                     <div
+//                       key={index}
+//                       className="bg-white shadow rounded-lg p-4 mb-4"
+//                     >
+//                       {activity.imageUrl && (
+//                         <div className="aspect-w-16 aspect-h-9 mb-4">
+//                           <img
+//                             src={activity.imageUrl}
+//                             alt={activity.placeName}
+//                             className="object-cover rounded-lg w-full h-48"
+//                             onError={(e) => {
+//                               e.target.src = "/api/placeholder/400/300";
+//                             }}
+//                           />
+//                         </div>
+//                       )}
+//                       <div className="flex justify-between items-center mb-2">
+//                         <h4 className="font-bold text-lg">
+//                           {activity.placeName}
+//                         </h4>
+//                         <span className="text-sm text-gray-600">
+//                           {activity.timeToVisit}
+//                         </span>
+//                       </div>
+//                       <p className="text-gray-700 mb-2">
+//                         {activity.placeDetails}
+//                       </p>
+//                       <div className="flex items-center justify-between">
+//                         {activity.rating && (
+//                           <div className="flex items-center">
+//                             <span className="text-yellow-400">★</span>
+//                             <span className="ml-1">{activity.rating}</span>
+//                           </div>
+//                         )}
+//                         {activity.ticketPrice && (
+//                           <span className="text-green-600">
+//                             Price: {activity.ticketPrice}
+//                           </span>
+//                         )}
+//                       </div>
+//                     </div>
+//                   ))}
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+//         </div>
+//       )} */
+// }
