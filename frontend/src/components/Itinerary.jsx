@@ -757,10 +757,9 @@
 
 import React, { useEffect, useState } from "react";
 import { MapPin, Users, Plane, Loader, RefreshCcw, Clock } from "lucide-react";
-import transformTravelPlans from '../utils/travelTransformer';
 
 import { chatSession } from "../service/AIModal";
-import HotelGrid from "./HotelGrid";
+
 import TravelMap from "./TravelMap";
 
 const Itinerary = ({ showLoginModal }) => {
@@ -828,215 +827,216 @@ const Itinerary = ({ showLoginModal }) => {
     fetchItinerary();
   }, []);
 
-  // const transformTravelPlans = (data) => {
-  //   // Check if data exists
-  //   if (!data) {
-  //     console.error("No data provided to transformTravelPlans");
-  //     return null;
-  //   }
+ 
+  const transformTravelPlans = (data) => {
+    // Check if data exists
+    if (!data) {
+      console.error("No data provided to transformTravelPlans");
+      return null;
+    }
 
-  //   // Normalize the data structure
-  //   let travelPlans;
-  //   if (data.travelPlan) {
-  //     // If data comes with a single travelPlan object
-  //     travelPlans = [data.travelPlan];
-  //   } else if (data.travelPlans) {
-  //     // If data comes wrapped in travelPlans array
-  //     travelPlans = Array.isArray(data.travelPlans)
-  //       ? data.travelPlans
-  //       : [data.travelPlans];
-  //   } else {
-  //     // If data is direct object or array
-  //     travelPlans = Array.isArray(data) ? data : [data];
-  //   }
+    // Normalize the data structure
+    let travelPlans;
+    if (data.travelPlan) {
+      // If data comes with a single travelPlan object
+      travelPlans = [data.travelPlan];
+    } else if (data.travelPlans) {
+      // If data comes wrapped in travelPlans array
+      travelPlans = Array.isArray(data.travelPlans)
+        ? data.travelPlans
+        : [data.travelPlans];
+    } else {
+      // If data is direct object or array
+      travelPlans = Array.isArray(data) ? data : [data];
+    }
 
-  //   const selectedCitiesData = JSON.parse(
-  //     localStorage.getItem("selectedCitiesData")
-  //   );
+    const selectedCitiesData = JSON.parse(
+      localStorage.getItem("selectedCitiesData")
+    );
 
-  //   return {
-  //     travelType: selectedCitiesData?.travelType || "Unknown",
-  //     travelCount: selectedCitiesData?.travelCount || 1,
-  //     cities: travelPlans.map((plan, index) => {
-  //       // Get the corresponding city data from localStorage if available
-  //       const cityData = selectedCitiesData?.selectedCities?.[index] || {};
-  //       console.log("Hotel options for city:", plan.hotelOptions);
-  //       return {
-  //         cityName: plan.location || cityData.cityName || "Unknown City",
-  //         duration:
-  //           parseInt(String(plan.duration)) || parseInt(cityData.duration) || 1,
-  //         latitude:
-  //           parseFloat(plan.latitude) || parseFloat(cityData.latitude) || 0,
-  //         longitude:
-  //           parseFloat(plan.longitude) || parseFloat(cityData.longitude) || 0,
-  //         hotels: (plan.hotelOptions || []).map((hotel) => ({
-  //           name: hotel.hotelName,
-  //           address: hotel.hotelAddress,
-  //           price: hotel.price,
-  //           imageUrl: hotel.hotelImageUrl,
-  //           coordinates: hotel.geoCoordinates
-  //             ? [
-  //                 parseFloat(hotel.geoCoordinates.latitude),
-  //                 parseFloat(hotel.geoCoordinates.longitude),
-  //               ]
-  //             : null,
-  //           rating: hotel.rating,
-  //           description: hotel.description,
-  //         })),
-  //         restaurantSuggestions: {
-  //           breakfastOptions: (
-  //             plan.restaurantSuggestions?.breakfastOptions || []
-  //           ).map((option) => ({
-  //             name: option.name,
-  //             cuisine: option.cuisine,
-  //             priceRange: option.priceRange,
-  //             description: option.description,
-  //             locationDetails: option.locationDetails,
-  //           })),
-  //           cafeOptions: (plan.restaurantSuggestions?.cafeOptions || []).map(
-  //             (option) => ({
-  //               name: option.name,
-  //               cuisine: option.cuisine,
-  //               priceRange: option.priceRange,
-  //               description: option.description,
-  //               locationDetails: option.locationDetails,
-  //             })
-  //           ),
-  //           snackOptions: (plan.restaurantSuggestions?.snackOptions || []).map(
-  //             (option) => ({
-  //               name: option.name,
-  //               cuisine: option.cuisine,
-  //               priceRange: option.priceRange,
-  //               description: option.description,
-  //               locationDetails: option.locationDetails,
-  //             })
-  //           ),
-  //         },
-  //         itinerary: Object.entries(plan.itinerary || {})
-  //           .filter(([key]) => key.startsWith("day"))
-  //           .map(([key, dayData]) => {
-  //             const activities = [];
+    return {
+      travelType: selectedCitiesData?.travelType || "Unknown",
+      travelCount: selectedCitiesData?.travelCount || 1,
+      cities: travelPlans.map((plan, index) => {
+        // Get the corresponding city data from localStorage if available
+        const cityData = selectedCitiesData?.selectedCities?.[index] || {};
+        console.log("Hotel options for city:", plan.hotelOptions);
+        return {
+          cityName: plan.location || cityData.cityName || "Unknown City",
+          duration:
+            parseInt(String(plan.duration)) || parseInt(cityData.duration) || 1,
+          latitude:
+            parseFloat(plan.latitude) || parseFloat(cityData.latitude) || 0,
+          longitude:
+            parseFloat(plan.longitude) || parseFloat(cityData.longitude) || 0,
+          hotels: (plan.hotelOptions || []).map((hotel) => ({
+            name: hotel.hotelName,
+            address: hotel.hotelAddress,
+            price: hotel.price,
+            imageUrl: hotel.hotelImageUrl,
+            coordinates: hotel.geoCoordinates
+              ? [
+                  parseFloat(hotel.geoCoordinates.latitude),
+                  parseFloat(hotel.geoCoordinates.longitude),
+                ]
+              : null,
+            rating: hotel.rating,
+            description: hotel.description,
+          })),
+          restaurantSuggestions: {
+            breakfastOptions: (
+              plan.restaurantSuggestions?.breakfastOptions || []
+            ).map((option) => ({
+              name: option.name,
+              cuisine: option.cuisine,
+              priceRange: option.priceRange,
+              description: option.description,
+              locationDetails: option.locationDetails,
+            })),
+            cafeOptions: (plan.restaurantSuggestions?.cafeOptions || []).map(
+              (option) => ({
+                name: option.name,
+                cuisine: option.cuisine,
+                priceRange: option.priceRange,
+                description: option.description,
+                locationDetails: option.locationDetails,
+              })
+            ),
+            snackOptions: (plan.restaurantSuggestions?.snackOptions || []).map(
+              (option) => ({
+                name: option.name,
+                cuisine: option.cuisine,
+                priceRange: option.priceRange,
+                description: option.description,
+                locationDetails: option.locationDetails,
+              })
+            ),
+          },
+          itinerary: Object.entries(plan.itinerary || {})
+            .filter(([key]) => key.startsWith("day"))
+            .map(([key, dayData]) => {
+              const activities = [];
 
-  //             // Morning activities
-  //             if (dayData?.morning?.activity) {
-  //               activities.push({
-  //                 placeName: dayData.morning.activity,
-  //                 placeDetails:
-  //                   dayData.morning.description ||
-  //                   "Start your day with morning activity",
-  //                 imageUrl: dayData.morning.placeImageUrl,
-  //                 coordinates: dayData.morning.geoCoordinates
-  //                   ? [
-  //                       parseFloat(dayData.morning.geoCoordinates.latitude),
-  //                       parseFloat(dayData.morning.geoCoordinates.longitude),
-  //                     ]
-  //                   : null,
-  //                 ticketPrice: dayData.morning.ticketPricing,
-  //                 rating: dayData.morning.rating,
-  //                 type: "activity",
-  //                 timeToVisit: "8:00 AM - 9:30 PM",
-  //                 order: 1,
-  //               });
-  //             }
-  //             if (dayData?.midday?.activity) {
-  //               activities.push({
-  //                 placeName: dayData.midday.activity,
-  //                 placeDetails: dayData.midday.placeDetails || "",
-  //                 imageUrl: dayData.midday.placeImageUrl,
-  //                 coordinates: dayData.midday.geoCoordinates
-  //                   ? [
-  //                       parseFloat(dayData.midday.geoCoordinates.latitude),
-  //                       parseFloat(dayData.midday.geoCoordinates.longitude),
-  //                     ]
-  //                   : null,
-  //                 ticketPrice: dayData.midday.ticketPricing,
-  //                 rating: dayData.midday.rating,
-  //                 type: "activity",
-  //                 timeToVisit: "9:30 PM - 12:00 PM",
-  //                 order: 2,
-  //               });
-  //             }
-  //             // Lunch
-  //             if (dayData?.midday?.diningSuggestion?.lunch) {
-  //               activities.push({
-  //                 placeName: dayData.midday.diningSuggestion.lunch,
-  //                 placeDetails:
-  //                   dayData.midday.diningSuggestion.lunchDetails ||
-  //                   "Lunch break",
-  //                 type: "lunch",
-  //                 timeToVisit: "12:00 PM - 1:30 PM",
-  //                 ticketPrice: dayData.midday.diningSuggestion.priceRange,
-  //                 order: 3,
-  //               });
-  //             }
+              // Morning activities
+              if (dayData?.morning?.activity) {
+                activities.push({
+                  placeName: dayData.morning.activity,
+                  placeDetails:
+                    dayData.morning.description ||
+                    "Start your day with morning activity",
+                  imageUrl: dayData.morning.placeImageUrl,
+                  coordinates: dayData.morning.geoCoordinates
+                    ? [
+                        parseFloat(dayData.morning.geoCoordinates.latitude),
+                        parseFloat(dayData.morning.geoCoordinates.longitude),
+                      ]
+                    : null,
+                  ticketPrice: dayData.morning.ticketPricing,
+                  rating: dayData.morning.rating,
+                  type: "activity",
+                  timeToVisit: "8:00 AM - 9:30 PM",
+                  order: 1,
+                });
+              }
+              if (dayData?.midday?.activity) {
+                activities.push({
+                  placeName: dayData.midday.activity,
+                  placeDetails: dayData.midday.placeDetails || "",
+                  imageUrl: dayData.midday.placeImageUrl,
+                  coordinates: dayData.midday.geoCoordinates
+                    ? [
+                        parseFloat(dayData.midday.geoCoordinates.latitude),
+                        parseFloat(dayData.midday.geoCoordinates.longitude),
+                      ]
+                    : null,
+                  ticketPrice: dayData.midday.ticketPricing,
+                  rating: dayData.midday.rating,
+                  type: "activity",
+                  timeToVisit: "9:30 PM - 12:00 PM",
+                  order: 2,
+                });
+              }
+              // Lunch
+              if (dayData?.midday?.diningSuggestion?.lunch) {
+                activities.push({
+                  placeName: dayData.midday.diningSuggestion.lunch,
+                  placeDetails:
+                    dayData.midday.diningSuggestion.lunchDetails ||
+                    "Lunch break",
+                  type: "lunch",
+                  timeToVisit: "12:00 PM - 1:30 PM",
+                  ticketPrice: dayData.midday.diningSuggestion.priceRange,
+                  order: 3,
+                });
+              }
 
-  //             // Afternoon activity
-  //             if (dayData?.afternoon?.activity) {
-  //               activities.push({
-  //                 placeName: dayData.afternoon.activity,
-  //                 placeDetails: dayData.afternoon.placeDetails || "",
-  //                 imageUrl: dayData.afternoon.placeImageUrl,
-  //                 coordinates: dayData.afternoon.geoCoordinates
-  //                   ? [
-  //                       parseFloat(dayData.afternoon.geoCoordinates.latitude),
-  //                       parseFloat(dayData.afternoon.geoCoordinates.longitude),
-  //                     ]
-  //                   : null,
-  //                 ticketPrice: dayData.afternoon.ticketPricing,
-  //                 rating: dayData.afternoon.rating,
-  //                 type: "activity",
-  //                 timeToVisit: "2:00 PM - 5:00 PM",
-  //                 order: 4,
-  //               });
-  //             }
+              // Afternoon activity
+              if (dayData?.afternoon?.activity) {
+                activities.push({
+                  placeName: dayData.afternoon.activity,
+                  placeDetails: dayData.afternoon.placeDetails || "",
+                  imageUrl: dayData.afternoon.placeImageUrl,
+                  coordinates: dayData.afternoon.geoCoordinates
+                    ? [
+                        parseFloat(dayData.afternoon.geoCoordinates.latitude),
+                        parseFloat(dayData.afternoon.geoCoordinates.longitude),
+                      ]
+                    : null,
+                  ticketPrice: dayData.afternoon.ticketPricing,
+                  rating: dayData.afternoon.rating,
+                  type: "activity",
+                  timeToVisit: "2:00 PM - 5:00 PM",
+                  order: 4,
+                });
+              }
 
-  //             // Evening activity and dinner
-  //             if (dayData?.evening?.activity) {
-  //               activities.push({
-  //                 placeName: dayData.evening.activity,
-  //                 placeDetails: dayData.evening.placeDetails || "",
-  //                 imageUrl: dayData.evening.placeImageUrl,
-  //                 coordinates: dayData.evening.geoCoordinates
-  //                   ? [
-  //                       parseFloat(dayData.evening.geoCoordinates.latitude),
-  //                       parseFloat(dayData.evening.geoCoordinates.longitude),
-  //                     ]
-  //                   : null,
-  //                 ticketPrice: dayData.evening.ticketPricing,
-  //                 rating: dayData.evening.rating,
-  //                 type: "activity",
-  //                 timeToVisit: "5:00 PM - 7:30 PM",
-  //                 order: 5,
-  //               });
-  //             }
+              // Evening activity and dinner
+              if (dayData?.evening?.activity) {
+                activities.push({
+                  placeName: dayData.evening.activity,
+                  placeDetails: dayData.evening.placeDetails || "",
+                  imageUrl: dayData.evening.placeImageUrl,
+                  coordinates: dayData.evening.geoCoordinates
+                    ? [
+                        parseFloat(dayData.evening.geoCoordinates.latitude),
+                        parseFloat(dayData.evening.geoCoordinates.longitude),
+                      ]
+                    : null,
+                  ticketPrice: dayData.evening.ticketPricing,
+                  rating: dayData.evening.rating,
+                  type: "activity",
+                  timeToVisit: "5:00 PM - 7:30 PM",
+                  order: 5,
+                });
+              }
 
-  //             if (dayData?.evening?.diningSuggestion?.dinner) {
-  //               activities.push({
-  //                 placeName: dayData.evening.diningSuggestion.dinner,
-  //                 placeDetails:
-  //                   dayData.evening.diningSuggestion.dinnerDetails ||
-  //                   "Dinner time",
-  //                 type: "dinner",
-  //                 timeToVisit: "7:30 PM - 9:00 PM",
-  //                 ticketPrice: dayData.evening.diningSuggestion.priceRange,
-  //                 order: 6,
-  //               });
-  //             }
+              if (dayData?.evening?.diningSuggestion?.dinner) {
+                activities.push({
+                  placeName: dayData.evening.diningSuggestion.dinner,
+                  placeDetails:
+                    dayData.evening.diningSuggestion.dinnerDetails ||
+                    "Dinner time",
+                  type: "dinner",
+                  timeToVisit: "7:30 PM - 9:00 PM",
+                  ticketPrice: dayData.evening.diningSuggestion.priceRange,
+                  order: 6,
+                });
+              }
 
-  //             return {
-  //               day: parseInt(key.replace("day", "")) || 1,
-  //               theme: dayData?.theme || "",
-  //               bestTimeToVisit: dayData?.bestTimeToVisit || "",
-  //               activities: activities.sort((a, b) => a.order - b.order),
-  //             };
-  //           }),
-  //       };
-  //     }),
-  //   };
-  // };
+              return {
+                day: parseInt(key.replace("day", "")) || 1,
+                theme: dayData?.theme || "",
+                bestTimeToVisit: dayData?.bestTimeToVisit || "",
+                activities: activities.sort((a, b) => a.order - b.order),
+              };
+            }),
+        };
+      }),
+    };
+  };
   const ActivityCard = ({ activity }) => (
     <div className="bg-white shadow rounded-lg p-4 mb-4">
-      {/* {activity.imageUrl && (
+      {activity.imageUrl && (
         <div className="aspect-w-16 aspect-h-9 mb-4">
           <img
             src={activity.imageUrl}
@@ -1047,7 +1047,7 @@ const Itinerary = ({ showLoginModal }) => {
             }}
           />
         </div>
-      )} */}
+      )}
       <div className="flex justify-between items-center mb-2">
         <div>
           <h4 className="font-bold text-lg">{activity.placeName}</h4>
@@ -1162,11 +1162,70 @@ const Itinerary = ({ showLoginModal }) => {
           </h2>
 
           {/* Hotels Section */}
+          {/* <div>
+            <h3 className="text-xl font-bold mb-4">Hotels Recommendation</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
+              {(selectedCity.hotels || []).map((hotel, index) => (
+                <div className="hover:scale-110 transition-all cursor-pointer">
+                  <img
+                    src="https://images.unsplash.com/photo-1517840901100-8179e982acb7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    alt={hotel.name}
+                    className="rounded-xl"
+                  />
+                  <div className="my-2 flex flex-col gap-2">
+                    <h2 className="font-medium">{hotel.name}</h2>
+                    <h2 className="text-xs text-gray-500">{hotel.address}</h2>
+                    <h2 className="text-sm">{hotel.price}</h2>
+                    <h2 className="text-sm">{hotel.rating}</h2>
+                  </div>
+                </div>
+                // <div
+                //   key={index}
+                //   className="w-1/4 bg-white shadow rounded-lg p-4 mx-2"
+                // >
 
+                //   {hotel.imageUrl && (
+                //     <div className="aspect-w-1 aspect-h-1 mb-4">
+                //       <img
+                //         src={hotel.imageUrl}
+                //         alt={hotel.name}
+                //         className="object-cover rounded-lg w-full"
+                //       />
+                //     </div>
+                //   )}
+                //   <h4 className="font-bold text-lg">{hotel.name}</h4>
+                //   <p className="text-gray-600">{hotel.address}</p>
+                //   <p className="text-green-600 font-bold">{hotel.price}</p>
+                //   {hotel.rating && (
+                //     <p className="text-sm text-gray-600">{hotel.rating} Star</p>
+                //   )}
+                // </div>
+              ))}
+            </div>
+          </div> */}
 
-          <div>
-            <h3 className="text-xl font-bold mt-5">Hotels Recommendation</h3>
-            <HotelGrid hotels={selectedCity.hotels || []} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {(selectedCity.hotels || []).map((hotel, index) => (
+              <div
+                key={index}
+                className="hover:scale-105 transition-all cursor-pointer"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1517840901100-8179e982acb7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt={hotel.name}
+                  className="rounded-xl w-full h-48 object-cover"
+                />
+                <div className="my-2 flex flex-col gap-2">
+                  <h2 className="font-medium ">{hotel.name}</h2>
+                  <h2 className="text-xs text-gray-500">{hotel.address}</h2>
+                  <h2 className="text-sm text-green-800">{hotel.price}</h2>
+                  <div className="flex items-center">
+                    <span className="text-yellow-400">★</span>
+                    <span className="ml-1 text-sm">{hotel.rating}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Map and Itinerary Section */}
