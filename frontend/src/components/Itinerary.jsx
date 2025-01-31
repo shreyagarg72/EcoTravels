@@ -792,7 +792,8 @@ const Itinerary = ({ showLoginModal }) => {
 
           const result = await chatSession.sendMessage(FINAL_PROMPT);
 
-          const responseText = result?.response?.text();
+          const responseText = await result?.response?.text();
+
           console.log(responseText);
           // Try to parse the response text into JSON
           let parsedData;
@@ -1162,47 +1163,7 @@ const Itinerary = ({ showLoginModal }) => {
           </h2>
 
           {/* Hotels Section */}
-          {/* <div>
-            <h3 className="text-xl font-bold mb-4">Hotels Recommendation</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
-              {(selectedCity.hotels || []).map((hotel, index) => (
-                <div className="hover:scale-110 transition-all cursor-pointer">
-                  <img
-                    src="https://images.unsplash.com/photo-1517840901100-8179e982acb7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt={hotel.name}
-                    className="rounded-xl"
-                  />
-                  <div className="my-2 flex flex-col gap-2">
-                    <h2 className="font-medium">{hotel.name}</h2>
-                    <h2 className="text-xs text-gray-500">{hotel.address}</h2>
-                    <h2 className="text-sm">{hotel.price}</h2>
-                    <h2 className="text-sm">{hotel.rating}</h2>
-                  </div>
-                </div>
-                // <div
-                //   key={index}
-                //   className="w-1/4 bg-white shadow rounded-lg p-4 mx-2"
-                // >
-
-                //   {hotel.imageUrl && (
-                //     <div className="aspect-w-1 aspect-h-1 mb-4">
-                //       <img
-                //         src={hotel.imageUrl}
-                //         alt={hotel.name}
-                //         className="object-cover rounded-lg w-full"
-                //       />
-                //     </div>
-                //   )}
-                //   <h4 className="font-bold text-lg">{hotel.name}</h4>
-                //   <p className="text-gray-600">{hotel.address}</p>
-                //   <p className="text-green-600 font-bold">{hotel.price}</p>
-                //   {hotel.rating && (
-                //     <p className="text-sm text-gray-600">{hotel.rating} Star</p>
-                //   )}
-                // </div>
-              ))}
-            </div>
-          </div> */}
+       
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {(selectedCity.hotels || []).map((hotel, index) => (

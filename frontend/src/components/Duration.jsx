@@ -382,8 +382,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "./Duration.css";
-import { AI_PROMPT } from "../constants/options";
-import { chatSession } from "../service/AIModal";
+
 
 const Duration = ({ handleLoginClick }) => {
   const [selectedCitiesData, setSelectedCitiesData] = useState({
@@ -430,35 +429,99 @@ const Duration = ({ handleLoginClick }) => {
     }
   }, [selectedDates]);
 
+  // const handleDateChange = (cityName, date) => {
+  //   setSelectedDates((prevDates) => {
+  //     const currentCityDates = prevDates[cityName] || {};
+  //     const { from, to } = currentCityDates;
+
+  //     let newFrom = from;
+  //     let newTo = to;
+
+  //     if (!from || (from && to)) {
+  //       newFrom = date;
+  //       newTo = null;
+  //     } else if (from && !to) {
+  //       const maxDate = addDays(from, 3);
+  //       if (date > maxDate) {
+  //         alert("Please select a date range of up to 4 days.");
+  //         return prevDates;
+  //       }
+  //       newTo = date;
+
+  //       const range = [];
+  //       for (let d = newFrom; d <= newTo; d = addDays(d, 1)) {
+  //         range.push(d);
+  //       }
+  //       setDisabledDates([...disabledDates, ...range]);
+  //     }
+
+  //     const duration =
+  //       newTo && newFrom ? differenceInDays(newTo, newFrom) + 1 : 0;
+
+  //     const newSelectedDates = {
+  //       ...prevDates,
+  //       [cityName]: {
+  //         from: newFrom,
+  //         to: newTo,
+  //         duration,
+  //       },
+  //     };
+
+  //     const totalDuration = Object.values(newSelectedDates).reduce(
+  //       (sum, { duration }) => sum + (duration || 0),
+  //       0
+  //     );
+  //     setTotalDuration(totalDuration);
+
+  //     const allSelected = Object.keys(newSelectedDates).every(
+  //       (key) => newSelectedDates[key].from && newSelectedDates[key].to
+  //     );
+  //     setAllDatesSelected(allSelected);
+
+  //     // Update selectedCitiesData with new duration
+  //     setSelectedCitiesData((prevData) => ({
+  //       ...prevData,
+  //       selectedCities: prevData.selectedCities.map((city) =>
+  //         city.cityName === cityName ? { ...city, duration: duration } : city
+  //       ),
+  //     }));
+
+  //     return newSelectedDates;
+  //   });
+  // };
+
   const handleDateChange = (cityName, date) => {
     setSelectedDates((prevDates) => {
       const currentCityDates = prevDates[cityName] || {};
       const { from, to } = currentCityDates;
-
+  
       let newFrom = from;
       let newTo = to;
-
+  
+      // Determine max days allowed based on number of selected cities
+      const maxDays = selectedCitiesData.selectedCities.length > 2 ? 2 : 3;
+      const maxDate = addDays(from || date, maxDays - 1);
+  
       if (!from || (from && to)) {
         newFrom = date;
         newTo = null;
       } else if (from && !to) {
-        const maxDate = addDays(from, 3);
         if (date > maxDate) {
-          alert("Please select a date range of up to 4 days.");
+          alert(`Please select a date range of up to ${maxDays} days.`);
           return prevDates;
         }
         newTo = date;
-
+  
         const range = [];
         for (let d = newFrom; d <= newTo; d = addDays(d, 1)) {
           range.push(d);
         }
         setDisabledDates([...disabledDates, ...range]);
       }
-
+  
       const duration =
         newTo && newFrom ? differenceInDays(newTo, newFrom) + 1 : 0;
-
+  
       const newSelectedDates = {
         ...prevDates,
         [cityName]: {
@@ -467,18 +530,18 @@ const Duration = ({ handleLoginClick }) => {
           duration,
         },
       };
-
+  
       const totalDuration = Object.values(newSelectedDates).reduce(
         (sum, { duration }) => sum + (duration || 0),
         0
       );
       setTotalDuration(totalDuration);
-
+  
       const allSelected = Object.keys(newSelectedDates).every(
         (key) => newSelectedDates[key].from && newSelectedDates[key].to
       );
       setAllDatesSelected(allSelected);
-
+  
       // Update selectedCitiesData with new duration
       setSelectedCitiesData((prevData) => ({
         ...prevData,
@@ -486,7 +549,7 @@ const Duration = ({ handleLoginClick }) => {
           city.cityName === cityName ? { ...city, duration: duration } : city
         ),
       }));
-
+  
       return newSelectedDates;
     });
   };
