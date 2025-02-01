@@ -382,7 +382,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "./Duration.css";
-
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { chatSession } from "../service/AIModal";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { LoaderCircle, LoaderCircleIcon } from "lucide-react";
 
 const Duration = ({ handleLoginClick }) => {
   const [selectedCitiesData, setSelectedCitiesData] = useState({
@@ -395,6 +400,7 @@ const Duration = ({ handleLoginClick }) => {
   const [totalDuration, setTotalDuration] = useState(0);
   const [allDatesSelected, setAllDatesSelected] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   // Check authentication state
@@ -494,14 +500,14 @@ const Duration = ({ handleLoginClick }) => {
     setSelectedDates((prevDates) => {
       const currentCityDates = prevDates[cityName] || {};
       const { from, to } = currentCityDates;
-  
+
       let newFrom = from;
       let newTo = to;
-  
+
       // Determine max days allowed based on number of selected cities
       const maxDays = selectedCitiesData.selectedCities.length > 2 ? 2 : 3;
       const maxDate = addDays(from || date, maxDays - 1);
-  
+
       if (!from || (from && to)) {
         newFrom = date;
         newTo = null;
@@ -511,17 +517,17 @@ const Duration = ({ handleLoginClick }) => {
           return prevDates;
         }
         newTo = date;
-  
+
         const range = [];
         for (let d = newFrom; d <= newTo; d = addDays(d, 1)) {
           range.push(d);
         }
         setDisabledDates([...disabledDates, ...range]);
       }
-  
+
       const duration =
         newTo && newFrom ? differenceInDays(newTo, newFrom) + 1 : 0;
-  
+
       const newSelectedDates = {
         ...prevDates,
         [cityName]: {
@@ -530,18 +536,18 @@ const Duration = ({ handleLoginClick }) => {
           duration,
         },
       };
-  
+
       const totalDuration = Object.values(newSelectedDates).reduce(
         (sum, { duration }) => sum + (duration || 0),
         0
       );
       setTotalDuration(totalDuration);
-  
+
       const allSelected = Object.keys(newSelectedDates).every(
         (key) => newSelectedDates[key].from && newSelectedDates[key].to
       );
       setAllDatesSelected(allSelected);
-  
+
       // Update selectedCitiesData with new duration
       setSelectedCitiesData((prevData) => ({
         ...prevData,
@@ -549,7 +555,7 @@ const Duration = ({ handleLoginClick }) => {
           city.cityName === cityName ? { ...city, duration: duration } : city
         ),
       }));
-  
+
       return newSelectedDates;
     });
   };
@@ -595,12 +601,78 @@ const Duration = ({ handleLoginClick }) => {
     setTotalDuration(0);
   };
 
-  const handleNext = () => {
+  // const handleNext = () => {
+  //   if (!isLoggedIn) {
+  //     handleLoginClick();
+  //     return;
+  //   }
+
+  //   navigate("/itinerary");
+  // };
+
+  const handleNext = async () => {
     if (!isLoggedIn) {
       handleLoginClick();
       return;
     }
-    navigate("/itinerary");
+    setLoading(true);
+    // Generate travel plan prompt
+    const citiesDetails = selectedCitiesData.selectedCities
+      .map(
+        (city) =>
+          `{${city.cityName}, for ${city.duration} Days, latitude of ${city.latitude}, longitude of ${city.longitude}}`
+      )
+      .join(", ");
+
+    const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget. 
+    Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description. 
+    Suggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include some restaurants and cafes for all meals (breakfast, lunch, dinner, and snacks) for each location per city duration. 
+    Provide a daily plan with the best time to visit each place in JSON format.`;
+
+    console.log("Prompt:", FINAL_PROMPT);
+
+    try {
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      const responseText = result?.response?.text();
+      console.log("Response:", responseText);
+      setLoading(false);
+      SaveAiTrip(responseText);
+      // Store the response for use in the itinerary page
+      localStorage.setItem("generatedItinerary", responseText);
+
+      // Navigate to the itinerary page
+      // navigate("/itinerary");
+    } catch (error) {
+      console.error("Error fetching itinerary:", error);
+    }
+  };
+
+  const SaveAiTrip = async (TripData) => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error("User not authenticated.");
+        return;
+      }
+      setLoading(true);
+      const userEmail = user.email;
+      const docId = Date.now().toString(); // Unique ID for the trip
+      const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
+      await setDoc(doc(db, "AITrips", docId), {
+        id: docId,
+        userEmail: userEmail, // Save user's email
+        tripData: JSON.parse(TripData),
+        userSelection: data, // Save the itinerary data
+        createdAt: new Date().toISOString(), // Timestamp for tracking
+      });
+      setLoading(false);
+      console.log("Trip saved successfully!");
+      navigate("/view-trip/" + docId);
+    } catch (error) {
+      console.error("Error saving trip:", error);
+    }
   };
 
   return (
@@ -653,8 +725,16 @@ const Duration = ({ handleLoginClick }) => {
         {allDatesSelected && (
           <div className="next-btn-container">
             <p>Total Duration: {totalDuration} days</p>
-            <button className="next-btn" onClick={handleNext}>
-              Generate Itinerary
+            <button
+              className="next-btn"
+              disabled={loading}
+              onClick={handleNext}
+            >
+              {loading ? (
+                <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
+              ) : (
+                "Generate Itinerary"
+              )}
             </button>
           </div>
         )}
