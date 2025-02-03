@@ -786,8 +786,27 @@ const Itinerary = ({ showLoginModal }) => {
             )
             .join(", ");
 
-          const FINAL_PROMPT = `Generate Travel Plan for multiple location based on length of cities - for each Location: ${citiesDetails} for ${travelType} of ${travelCount} people with a Cheap budget. 
-          Give me a Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and suggest itinerary with placeName, Place Details, Place Image Url, Geo Coordinates, ticket Pricing, rating, Time travel, and include some restaurants, cafes for all breakfast, lunch, dinner and snacks for each location for each city duration with each day plan with best time to visit in JSON format.`;
+          // const FINAL_PROMPT = `Generate Travel Plan for multiple location based on length of cities - for each Location: ${citiesDetails} for ${travelType} of ${travelCount} people with a Cheap budget. 
+          // Give me a Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and suggest itinerary with placeName, Place Details, Place Image Url, Geo Coordinates, ticket Pricing, rating, Time travel, and include some restaurants, cafes for all breakfast, lunch, dinner and snacks for each location for each city duration with each day plan with best time to visit in JSON format.`;
+
+          const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${travelType} of ${travelCount} people with a Cheap budget. 
+          Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
+      
+      Suggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.
+      
+      For each day in the itinerary, provide:
+      
+      Morning activity with breakfast details
+      
+      Midday activity with lunch details
+      
+      Afternoon activity
+      
+      Evening activity or any place to visit 
+      
+      Night activity with dinner details
+      
+      Provide a daily plan with the best time to visit each place in JSON format.`;
           console.log(FINAL_PROMPT);
 
           const result = await chatSession.sendMessage(FINAL_PROMPT);
