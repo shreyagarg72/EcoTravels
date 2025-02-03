@@ -63,11 +63,12 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import TravelOptions from "./components/TravelOptions";
 import Duration from "./components/Duration";
-import Itinerary from "./components/Itinerary";
+
 import InbuiltTrip from "./components/InbuiltTrip";
 import LoginSignupModel from "./components/LoginSignupModel";
 import { ToastContainer } from "react-toastify";
 import ViewTrip from "./components/viewTrip.jsx";
+import Itinerary from "./components/Itinerary";
 function App() {
   const [showModal, setShowModal] = useState(false); // State for showing modal
   const [user, setUser] = useState(null);
@@ -112,6 +113,7 @@ function App() {
           {/* <Route path="/duration"  element={<Duration setShowModal={setShowModal} />} /> */}
           <Route path="/duration" element={<Duration handleLoginClick={handleLoginClick}/>} />
           <Route path="/view-trip/:tripId" element={<ViewTrip />} />
+          <Route path="/itinerary" element={<Itinerary handleLoginClick={handleLoginClick}/>}/>
         </Routes>
         <ToastContainer />
       </div>
