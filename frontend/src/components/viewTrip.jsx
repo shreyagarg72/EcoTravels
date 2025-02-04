@@ -24,7 +24,8 @@ const viewTrip = () => {
     }
   };
   if (!trip) return <div className="p-4">Loading...</div>;
-  const currentPlan = trip.tripData?.travelPlans?.[selectedLocationIndex] || {};
+  const currentPlan = trip.tripData?.[selectedLocationIndex] || {};
+  console.log(currentPlan);
   const locations = trip.userSelection?.selectedCities || [];
   const CategoryBox = ({ category, children }) => (
     <div className="mb-4">
@@ -41,33 +42,26 @@ const viewTrip = () => {
     </div>
   );
 
-  const renderMealInfo = (data) => {
-    if (!data) return null;
-    const dining = data.diningSuggestion || {};
+  const renderMealInfo = (data, mealType) => {
+    if (!data || !data[mealType]) return null;
+    const meal = data[mealType];
+    
     return (
-      <>
-        {dining.breakfast && (
-          <div className="font-medium">{dining.breakfast}</div>
+      <div className="space-y-2">
+        <div className="font-medium">{meal}</div>
+        {data[`${mealType}Details`] && (
+          <div className="text-gray-600">{data[`${mealType}Details`]}</div>
         )}
-        {dining.breakfastDetails && (
-          <div className="text-gray-600">{dining.breakfastDetails}</div>
+        {data.cuisine && (
+          <div className="text-gray-600">Cuisine: {data.cuisine}</div>
         )}
-        {dining.dinner && (
-          <div className="font-medium">{dining.dinner}</div>
+        {data.locationDetails && (
+          <div className="text-gray-600">Location: {data.locationDetails}</div>
         )}
-        {dining.cuisine && (
-          <div className="text-gray-600">Cuisine: {dining.cuisine}</div>
+        {data.priceRange && (
+          <div className="text-gray-600">Price Range: {data.priceRange}</div>
         )}
-        {dining.dinnerDetails && (
-          <div className="text-gray-600">{dining.dinnerDetails}</div>
-        )}
-        {dining.locationDetails && (
-          <div className="text-gray-600">Location: {dining.locationDetails}</div>
-        )}
-        {dining.priceRange && (
-          <div className="text-gray-600">Price Range: {dining.priceRange}</div>
-        )}
-      </>
+      </div>
     );
   };
 
@@ -160,22 +154,20 @@ const viewTrip = () => {
             {/* Morning Section */}
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">Morning</h3>
-              {dayData.morning?.diningSuggestion && (
-                <CategoryBox category="Breakfast">
-                  {renderMealInfo(dayData.morning)}
-                </CategoryBox>
-              )}
+              <CategoryBox category="Breakfast">
+                {renderMealInfo(dayData.morning, 'breakfast')}
+              </CategoryBox>
+              {renderActivity(dayData.morning)}
             </div>
+
 
             {/* Midday Section */}
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">Midday</h3>
               {renderActivity(dayData.midday)}
-              {dayData.midday?.diningSuggestion && (
-                <CategoryBox category="Lunch">
-                  {renderMealInfo(dayData.midday)}
-                </CategoryBox>
-              )}
+              <CategoryBox category="Lunch">
+                {renderMealInfo(dayData.midday, 'lunch')}
+              </CategoryBox>
             </div>
 
             {/* Afternoon Section */}
@@ -188,11 +180,9 @@ const viewTrip = () => {
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">Evening</h3>
               {renderActivity(dayData.evening)}
-              {dayData.evening?.diningSuggestion && (
-                <CategoryBox category="Dinner">
-                  {renderMealInfo(dayData.evening)}
-                </CategoryBox>
-              )}
+              <CategoryBox category="Dinner">
+                {renderMealInfo(dayData.evening, 'dinner')}
+              </CategoryBox>
             </div>
           </div>
         ))}

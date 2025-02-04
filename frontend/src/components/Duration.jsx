@@ -624,22 +624,22 @@ const Duration = ({ handleLoginClick }) => {
       )
       .join(", ");
 
-    const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget. 
-    Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
+    // const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget.
+    // Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
+    // Suggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include some restaurants and cafes for all meals (breakfast, lunch, dinner, and snacks) for each location per city duration.
+    // Provide a daily plan with the best time to visit each place in JSON format.`;
+
+    const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget.
+
+Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
 
 Suggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.
 
-For each day in the itinerary, provide:
-
-Morning activity with breakfast details
-
-Midday activity with lunch details
-
-Afternoon activity
-
-Evening activity or any place to visit 
-
-Night activity with dinner details
+For each day in the itinerary, provide: 
+- Morning activity with breakfast details
+- Midday activity with lunch details
+- Afternoon activity 
+- Evening activity with dinner details
 
 Provide a daily plan with the best time to visit each place in JSON format.`;
 
