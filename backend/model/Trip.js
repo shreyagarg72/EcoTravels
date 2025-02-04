@@ -12,6 +12,7 @@ const tripSchema = new mongoose.Schema({
   ],
   totalDuration: { type: Number, required: true },
   description: { type: String, required: true },
+  tripId:{type:Number},
 });
 
 const Trip = mongoose.model("Trip", tripSchema);

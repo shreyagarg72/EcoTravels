@@ -32,9 +32,10 @@ const InbuiltTrip = ({ showLoginModal }) => {
   }, []);
 
   const handleTripSelect = (trip) => {
-    localStorage.setItem("selectedCities", JSON.stringify(trip.locations));
-    localStorage.setItem("tripDuration", trip.duration);
-    navigate("/itinerary");
+    const tripId = trip.tripId?.toString() || trip._id?.toString();
+    if (tripId) {
+      navigate(`/view-trip/${tripId}`);
+    }
   };
 
   if (isLoading) {
@@ -82,7 +83,7 @@ const InbuiltTrip = ({ showLoginModal }) => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {trips.map((trip) => (
               <TripCard
-                key={trip._id}
+                key={trip.tripId || trip._id}
                 trip={trip}
                 onSelect={() => handleTripSelect(trip)}
               />
