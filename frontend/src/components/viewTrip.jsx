@@ -43,7 +43,6 @@ const ViewTrip = () => {
           ...day.morning.activity,
           dayNumber: dayIndex + 1,
           timeOfDay: "Morning",
-          
         });
       }
       if (day.afternoon?.activity?.coordinates) {
@@ -51,7 +50,6 @@ const ViewTrip = () => {
           ...day.afternoon.activity,
           dayNumber: dayIndex + 1,
           timeOfDay: "Afternoon",
-          
         });
       }
       if (day.evening?.activity?.coordinates) {
@@ -59,7 +57,6 @@ const ViewTrip = () => {
           ...day.evening.activity,
           dayNumber: dayIndex + 1,
           timeOfDay: "Evening",
-        
         });
       }
     });
@@ -97,7 +94,8 @@ const ViewTrip = () => {
 
   const currentPlan =
     trip?.tripData?.travelPlans?.[selectedLocationIndex] || {};
-  const locations = trip?.userSelection?.selectedCities || [];
+  const locations =
+    trip?.userSelection?.selectedCities?.[selectedLocationIndex] || [];
   const allActivities = getAllDayActivities(currentPlan.itinerary);
   const mapCenter = getMapCenter(allActivities);
 
@@ -195,40 +193,37 @@ const ViewTrip = () => {
           </button>
         ))}
       </div>
-      {/* hotel Section */}
-      {/* <div>
-        <h2 className="text-2xl font-bold mb-4">🏨 Hotel Options</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {currentPlan.hotelOptions?.map((hotel, index) => (
-            <div
-              key={index}
-              className="border rounded-lg p-4 hover:shadow-lg transition-shadow"
-            >
-              <h3 className="font-bold text-lg mb-2">{hotel.hotelName}</h3>
-              <div className="space-y-2">
-                <p className="text-gray-600">{hotel.description}</p>
-                <div className="text-green-600 font-semibold">
-                  Price: {hotel.price}
-                </div>
-                <div className="flex items-center">
-                  <span>Rating: </span>
-                  <span className="ml-1">⭐ {hotel.rating}</span>
-                </div>
-                <div className="text-gray-500">
-                  {hotel.hotelAddress}
-                </div>
-              </div>
-            </div>
-          ))}
+
+      {/* Info section */}
+
+      <div className="flex justify-between items-center">
+        <div className="my-5 flex flex-col gap-2">
+          <div className="flex gap-5">
+            {trip?.userSelection?.selectedCities?.map((city, index) => (
+              <h2
+                key={index}
+                className="p-1 px-3 bg-gray-200 rounded-full text-gray-500"
+              >
+                📅 {city.duration} Day
+              </h2>
+            ))}
+            <h2 className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
+            🥂 No. of traveller: {trip?.userSelection.travelCount}
+            </h2>
+            <h2 className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
+            👪 {trip?.userSelection.travelType}
+            </h2>
+          </div>
         </div>
-      </div> */}
+      </div>
+      {/* hotel Section */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">🏨 Hotel Options</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
           {currentPlan.hotelOptions?.map((hotel, index) => (
             <div
               key={index}
-              className="border rounded-lg p-4 hover:shadow-lg transition-shadow h-full"
+              className="border rounded-lg p-4 hover:shadow-lg transition-shadow h-full hover:scale-110 transition-all"
             >
               <h3 className="font-bold text-lg mb-2">{hotel.hotelName}</h3>
               <div className="space-y-2">
@@ -236,11 +231,11 @@ const ViewTrip = () => {
                   {hotel.description}
                 </p>
                 <div className="text-green-600 font-semibold">
-                  Price: {hotel.price}
+                💰 Price: {hotel.price}
                 </div>
                 <div className="flex items-center">
                   <span>Rating: </span>
-                  <span className="ml-1">⭐ {hotel.rating}</span>
+                  <span className="ml-1"> {hotel.rating} ⭐</span>
                 </div>
                 <div className="text-gray-500">{hotel.hotelAddress}</div>
               </div>
@@ -298,30 +293,41 @@ const ViewTrip = () => {
                 />
                 {/* City Center Marker */}
                 {trip?.userSelection?.selectedCities[selectedLocationIndex] && (
-                 <Marker
-                 position={[
-                   trip.userSelection.selectedCities[selectedLocationIndex].latitude,
-                   trip.userSelection.selectedCities[selectedLocationIndex].longitude,
-                 ]}
-               >
+                  <Marker
+                    position={[
+                      trip.userSelection.selectedCities[selectedLocationIndex]
+                        .latitude,
+                      trip.userSelection.selectedCities[selectedLocationIndex]
+                        .longitude,
+                    ]}
+                  >
                     <Popup>
                       <div className="p-2">
                         <div className="font-bold">
-                          {trip.userSelection.selectedCities[selectedLocationIndex].cityName}
+                          {
+                            trip.userSelection.selectedCities[
+                              selectedLocationIndex
+                            ].cityName
+                          }
                         </div>
                       </div>
                     </Popup>
                   </Marker>
                 )}
-              {allActivities.map((activity, index) => (
-                 <Marker
-                 key={index}
-                 position={[activity.coordinates.latitude, activity.coordinates.longitude]}
-               >
+                {allActivities.map((activity, index) => (
+                  <Marker
+                    key={index}
+                    position={[
+                      activity.coordinates.latitude,
+                      activity.coordinates.longitude,
+                    ]}
+                  >
                     <Popup>
                       <div className="p-2">
                         <div className="font-bold">{activity.placeName}</div>
-                        <div className="text-sm">Day {activity.dayNumber} - {activity.timeOfDay}</div>
+                        <div className="text-sm">
+                          Day {activity.dayNumber} - {activity.timeOfDay}
+                        </div>
                         {activity.bestTimeToVisit && (
                           <div className="text-sm text-gray-600">
                             Best time: {activity.bestTimeToVisit}
