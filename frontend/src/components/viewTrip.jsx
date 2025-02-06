@@ -208,10 +208,10 @@ const ViewTrip = () => {
               </h2>
             ))}
             <h2 className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
-            🥂 No. of traveller: {trip?.userSelection.travelCount}
+              🥂 No. of traveller: {trip?.userSelection.travelCount}
             </h2>
             <h2 className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
-            👪 {trip?.userSelection.travelType}
+              👪 {trip?.userSelection.travelType}
             </h2>
           </div>
         </div>
@@ -231,7 +231,7 @@ const ViewTrip = () => {
                   {hotel.description}
                 </p>
                 <div className="text-green-600 font-semibold">
-                💰 Price: {hotel.price}
+                  💰 Price: {hotel.price}
                 </div>
                 <div className="flex items-center">
                   <span>Rating: </span>
@@ -314,29 +314,36 @@ const ViewTrip = () => {
                     </Popup>
                   </Marker>
                 )}
-                {allActivities.map((activity, index) => (
-                  <Marker
-                    key={index}
-                    position={[
-                      activity.coordinates.latitude,
-                      activity.coordinates.longitude,
-                    ]}
-                  >
-                    <Popup>
-                      <div className="p-2">
-                        <div className="font-bold">{activity.placeName}</div>
-                        <div className="text-sm">
-                          Day {activity.dayNumber} - {activity.timeOfDay}
-                        </div>
-                        {activity.bestTimeToVisit && (
-                          <div className="text-sm text-gray-600">
-                            Best time: {activity.bestTimeToVisit}
+                {allActivities
+                  .filter(
+                    (activity) =>
+                      activity.coordinates &&
+                      activity.coordinates.latitude !== "Not available" &&
+                      activity.coordinates.longitude !== "Not available"
+                  )
+                  .map((activity, index) => (
+                    <Marker
+                      key={index}
+                      position={[
+                        activity.coordinates.latitude,
+                        activity.coordinates.longitude,
+                      ]}
+                    >
+                      <Popup>
+                        <div className="p-2">
+                          <div className="font-bold">{activity.placeName}</div>
+                          <div className="text-sm">
+                            Day {activity.dayNumber} - {activity.timeOfDay}
                           </div>
-                        )}
-                      </div>
-                    </Popup>
-                  </Marker>
-                ))}
+                          {activity.bestTimeToVisit && (
+                            <div className="text-sm text-gray-600">
+                              Best time: {activity.bestTimeToVisit}
+                            </div>
+                          )}
+                        </div>
+                      </Popup>
+                    </Marker>
+                  ))}
               </MapContainer>
             </div>
           </div>
