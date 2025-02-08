@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { db } from "../../firebaseConfig";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -225,20 +225,29 @@ const ViewTrip = () => {
               key={index}
               className="border rounded-lg p-4 hover:shadow-lg transition-shadow h-full hover:scale-110 transition-all"
             >
-              <h3 className="font-bold text-lg mb-2">{hotel.hotelName}</h3>
-              <div className="space-y-2">
-                <p className="text-gray-600 line-clamp-2">
-                  {hotel.description}
-                </p>
-                <div className="text-green-600 font-semibold">
-                  💰 Price: {hotel.price}
+              <Link
+                to={
+                  "https://www.google.com/maps/search/?api=1&query=" +
+                  hotel.hotelName +
+                  "," +
+                  hotel?.hotelAddress
+                } target="_blank"
+              >
+                <h3 className="font-bold text-lg mb-2">{hotel.hotelName}</h3>
+                <div className="space-y-2">
+                  <p className="text-gray-600 line-clamp-2">
+                    {hotel.description}
+                  </p>
+                  <div className="text-green-600 font-semibold">
+                    💰 Price: {hotel.price}
+                  </div>
+                  <div className="flex items-center">
+                    <span>Rating: </span>
+                    <span className="ml-1"> {hotel.rating} ⭐</span>
+                  </div>
+                  <div className="text-gray-500">{hotel.hotelAddress}</div>
                 </div>
-                <div className="flex items-center">
-                  <span>Rating: </span>
-                  <span className="ml-1"> {hotel.rating} ⭐</span>
-                </div>
-                <div className="text-gray-500">{hotel.hotelAddress}</div>
-              </div>
+              </Link>
             </div>
           ))}
         </div>
