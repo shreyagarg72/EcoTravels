@@ -12,7 +12,7 @@ const Home = ({ showLoginModal }) => {
             {[
               { title: "EXPLORE", subtitle: "New Places" },
               { title: "PLAN", subtitle: "Budget" },
-              { title: "BOOK", subtitle: "Your Trip" },
+              { title: "DISCOVER", subtitle: "Exclusive Itineraries" },
               { title: "TRAVEL", subtitle: "All Over Country" }
             ].map((item, index) => (
               <React.Fragment key={item.title}>

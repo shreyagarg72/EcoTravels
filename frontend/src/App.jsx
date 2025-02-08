@@ -63,7 +63,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import TravelOptions from "./components/TravelOptions";
 import Duration from "./components/Duration";
-import Itinerary from "./components/Itinerary";
+
 import InbuiltTrip from "./components/InbuiltTrip";
 import LoginSignupModel from "./components/LoginSignupModel";
 import { ToastContainer } from "react-toastify";

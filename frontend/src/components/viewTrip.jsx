@@ -5,7 +5,7 @@ import { db } from "../../firebaseConfig";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
-
+import TripSummary from "./TripSummary";
 // Fix for default marker icons
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -193,10 +193,8 @@ const ViewTrip = () => {
           </button>
         ))}
       </div>
-
       {/* Info section */}
-
-      <div className="flex justify-between items-center">
+      {/* <div className="flex justify-between items-center">
         <div className="my-5 flex flex-col gap-2">
           <div className="flex gap-5">
             {trip?.userSelection?.selectedCities?.map((city, index) => (
@@ -215,8 +213,9 @@ const ViewTrip = () => {
             </h2>
           </div>
         </div>
-      </div>
-      {/* hotel Section */}
+      </div> */}
+      <TripSummary trip={trip} />
+       {/* hotel Section */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">🏨 Hotel Options</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
@@ -231,7 +230,8 @@ const ViewTrip = () => {
                   hotel.hotelName +
                   "," +
                   hotel?.hotelAddress
-                } target="_blank"
+                }
+                target="_blank"
               >
                 <h3 className="font-bold text-lg mb-2">{hotel.hotelName}</h3>
                 <div className="space-y-2">
@@ -252,7 +252,6 @@ const ViewTrip = () => {
           ))}
         </div>
       </div>
-
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">📍 Activities Map</h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -358,7 +357,6 @@ const ViewTrip = () => {
           </div>
         </div>
       </div>
-
       <div className="max-w-4xl mx-auto p-4">
         {[...Array(currentPlan.itinerary?.length || 0)].map((_, index) => {
           const day = currentPlan.itinerary[index];
