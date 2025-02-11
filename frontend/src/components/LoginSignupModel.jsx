@@ -239,6 +239,34 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
     setError("");
   };
 
+  // const handleGoogleSignIn = async () => {
+  //   setLoading(true);
+  //   setError("");
+
+  //   try {
+  //     const result = await signInWithPopup(auth, googleProvider);
+  //     const user = result.user;
+      
+  //     // Only save user data if signing up (not already in system)
+  //     await saveUserToMongoDB({
+  //       email: user.email,
+  //       firebaseUid: user.uid,
+  //     });
+      
+  //     toast.success("Signed in with Google successfully!", { position: "top-center" });
+  //     closeModal();
+      
+  //     // Redirect to itinerary if on duration page
+  //     if (location.pathname === '/duration') {
+  //       navigate('/itinerary');
+  //     }
+  //   } catch (err) {
+  //     console.error(err.message);
+  //     setError(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError("");
@@ -247,7 +275,6 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       
-      // Only save user data if signing up (not already in system)
       await saveUserToMongoDB({
         email: user.email,
         firebaseUid: user.uid,
@@ -256,9 +283,14 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
       toast.success("Signed in with Google successfully!", { position: "top-center" });
       closeModal();
       
-      // Redirect to itinerary if on duration page
-      if (location.pathname === '/duration') {
-        navigate('/itinerary');
+      // Get return URL from localStorage
+      const returnUrl = localStorage.getItem('returnUrl');
+      if (returnUrl) {
+        localStorage.removeItem('returnUrl'); // Clear the stored URL
+        navigate(returnUrl);
+      } else {
+        // Default fallback if no return URL
+        navigate('/duration');
       }
     } catch (err) {
       console.error(err.message);
@@ -276,31 +308,28 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
     try {
       let userCredential;
       if (isSignup) {
-        userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await saveUserToMongoDB({
           email: userCredential.user.email,
           firebaseUid: userCredential.user.uid,
         });
         toast.success("Signup Successful!", { position: "top-center" });
       } else {
-        userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        userCredential = await signInWithEmailAndPassword(auth, email, password);
         toast.success("Logged in successfully!", { position: "top-center" });
       }
 
       closeModal();
       
-      if (location.pathname === '/duration') {
-        navigate('/itinerary');
+      // Get return URL from localStorage
+      const returnUrl = localStorage.getItem('returnUrl');
+      if (returnUrl) {
+        localStorage.removeItem('returnUrl'); // Clear the stored URL
+        navigate(returnUrl);
+      } else {
+        // Default fallback if no return URL
+        navigate('/duration');
       }
-
     } catch (err) {
       console.error(err.message);
       setError(err.message);
@@ -308,6 +337,47 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
       setLoading(false);
     }
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setError("");
+
+  //   try {
+  //     let userCredential;
+  //     if (isSignup) {
+  //       userCredential = await createUserWithEmailAndPassword(
+  //         auth,
+  //         email,
+  //         password
+  //       );
+  //       await saveUserToMongoDB({
+  //         email: userCredential.user.email,
+  //         firebaseUid: userCredential.user.uid,
+  //       });
+  //       toast.success("Signup Successful!", { position: "top-center" });
+  //     } else {
+  //       userCredential = await signInWithEmailAndPassword(
+  //         auth,
+  //         email,
+  //         password
+  //       );
+  //       toast.success("Logged in successfully!", { position: "top-center" });
+  //     }
+
+  //     closeModal();
+      
+  //     if (location.pathname === '/duration') {
+  //       navigate('/itinerary');
+  //     }
+
+  //   } catch (err) {
+  //     console.error(err.message);
+  //     setError(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const saveUserToMongoDB = async (userData) => {
     try {

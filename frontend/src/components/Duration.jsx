@@ -1,4 +1,88 @@
 
+
+    // const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget.
+    // Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
+    // Suggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include some restaurants and cafes for all meals (breakfast, lunch, dinner, and snacks) for each location per city duration.
+    // Provide a daily plan with the best time to visit each place in JSON format.`;
+
+//     const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget.
+
+// Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
+
+// Suggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.
+
+// For each day in the itinerary, provide: 
+// - Morning activity with breakfast details
+// - Midday activity with lunch details
+// - Afternoon activity 
+// - Evening activity with dinner details
+
+// Provide a daily plan with the best time to visit each place in JSON format.`;
+// const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget. Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.\nSuggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.\nFor each day in the itinerary, provide:- Morning activity with breakfast details- Midday activity with lunch details- Afternoon activity - Evening activity with dinner details\nProvide a daily plan with the best time to visit each place in JSON format.\n\nPlease provide the response in the following strict JSON format:\n\n\"travelPlans\": [\n{\n\"location\": \"Goa\",\n\"duration\": \"3 Days\",\n\"travelerType\": \"Solo\",\n\"budget\": \"Cheap\",\n\"hotelOptions\": [\n{\n\"hotelName\": \"\",\n\"hotelAddress\": \"\",\n\"price\": \"\",\n\"hotelImageUrl\": \"\",\n\"coordinates\": {\n\"latitude\": 0,\n\"longitude\": 0\n},\n\"rating\": 0,\n\"description\": \"\"\n}\n],\n\"itinerary\": [\n{\n\"day\": 1,\n\"theme\": \"Day Theme\",\n\"morning\": {\n\"activity\": {\n\"placeName\": \"\",\n\"placeDetails\": \"\",\n\"imageUrl\": \"\",\n\"coordinates\": {\n\"latitude\": 0,\n\"longitude\": 0\n},\n\"ticketPrice\": \"\",\n\"rating\": 0,\n\"bestTimeToVisit\": \"\",\n\"travelTime\": \"\"\n},\n\"breakfast\": {\n\"restaurantName\": \"\",\n\"cuisine\": \"\",\n\"priceRange\": \"\",\n\"location\": \"\"\n}\n},\n\"afternoon\": {\n\"activity\": {\n\"placeName\": \"\",\n\"placeDetails\": \"\",\n\"imageUrl\": \"\",\n\"coordinates\": {\n\"latitude\": 0,\n\"longitude\": 0\n},\n\"ticketPrice\": \"\",\n\"rating\": 0,\n\"bestTimeToVisit\": \"\",\n\"travelTime\": \"\"\n},\n\"lunch\": {\n\"restaurantName\": \"\",\n\"cuisine\": \"\",\n\"priceRange\": \"\",\n\"location\": \"\"\n}\n},\n\"evening\": {\n\"activity\": {\n\"placeName\": \"\",\n\"placeDetails\": \"\",\n\"imageUrl\": \"\",\n\"coordinates\": {\n\"latitude\": 0,\n\"longitude\": 0\n},\n\"ticketPrice\": \"\",\n\"rating\": 0,\n\"bestTimeToVisit\": \"\",\n\"travelTime\": \"\"\n},\n\"dinner\": {\n\"restaurantName\": \"\",\n\"cuisine\": \"\",\n\"priceRange\": \"\",\n\"location\": \"\"\n}\n}\n}\n]\n}\n]\n\nPlease ensure each field follows this exact structure and naming convention. Fields should not be empty - use \"Not available\" if information is not applicable.`;
+
+
+  // const handleDateChange = (cityName, date) => {
+  //   setSelectedDates((prevDates) => {
+  //     const currentCityDates = prevDates[cityName] || {};
+  //     const { from, to } = currentCityDates;
+
+  //     let newFrom = from;
+  //     let newTo = to;
+
+  //     if (!from || (from && to)) {
+  //       newFrom = date;
+  //       newTo = null;
+  //     } else if (from && !to) {
+  //       const maxDate = addDays(from, 3);
+  //       if (date > maxDate) {
+  //         alert("Please select a date range of up to 4 days.");
+  //         return prevDates;
+  //       }
+  //       newTo = date;
+
+  //       const range = [];
+  //       for (let d = newFrom; d <= newTo; d = addDays(d, 1)) {
+  //         range.push(d);
+  //       }
+  //       setDisabledDates([...disabledDates, ...range]);
+  //     }
+
+  //     const duration =
+  //       newTo && newFrom ? differenceInDays(newTo, newFrom) + 1 : 0;
+
+  //     const newSelectedDates = {
+  //       ...prevDates,
+  //       [cityName]: {
+  //         from: newFrom,
+  //         to: newTo,
+  //         duration,
+  //       },
+  //     };
+
+  //     const totalDuration = Object.values(newSelectedDates).reduce(
+  //       (sum, { duration }) => sum + (duration || 0),
+  //       0
+  //     );
+  //     setTotalDuration(totalDuration);
+
+  //     const allSelected = Object.keys(newSelectedDates).every(
+  //       (key) => newSelectedDates[key].from && newSelectedDates[key].to
+  //     );
+  //     setAllDatesSelected(allSelected);
+
+  //     // Update selectedCitiesData with new duration
+  //     setSelectedCitiesData((prevData) => ({
+  //       ...prevData,
+  //       selectedCities: prevData.selectedCities.map((city) =>
+  //         city.cityName === cityName ? { ...city, duration: duration } : city
+  //       ),
+  //     }));
+
+  //     return newSelectedDates;
+  //   });
+  // };
+
+
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -64,66 +148,6 @@ const Duration = ({ handleLoginClick }) => {
     }
   }, [selectedDates]);
 
-  // const handleDateChange = (cityName, date) => {
-  //   setSelectedDates((prevDates) => {
-  //     const currentCityDates = prevDates[cityName] || {};
-  //     const { from, to } = currentCityDates;
-
-  //     let newFrom = from;
-  //     let newTo = to;
-
-  //     if (!from || (from && to)) {
-  //       newFrom = date;
-  //       newTo = null;
-  //     } else if (from && !to) {
-  //       const maxDate = addDays(from, 3);
-  //       if (date > maxDate) {
-  //         alert("Please select a date range of up to 4 days.");
-  //         return prevDates;
-  //       }
-  //       newTo = date;
-
-  //       const range = [];
-  //       for (let d = newFrom; d <= newTo; d = addDays(d, 1)) {
-  //         range.push(d);
-  //       }
-  //       setDisabledDates([...disabledDates, ...range]);
-  //     }
-
-  //     const duration =
-  //       newTo && newFrom ? differenceInDays(newTo, newFrom) + 1 : 0;
-
-  //     const newSelectedDates = {
-  //       ...prevDates,
-  //       [cityName]: {
-  //         from: newFrom,
-  //         to: newTo,
-  //         duration,
-  //       },
-  //     };
-
-  //     const totalDuration = Object.values(newSelectedDates).reduce(
-  //       (sum, { duration }) => sum + (duration || 0),
-  //       0
-  //     );
-  //     setTotalDuration(totalDuration);
-
-  //     const allSelected = Object.keys(newSelectedDates).every(
-  //       (key) => newSelectedDates[key].from && newSelectedDates[key].to
-  //     );
-  //     setAllDatesSelected(allSelected);
-
-  //     // Update selectedCitiesData with new duration
-  //     setSelectedCitiesData((prevData) => ({
-  //       ...prevData,
-  //       selectedCities: prevData.selectedCities.map((city) =>
-  //         city.cityName === cityName ? { ...city, duration: duration } : city
-  //       ),
-  //     }));
-
-  //     return newSelectedDates;
-  //   });
-  // };
 
   const handleDateChange = (cityName, date) => {
     setSelectedDates((prevDates) => {
@@ -239,11 +263,21 @@ const Duration = ({ handleLoginClick }) => {
   //   navigate("/itinerary");
   // };
 
+  // const handleNext = async () => {
+  //   if (!isLoggedIn) {
+  //     handleLoginClick();
+  //     return;
+  //   }
+  //   setLoading(true);
   const handleNext = async () => {
     if (!isLoggedIn) {
+      // Save current URL and dates before redirecting to login
+      localStorage.setItem('returnUrl', window.location.pathname);
+      localStorage.setItem('selectedDates', JSON.stringify(selectedDates));
       handleLoginClick();
       return;
     }
+
     setLoading(true);
     // Generate travel plan prompt
     const citiesDetails = selectedCitiesData.selectedCities
@@ -253,72 +287,111 @@ const Duration = ({ handleLoginClick }) => {
       )
       .join(", ");
 
-    // const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget.
-    // Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
-    // Suggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include some restaurants and cafes for all meals (breakfast, lunch, dinner, and snacks) for each location per city duration.
-    // Provide a daily plan with the best time to visit each place in JSON format.`;
-
-//     const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget.
-
-// Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
-
-// Suggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.
-
-// For each day in the itinerary, provide: 
-// - Morning activity with breakfast details
-// - Midday activity with lunch details
-// - Afternoon activity 
-// - Evening activity with dinner details
-
-// Provide a daily plan with the best time to visit each place in JSON format.`;
-// const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget. Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.\nSuggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.\nFor each day in the itinerary, provide:- Morning activity with breakfast details- Midday activity with lunch details- Afternoon activity - Evening activity with dinner details\nProvide a daily plan with the best time to visit each place in JSON format.\n\nPlease provide the response in the following strict JSON format:\n\n\"travelPlans\": [\n{\n\"location\": \"Goa\",\n\"duration\": \"3 Days\",\n\"travelerType\": \"Solo\",\n\"budget\": \"Cheap\",\n\"hotelOptions\": [\n{\n\"hotelName\": \"\",\n\"hotelAddress\": \"\",\n\"price\": \"\",\n\"hotelImageUrl\": \"\",\n\"coordinates\": {\n\"latitude\": 0,\n\"longitude\": 0\n},\n\"rating\": 0,\n\"description\": \"\"\n}\n],\n\"itinerary\": [\n{\n\"day\": 1,\n\"theme\": \"Day Theme\",\n\"morning\": {\n\"activity\": {\n\"placeName\": \"\",\n\"placeDetails\": \"\",\n\"imageUrl\": \"\",\n\"coordinates\": {\n\"latitude\": 0,\n\"longitude\": 0\n},\n\"ticketPrice\": \"\",\n\"rating\": 0,\n\"bestTimeToVisit\": \"\",\n\"travelTime\": \"\"\n},\n\"breakfast\": {\n\"restaurantName\": \"\",\n\"cuisine\": \"\",\n\"priceRange\": \"\",\n\"location\": \"\"\n}\n},\n\"afternoon\": {\n\"activity\": {\n\"placeName\": \"\",\n\"placeDetails\": \"\",\n\"imageUrl\": \"\",\n\"coordinates\": {\n\"latitude\": 0,\n\"longitude\": 0\n},\n\"ticketPrice\": \"\",\n\"rating\": 0,\n\"bestTimeToVisit\": \"\",\n\"travelTime\": \"\"\n},\n\"lunch\": {\n\"restaurantName\": \"\",\n\"cuisine\": \"\",\n\"priceRange\": \"\",\n\"location\": \"\"\n}\n},\n\"evening\": {\n\"activity\": {\n\"placeName\": \"\",\n\"placeDetails\": \"\",\n\"imageUrl\": \"\",\n\"coordinates\": {\n\"latitude\": 0,\n\"longitude\": 0\n},\n\"ticketPrice\": \"\",\n\"rating\": 0,\n\"bestTimeToVisit\": \"\",\n\"travelTime\": \"\"\n},\n\"dinner\": {\n\"restaurantName\": \"\",\n\"cuisine\": \"\",\n\"priceRange\": \"\",\n\"location\": \"\"\n}\n}\n}\n]\n}\n]\n\nPlease ensure each field follows this exact structure and naming convention. Fields should not be empty - use \"Not available\" if information is not applicable.`;
 
 const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location:  ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget. Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.\nSuggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.\nFor each day in the itinerary, provide:- Morning activity with breakfast details- Midday activity with lunch details- Afternoon activity - Evening activity with dinner details\nProvide a daily plan with the best time to visit each place in JSON format.\n\nPlease provide the response in the following strict JSON format:\n\"travelPlans\": [\n\n\"location\": \"Goa\",\n\"duration\": \"3 Days\",\"travelerType\": \"Solo\",\"budget\": \"Cheap\",\n\"hotelOptions\": [{\"hotelName\": \"\",\"hotelAddress\": \"\",\"price\": \"\",\"hotelImageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"rating\": 0,\"description\": \"\"}],\n\"itinerary\": [{\"day\": 1,\"theme\": \"Day Theme\",\n\"morning\": {\n\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"breakfast\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"afternoon\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"lunch\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"evening\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"dinner\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}}}]\ntotalCostEstimation:\"\"}]Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use \"Not available\" if information is not applicable.\n\n`
     console.log("Prompt:", FINAL_PROMPT);
 
-    try {
-      const result = await chatSession.sendMessage(FINAL_PROMPT);
-      const responseText = result?.response?.text();
-      console.log("Response:", responseText);
-      setLoading(false);
-      SaveAiTrip(responseText);
-      // Store the response for use in the itinerary page
-      localStorage.setItem("generatedItinerary", responseText);
+  //   try {
+  //     const result = await chatSession.sendMessage(FINAL_PROMPT);
+  //     const responseText = result?.response?.text();
+  //     console.log("Response:", responseText);
+  //     setLoading(false);
+  //     SaveAiTrip(responseText);
+  //     // Store the response for use in the itinerary page
+  //     localStorage.setItem("generatedItinerary", responseText);
 
-      // Navigate to the itinerary page
-      // navigate("/itinerary");
-    } catch (error) {
-      console.error("Error fetching itinerary:", error);
+  //     // Navigate to the itinerary page
+  //     // navigate("/itinerary");
+  //   } catch (error) {
+  //     console.error("Error fetching itinerary:", error);
+  //   }
+  // };
+
+  // const SaveAiTrip = async (TripData) => {
+  //   try {
+  //     const auth = getAuth();
+  //     const user = auth.currentUser;
+
+  //     if (!user) {
+  //       console.error("User not authenticated.");
+  //       return;
+  //     }
+  //     setLoading(true);
+  //     const userEmail = user.email;
+  //     const docId = Date.now().toString(); // Unique ID for the trip
+  //     const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
+  //     await setDoc(doc(db, "AITrips", docId), {
+  //       id: docId,
+  //       userEmail: userEmail, // Save user's email
+  //       tripData: JSON.parse(TripData),
+  //       userSelection: data, // Save the itinerary data
+  //       createdAt: new Date().toISOString(), // Timestamp for tracking
+  //     });
+  //     setLoading(false);
+  //     console.log("Trip saved successfully!");
+  //     navigate("/view-trip/" + docId);
+  //   } catch (error) {
+  //     console.error("Error saving trip:", error);
+  //   }
+  // };
+  try {
+    const result = await chatSession.sendMessage(FINAL_PROMPT);
+    const responseText = result?.response?.text();
+    console.log("Response:", responseText);
+    setLoading(false);
+    
+    // Save the trip and get the ID
+    const tripId = await SaveAiTrip(responseText);
+    
+    // Navigate to view-trip with the new trip ID
+    navigate(`/view-trip/${tripId}`);
+  } catch (error) {
+    console.error("Error generating itinerary:", error);
+    setLoading(false);
+    toast.error("Failed to generate itinerary. Please try again.");
+  }
+};
+
+const SaveAiTrip = async (TripData) => {
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      console.error("User not authenticated.");
+      return null;
     }
-  };
 
-  const SaveAiTrip = async (TripData) => {
-    try {
-      const auth = getAuth();
-      const user = auth.currentUser;
+    setLoading(true);
+    const userEmail = user.email;
+    const docId = Date.now().toString();
+    const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
+    
+    await setDoc(doc(db, "AITrips", docId), {
+      id: docId,
+      userEmail: userEmail,
+      tripData: JSON.parse(TripData),
+      userSelection: data,
+      createdAt: new Date().toISOString(),
+    });
+    
+    setLoading(false);
+    console.log("Trip saved successfully!");
+    return docId; // Return the document ID
+  } catch (error) {
+    console.error("Error saving trip:", error);
+    return null;
+  }
+};
 
-      if (!user) {
-        console.error("User not authenticated.");
-        return;
-      }
-      setLoading(true);
-      const userEmail = user.email;
-      const docId = Date.now().toString(); // Unique ID for the trip
-      const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
-      await setDoc(doc(db, "AITrips", docId), {
-        id: docId,
-        userEmail: userEmail, // Save user's email
-        tripData: JSON.parse(TripData),
-        userSelection: data, // Save the itinerary data
-        createdAt: new Date().toISOString(), // Timestamp for tracking
-      });
-      setLoading(false);
-      console.log("Trip saved successfully!");
-      navigate("/view-trip/" + docId);
-    } catch (error) {
-      console.error("Error saving trip:", error);
-    }
-  };
+// Add useEffect to restore saved dates when component mounts
+useEffect(() => {
+  const savedDates = localStorage.getItem('selectedDates');
+  if (savedDates) {
+    setSelectedDates(JSON.parse(savedDates));
+    localStorage.removeItem('selectedDates'); // Clear saved dates after restoring
+  }
+}, []);
 
   return (
     <div className="container mx-auto">
