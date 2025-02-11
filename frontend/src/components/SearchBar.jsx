@@ -51,7 +51,7 @@ const SearchBar = ({ showLoginModal }) => {
   // Fetch coordinates for a selected city using Geoapify Geocoding API
   const fetchCoordinates = async (cityName) => {
     const apiKey = import.meta.env.VITE_GEO_API;
-    const geocodeUrl = `https://api.geoapify.com/v1/geocode/search?text=${cityName}&apiKey=${apiKey}`;
+    const geocodeUrl = `https://api.geoapify.com/v1/geocode/search?text=${cityName}&country=India&type=city&apiKey=${apiKey}`;
     try {
       const response = await fetch(geocodeUrl);
       const data = await response.json();
