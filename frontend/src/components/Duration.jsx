@@ -11,11 +11,10 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "./Duration.css";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { chatSession } from "../service/AIModal";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-import { LoaderCircle, LoaderCircleIcon } from "lucide-react";
+
 
 const Duration = ({ handleLoginClick }) => {
   const [selectedCitiesData, setSelectedCitiesData] = useState({

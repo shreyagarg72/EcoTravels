@@ -117,7 +117,6 @@ const SearchBar = ({ showLoginModal }) => {
       navigate("/travel-options", { state: { selectedCitiesData } });
     }
   };
-
   const handleCityRemove = (cityToRemove) => {
     const updatedCitiesData = {
       selectedCities: selectedCitiesData.selectedCities.filter(
@@ -127,15 +126,19 @@ const SearchBar = ({ showLoginModal }) => {
   
     setSelectedCitiesData(updatedCitiesData);
     
-    // Remove the entire input field for the deleted city
-    setInputFields(prevFields => 
-      prevFields.filter(field => field.value !== cityToRemove)
-    );
+    // Remove the input field for the deleted city and ensure at least one empty field
+    setInputFields(prevFields => {
+      const remainingFields = prevFields.filter(field => field.value !== cityToRemove);
+      // If no fields remain, add an empty one
+      if (remainingFields.length === 0) {
+        return [{ id: Date.now(), value: "", showDropdown: false }];
+      }
+      return remainingFields;
+    });
   
     // Update localStorage with the updated cities data
     localStorage.setItem("selectedCitiesData", JSON.stringify(updatedCitiesData));
   };
-
   return (
     <div className={`mt-5 mb-5 flex flex-col items-center px-4 ${showLoginModal ? 'blur-sm' : ''}`}>
       <div className="relative w-full md:w-1/3 flex flex-col items-center">
