@@ -28,9 +28,19 @@ const Duration = ({ handleLoginClick }) => {
   const [allDatesSelected, setAllDatesSelected] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
 
   // Check authentication state
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -318,7 +328,7 @@ useEffect(() => {
                 <h3 className="calendar-title">Select Dates</h3>
                 <Calendar
                   view="month"
-                  showDoubleView
+                  showDoubleView={!isMobile}
                   defaultValue={new Date()}
                   onClickDay={(date) =>
                     handleDateChange(location.cityName, date)
@@ -338,6 +348,7 @@ useEffect(() => {
                     return null;
                   }}
                   tileDisabled={({ date }) => isDateDisabled(date)}
+                  className={isMobile ? "mobile-calendar" : "desktop-calendar"}
                 />
               </div>
             </div>
