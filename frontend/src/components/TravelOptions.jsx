@@ -61,7 +61,7 @@ const TravelOptions = ({ showLoginModal }) => {
       };
       localStorage.setItem('selectedCitiesData', JSON.stringify(updatedData));
       console.log('Updated data for Solo:', updatedData);
-      navigate('/duration');
+      navigate('/budget');
     } else {
       // For other types, show travellers modal
       setSelectedType(type);
@@ -84,7 +84,7 @@ const TravelOptions = ({ showLoginModal }) => {
     // Save updated data back to localStorage
     localStorage.setItem('selectedCitiesData', JSON.stringify(updatedData));
     console.log('Updated data with travellers:', updatedData);
-    navigate('/duration');
+    navigate('/budget');
   };
 
   return (

@@ -69,6 +69,7 @@ import LoginSignupModel from "./components/LoginSignupModel";
 import { ToastContainer } from "react-toastify";
 import ViewTrip from "./components/viewTrip.jsx";
 import Reviews from "./components/Reviews.jsx";
+import BudgetSelection from "./components/BudgetSelection.jsx";
 function App() {
   const [showModal, setShowModal] = useState(false); // State for showing modal
   const [user, setUser] = useState(null);
@@ -117,6 +118,7 @@ function App() {
           />
           <Route path="/view-trip/:tripId" element={<ViewTrip />} />
           <Route path="/reviews" element={<Reviews handleLoginClick={handleLoginClick}/>} />
+          <Route path="/budget" element={<BudgetSelection />} />
         </Routes>
         <ToastContainer />
       </div>
