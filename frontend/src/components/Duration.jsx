@@ -21,6 +21,8 @@ const Duration = ({ handleLoginClick }) => {
     selectedCities: [],
     travelType: "",
     travelCount: 0,
+    budget: "cheap", // Add budget state with default value
+    isEcoFriendly: false, // Add eco-fr
   });
   const [selectedDates, setSelectedDates] = useState({});
   const [disabledDates, setDisabledDates] = useState([]);
@@ -193,6 +195,20 @@ const Duration = ({ handleLoginClick }) => {
   //     return;
   //   }
   //   setLoading(true);
+  const handleBudgetChange = (budget) => {
+    setSelectedCitiesData(prev => ({
+      ...prev,
+      budget
+    }));
+  };
+
+  const handleEcoFriendlyToggle = () => {
+    setSelectedCitiesData(prev => ({
+      ...prev,
+      isEcoFriendly: !prev.isEcoFriendly
+    }));
+  };
+
   const handleNext = async () => {
     if (!isLoggedIn) {
       // Save current URL and dates before redirecting to login
@@ -212,7 +228,15 @@ const Duration = ({ handleLoginClick }) => {
       .join(", ");
 
 
-const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location:  ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a Cheap budget. Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.\nSuggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.\nFor each day in the itinerary, provide:- Morning activity with breakfast details- Midday activity with lunch details- Afternoon activity - Evening activity with dinner details\nProvide a daily plan with the best time to visit each place in JSON format.\n\nPlease provide the response in the following strict JSON format:\n\"travelPlans\": [\n\n\"location\": \"Goa\",\n\"duration\": \"3 Days\",\"travelerType\": \"Solo\",\"budget\": \"Cheap\",\n\"hotelOptions\": [{\"hotelName\": \"\",\"hotelAddress\": \"\",\"price\": \"\",\"hotelImageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"rating\": 0,\"description\": \"\"}],\n\"itinerary\": [{\"day\": 1,\"theme\": \"Day Theme\",\n\"morning\": {\n\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"breakfast\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"afternoon\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"lunch\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"evening\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"dinner\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}}}]\ntotalCostEstimation:\"\" for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount}}]Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use \"Not available\" if information is not applicable.\n\n`
+const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location:  ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a ${selectedCitiesData.budget} budget${selectedCitiesData.isEcoFriendly ? ' and eco-friendly options' : ''}. 
+${selectedCitiesData.isEcoFriendly ? 'Please prioritize sustainable accommodations, eco-friendly activities, and environmentally conscious transportation options. ' : ''}
+Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.\nSuggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.\nFor each day in the itinerary, provide:
+- Morning activity with breakfast details
+- Midday activity with lunch details
+- Afternoon activity 
+- Evening activity with dinner details
+Provide a daily plan with the best time to visit each place in JSON format.
+Please provide the response in the following strict JSON format:\n\"travelPlans\": [\n\n\"location\": \"Goa\",\n\"duration\": \"3 Days\",\"travelerType\": \"Solo\",\"budget\": \"cheap\",\n\"hotelOptions\": [{\"hotelName\": \"\",\"hotelAddress\": \"\",\"price\": \"\",\"hotelImageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"rating\": 0,\"description\": \"\"}],\n\"itinerary\": [{\"day\": 1,\"theme\": \"Day Theme\",\n\"morning\": {\n\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"breakfast\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"afternoon\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"lunch\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"evening\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"dinner\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}}}]\ntotalCostEstimation:\"\" for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount}}]Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use \"Not available\" if information is not applicable.\n\n`
     console.log("Prompt:", FINAL_PROMPT);
 
   //   try {

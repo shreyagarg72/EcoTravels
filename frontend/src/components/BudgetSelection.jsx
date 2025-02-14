@@ -40,61 +40,85 @@ const BudgetSelection = () => {
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-stretch">
           {/* Budget Friendly Card */}
           <div 
-            className={`p-6 rounded-lg shadow cursor-pointer transition-all ${
-              selectedBudget === 'cheap' 
+            className={`p-6 rounded-lg shadow cursor-pointer transition-all duration-300 relative overflow-hidden
+              ${selectedBudget === 'cheap' 
                 ? 'ring-2 ring-green-500 shadow-lg bg-white' 
-                : 'hover:shadow-md bg-white'
-            }`}
+                : 'hover:shadow-xl bg-white hover:scale-105'
+              }
+              before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full 
+              before:bg-gradient-to-r before:from-green-100/50 before:to-blue-100/50
+              before:translate-x-[-100%] hover:before:translate-x-0 before:transition-transform before:duration-500
+              before:pointer-events-none
+            `}
             onClick={() => handleBudgetSelect('cheap')}
           >
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center space-y-4 relative z-10">
               <div className="p-3 bg-green-100 rounded-full">
                 <DollarSign className="h-6 w-6 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold">Essential Explorer</h3>
-              <p className="text-gray-600 text-center">
-                Authentic local experiences and comfortable basics. Perfect for adventurous souls who prefer spending on experiences over luxury.
+              <p className="text-gray-600 text-center text-sm">
+                Authentic local experiences with comfortable basics.
+                <span className="mt-2 block text-green-600 text-xs font-medium opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  Perfect for adventurous souls
+                </span>
               </p>
             </div>
           </div>
 
           {/* Moderate Card */}
           <div 
-            className={`p-6 rounded-lg shadow cursor-pointer transition-all ${
-              selectedBudget === 'moderate' 
+            className={`p-6 rounded-lg shadow cursor-pointer transition-all duration-300 relative overflow-hidden
+              ${selectedBudget === 'moderate' 
                 ? 'ring-2 ring-blue-500 shadow-lg bg-white' 
-                : 'hover:shadow-md bg-white'
-            }`}
+                : 'hover:shadow-xl bg-white hover:scale-105'
+              }
+              before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full 
+              before:bg-gradient-to-r before:from-blue-100/50 before:to-purple-100/50
+              before:translate-x-[-100%] hover:before:translate-x-0 before:transition-transform before:duration-500
+              before:pointer-events-none
+            `}
             onClick={() => handleBudgetSelect('moderate')}
           >
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center space-y-4 relative z-10">
               <div className="p-3 bg-blue-100 rounded-full">
                 <Shield className="h-6 w-6 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold">Balanced Voyager</h3>
-              <p className="text-gray-600 text-center">
-                Enhanced comfort with premium experiences. Ideal for those seeking quality accommodations and curated activities.
+              <p className="text-gray-600 text-center text-sm">
+                Enhanced comfort with premium experiences.
+                <span className="mt-2 block text-blue-600 text-xs font-medium opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  Quality accommodations included
+                </span>
               </p>
             </div>
           </div>
 
           {/* Premium Card */}
           <div 
-            className={`p-6 rounded-lg shadow cursor-pointer transition-all ${
-              selectedBudget === 'high' 
+            className={`p-6 rounded-lg shadow cursor-pointer transition-all duration-300 relative overflow-hidden
+              ${selectedBudget === 'high' 
                 ? 'ring-2 ring-purple-500 shadow-lg bg-white' 
-                : 'hover:shadow-md bg-white'
-            }`}
+                : 'hover:shadow-xl bg-white hover:scale-105'
+              }
+              before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full 
+              before:bg-gradient-to-r before:from-purple-100/50 before:to-pink-100/50
+              before:translate-x-[-100%] hover:before:translate-x-0 before:transition-transform before:duration-500
+              before:pointer-events-none
+            `}
             onClick={() => handleBudgetSelect('high')}
           >
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center space-y-4 relative z-10">
               <div className="p-3 bg-purple-100 rounded-full flex">
                 <DollarSign className="h-6 w-6 text-purple-600" />
                 <DollarSign className="h-6 w-6 text-purple-600 -ml-2" />
               </div>
               <h3 className="text-xl font-semibold">Luxury Connoisseur</h3>
-              <p className="text-gray-600 text-center">
-                Exclusive experiences and premium services. For those who appreciate the finest accommodations and personalized attention.
+              <p className="text-gray-600 text-center text-sm">
+                Exclusive experiences and premium services.
+                <span className="mt-2 block text-purple-600 text-xs font-medium opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  Personalized attention guaranteed
+                </span>
               </p>
             </div>
           </div>
