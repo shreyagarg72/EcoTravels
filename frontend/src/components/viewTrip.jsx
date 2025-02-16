@@ -34,26 +34,76 @@ const ViewTrip = () => {
     };
     fetchTrip();
   }, [tripId]);
+  const isValidCoordinate = (coord) => {
+    if (!coord) return false;
+    const num = parseFloat(coord);
+    return !isNaN(num) && typeof num === 'number' && isFinite(num);
+  };
+  
+  const isValidLatLng = (coordinates) => {
+    if (!coordinates) return false;
+    
+    const lat = parseFloat(coordinates.latitude);
+    const lng = parseFloat(coordinates.longitude);
+    
+    return isValidCoordinate(lat) && 
+           isValidCoordinate(lng) && 
+           lat >= -90 && lat <= 90 && 
+           lng >= -180 && lng <= 180 &&
+           coordinates.latitude !== "Not available" &&
+           coordinates.longitude !== "Not available" &&
+           coordinates.latitude !== "Varies based on venue" &&
+           coordinates.longitude !== "Varies based on venue";
+  };
+  // const getAllDayActivities = (itinerary) => {
+  //   if (!itinerary) return [];
+
+  //   const activities = [];
+  //   itinerary.forEach((day, dayIndex) => {
+  //     if (day.morning?.activity?.coordinates) {
+  //       activities.push({
+  //         ...day.morning.activity,
+  //         dayNumber: dayIndex + 1,
+  //         timeOfDay: "Morning",
+  //       });
+  //     }
+  //     if (day.afternoon?.activity?.coordinates) {
+  //       activities.push({
+  //         ...day.afternoon.activity,
+  //         dayNumber: dayIndex + 1,
+  //         timeOfDay: "Afternoon",
+  //       });
+  //     }
+  //     if (day.evening?.activity?.coordinates) {
+  //       activities.push({
+  //         ...day.evening.activity,
+  //         dayNumber: dayIndex + 1,
+  //         timeOfDay: "Evening",
+  //       });
+  //     }
+  //   });
+  //   return activities;
+  // };
   const getAllDayActivities = (itinerary) => {
     if (!itinerary) return [];
 
     const activities = [];
     itinerary.forEach((day, dayIndex) => {
-      if (day.morning?.activity?.coordinates) {
+      if (day.morning?.activity?.coordinates && isValidLatLng(day.morning.activity.coordinates)) {
         activities.push({
           ...day.morning.activity,
           dayNumber: dayIndex + 1,
           timeOfDay: "Morning",
         });
       }
-      if (day.afternoon?.activity?.coordinates) {
+      if (day.afternoon?.activity?.coordinates && isValidLatLng(day.afternoon.activity.coordinates)) {
         activities.push({
           ...day.afternoon.activity,
           dayNumber: dayIndex + 1,
           timeOfDay: "Afternoon",
         });
       }
-      if (day.evening?.activity?.coordinates) {
+      if (day.evening?.activity?.coordinates && isValidLatLng(day.evening.activity.coordinates)) {
         activities.push({
           ...day.evening.activity,
           dayNumber: dayIndex + 1,
@@ -176,7 +226,7 @@ const ViewTrip = () => {
       </div>
     );
   };
-
+  
   return (
     <div className="max-w-7xl mx-auto p-4">
       <LocationSelector
@@ -292,43 +342,46 @@ const ViewTrip = () => {
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
                 {/* City Center Marker */}
-                {trip?.userSelection?.selectedCities[selectedLocationIndex] && (
-                  <Marker
-                    position={[
+                {trip?.userSelection?.selectedCities[selectedLocationIndex] &&
+                  isValidLatLng({
+                    latitude:
                       trip.userSelection.selectedCities[selectedLocationIndex]
                         .latitude,
+                    longitude:
                       trip.userSelection.selectedCities[selectedLocationIndex]
                         .longitude,
-                    ]}
-                  >
-                    <Popup>
-                      <div className="p-2">
-                        <div className="font-bold">
-                          {
-                            trip.userSelection.selectedCities[
-                              selectedLocationIndex
-                            ].cityName
-                          }
-                        </div>
-                      </div>
-                    </Popup>
-                  </Marker>
-                )}
-                {allActivities
-                  .filter(
-                    (activity) =>
-                      activity.coordinates &&
-                      activity.coordinates.latitude !== "Not available" &&
-                      activity.coordinates.longitude !== "Not available"
-                  )
-                  .map((activity, index) => (
+                  }) && (
                     <Marker
-                      key={index}
                       position={[
-                        activity.coordinates.latitude,
-                        activity.coordinates.longitude,
+                        trip.userSelection.selectedCities[selectedLocationIndex]
+                          .latitude,
+                        trip.userSelection.selectedCities[selectedLocationIndex]
+                          .longitude,
                       ]}
                     >
+                      <Popup>
+                        <div className="p-2">
+                          <div className="font-bold">
+                            {
+                              trip.userSelection.selectedCities[
+                                selectedLocationIndex
+                              ].cityName
+                            }
+                          </div>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  )}
+                {allActivities
+                   .filter(activity => isValidLatLng(activity.coordinates))
+                   .map((activity, index) => (
+                     <Marker
+                       key={index}
+                       position={[
+                         parseFloat(activity.coordinates.latitude),
+                         parseFloat(activity.coordinates.longitude),
+                       ]}
+                     >
                       <Popup>
                         <div className="p-2">
                           <div className="font-bold">{activity.placeName}</div>
