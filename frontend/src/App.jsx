@@ -64,7 +64,7 @@ import Home from "./components/Home";
 import TravelOptions from "./components/TravelOptions";
 import Duration from "./components/Duration";
 
-import InbuiltTrip from "./components/InbuiltTrip";
+import InbuiltTrip from "./components/InbuiltTrips/InbuiltTrip.jsx";
 import LoginSignupModel from "./components/LoginSignupModel";
 import { ToastContainer } from "react-toastify";
 import ViewTrip from "./components/viewTrip.jsx";
@@ -117,7 +117,10 @@ function App() {
             element={<Duration handleLoginClick={handleLoginClick} />}
           />
           <Route path="/view-trip/:tripId" element={<ViewTrip />} />
-          <Route path="/reviews" element={<Reviews handleLoginClick={handleLoginClick}/>} />
+          <Route
+            path="/reviews"
+            element={<Reviews handleLoginClick={handleLoginClick} />}
+          />
           <Route path="/budget" element={<BudgetSelection />} />
         </Routes>
         <ToastContainer />

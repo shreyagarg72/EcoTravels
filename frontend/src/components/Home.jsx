@@ -1,6 +1,6 @@
 import React from "react";
 import SearchBar from "./SearchBar";
-import PopularTrips from "./PopularTrips";
+import PopularTrips from "./Popular Trips/PopularTrips.jsx";
 
 const Home = ({ showLoginModal }) => {
   return (

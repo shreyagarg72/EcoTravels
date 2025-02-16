@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import TripCard from "../components/TripCard";
+import TripCard from "./TripCard";
 
 const InbuiltTrip = ({ showLoginModal }) => {
   const [trips, setTrips] = useState([]);
@@ -20,7 +20,9 @@ const InbuiltTrip = ({ showLoginModal }) => {
   useEffect(() => {
     const fetchTrips = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/trips`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/trips`
+        );
         setTrips(response.data);
         setIsLoading(false);
       } catch (error) {
