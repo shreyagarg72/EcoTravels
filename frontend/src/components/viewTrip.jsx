@@ -7,6 +7,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import TripSummary from "./TripSummary";
 // Fix for default marker icons
+import EcoImpactCalculator from "./EcoImpactCalculator";
 import LocationSelector from "./LocationSelector";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -21,7 +22,7 @@ const ViewTrip = () => {
   const { tripId } = useParams();
   const [selectedLocationIndex, setSelectedLocationIndex] = useState(0);
   const [trip, setTrip] = useState(null);
-
+  const [isEcoFriendly, setIsEcoFriendly] = useState(false); 
   useEffect(() => {
     const fetchTrip = async () => {
       if (!tripId) return;
@@ -30,6 +31,22 @@ const ViewTrip = () => {
       if (docSnap.exists()) {
         setTrip(docSnap.data());
         console.log("document:", docSnap.data());
+        if (trip?.tripData?.travelPlans) {
+          const hasEcoFriendlyHotels = trip.tripData.travelPlans.some(plan =>
+            plan.hotelOptions?.some(hotel => 
+              hotel.description?.toLowerCase().includes('eco-friendly')
+            )
+          );
+          
+          const hasOutdoorActivities = tripData.tripData.travelPlans.some(plan =>
+            plan.itinerary?.some(day =>
+              [day.morning?.activity, day.afternoon?.activity, day.evening?.activity]
+                .some(activity => activity?.placeDetails?.toLowerCase().includes('outdoor'))
+            )
+          );
+
+          setIsEcoFriendly(hasEcoFriendlyHotels || hasOutdoorActivities);
+        }
       }
     };
     fetchTrip();
@@ -257,6 +274,11 @@ const ViewTrip = () => {
         </div>
       </div> */}
       <TripSummary trip={trip} />
+      <EcoImpactCalculator 
+        trip={trip} 
+        isEcoFriendly={isEcoFriendly}
+      />
+
       {/* hotel Section */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">🏨 Hotel Options</h2>
