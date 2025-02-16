@@ -2,7 +2,7 @@ import React from 'react';
 
 const LocationSelector = ({ trip, selectedLocationIndex, onLocationSelect }) => {
   return (
-    <div className="flex flex-col gap-4 mb-6">
+    <div className="flex flex-col gap-4">
       <div className="flex gap-2 overflow-x-auto pb-2">
         {trip?.userSelection?.selectedCities?.map((location, index) => (
           <button
