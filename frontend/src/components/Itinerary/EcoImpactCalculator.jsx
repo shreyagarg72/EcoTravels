@@ -45,23 +45,28 @@ const EcoImpactCalculator = ({ trip }) => {
       let potentialDiningSavings = 0;
       const ecoChoices = [];
 
-      // Calculate hotel savings
+      // Calculate hotel savings with expanded eco-friendly criteria
       trip.tripData.travelPlans.forEach(plan => {
         const hotelOptions = plan.hotelOptions || [];
         const duration = parseInt(plan.duration || "1");
         
         hotelOptions.forEach(hotel => {
-          const isEcoFriendly = hotel.description?.toLowerCase().includes('eco-friendly');
-          if (isEcoFriendly) {
+          // Updated to check for both eco-friendly and sustainable
+          const isGreenHotel = hotel.description?.toLowerCase().includes('eco-friendly') ||
+                              hotel.description?.toLowerCase().includes('sustainable') ||
+                              hotel.hotelName?.toLowerCase().includes('eco') ||
+                              hotel.hotelName?.toLowerCase().includes('green');
+          
+          if (isGreenHotel) {
             hotelSavings += emissionFactors.hotel.saving * duration;
-            ecoChoices.push(`Eco-friendly hotel: ${hotel.hotelName}`);
+            ecoChoices.push(`Green hotel: ${hotel.hotelName}`);
           } else {
             potentialHotelSavings += emissionFactors.hotel.saving * duration;
           }
         });
       });
 
-      // Calculate activities savings
+      // Calculate activities savings with expanded outdoor criteria
       trip.tripData.travelPlans.forEach(plan => {
         plan.itinerary?.forEach(day => {
           const activities = [
@@ -72,11 +77,18 @@ const EcoImpactCalculator = ({ trip }) => {
 
           activities.forEach(activity => {
             if (activity) {
+              // Updated eco-activity criteria to include heritage sites and lake gardens
               const isEcoActivity = 
                 activity.placeDetails?.toLowerCase().includes('outdoor') ||
                 activity.placeName?.toLowerCase().includes('park') ||
                 activity.placeName?.toLowerCase().includes('garden') ||
-                activity.placeDetails?.toLowerCase().includes('walking');
+                activity.placeDetails?.toLowerCase().includes('walk') ||
+                activity.placeName?.toLowerCase().includes('heritage') ||
+                activity.placeName?.toLowerCase().includes('monument') ||
+                activity.placeName?.toLowerCase().includes('lake') ||
+                activity.placeDetails?.toLowerCase().includes('heritage') ||
+                activity.placeDetails?.toLowerCase().includes('monument') ||
+                activity.placeDetails?.toLowerCase().includes('lake');
 
               const duration = activity.bestTimeToVisit ? 
                 parseInt(activity.bestTimeToVisit.split(' - ')[1]) - 
@@ -93,7 +105,7 @@ const EcoImpactCalculator = ({ trip }) => {
         });
       });
 
-      // Calculate dining savings
+      // Calculate dining savings (unchanged)
       trip.tripData.travelPlans.forEach(plan => {
         plan.itinerary?.forEach(day => {
           const meals = [
@@ -138,6 +150,7 @@ const EcoImpactCalculator = ({ trip }) => {
     calculateImpact();
   }, [trip]);
 
+  // Rest of the component remains the same
   return (
     <div className="w-full mb-6">
       <button
@@ -150,6 +163,7 @@ const EcoImpactCalculator = ({ trip }) => {
 
       {showImpact && (
         <div className="bg-white rounded-lg shadow-lg p-6">
+          {/* Rest of the JSX remains exactly the same */}
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-4">
               <Leaf className="text-green-500" size={24} />
