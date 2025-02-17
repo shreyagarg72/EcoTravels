@@ -85,11 +85,7 @@ const EcoImpactCalculator = ({ trip }) => {
                 activity.placeDetails?.toLowerCase().includes('walk') ||
                 activity.placeName?.toLowerCase().includes('heritage') ||
                 activity.placeName?.toLowerCase().includes('monument') ||
-                activity.placeName?.toLowerCase().includes('lake') ||
-                activity.placeDetails?.toLowerCase().includes('heritage') ||
-                activity.placeDetails?.toLowerCase().includes('monument') ||
-                activity.placeDetails?.toLowerCase().includes('lake');
-
+                activity.placeName?.toLowerCase().includes('lake');
               const duration = activity.bestTimeToVisit ? 
                 parseInt(activity.bestTimeToVisit.split(' - ')[1]) - 
                 parseInt(activity.bestTimeToVisit.split(' - ')[0]) : 2;
