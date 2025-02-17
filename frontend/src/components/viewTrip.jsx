@@ -5,10 +5,10 @@ import { db } from "../../firebaseConfig";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
-import TripSummary from "./TripSummary";
+import TripSummary from "./Itinerary/TripSummary";
 // Fix for default marker icons
-import EcoImpactCalculator from "./EcoImpactCalculator";
-import LocationSelector from "./LocationSelector";
+import EcoImpactCalculator from "../components/Itinerary/EcoImpactCalculator";
+import LocationSelector from "../components/Itinerary/LocationSelector";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:

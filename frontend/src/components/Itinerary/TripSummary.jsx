@@ -13,7 +13,7 @@ const TripSummary = ({ trip }) => {
         <div className="flex gap-5">
           {/* Show individual city durations */}
           {/* Show total duration if multiple cities */}
-          {trip?.userSelection?.selectedCities?.length > 1 && (
+          {trip?.userSelection?.selectedCities?.length >=1 && (
             <h2 className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
               📅 Total: {totalDuration} Days
             </h2>
