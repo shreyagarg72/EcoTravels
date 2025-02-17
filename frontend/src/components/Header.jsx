@@ -10,10 +10,11 @@ import {
   MessageSquare,
   LogIn,
   User,
-  LogOut,
+  LogOut,BadgeDollarSign
 } from "lucide-react";
 import { getAuth, signOut } from "firebase/auth";
 import { toast } from "react-toastify";
+
 import { onAuthStateChanged } from "firebase/auth";
 const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -22,8 +23,9 @@ const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
   const navLinks = [
     { name: "Discover", path: "/", icon: Home },
     { name: "Trips", path: "/trips", icon: MapPin },
-    //{ name: "Rewards", path: "/rewards", icon: Award },
+    { name: "Rewards", path: "/rewards", icon: Award },
     { name: "Reviews", path: "/reviews", icon: MessageSquare },
+    { name: "Pricing", path: "/pricing", icon: BadgeDollarSign },
   ];
 
   const handleLogout = async () => {
