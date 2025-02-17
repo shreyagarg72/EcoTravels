@@ -252,28 +252,10 @@ const ViewTrip = () => {
         onLocationSelect={handleLocationSelect}
       />
 
-      {/* Info section */}
-      {/* <div className="flex justify-between items-center">
-        <div className="my-5 flex flex-col gap-2">
-          <div className="flex gap-5">
-            {trip?.userSelection?.selectedCities?.map((city, index) => (
-              <h2
-                key={index}
-                className="p-1 px-3 bg-gray-200 rounded-full text-gray-500"
-              >
-                📅 {city.duration} Day
-              </h2>
-            ))}
-            <h2 className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
-              🥂 No. of traveller: {trip?.userSelection.travelCount}
-            </h2>
-            <h2 className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
-              👪 {trip?.userSelection.travelType}
-            </h2>
-          </div>
-        </div>
-      </div> */}
+      {/* trip Info section */}
       <TripSummary trip={trip} />
+
+{/* Eco Impact carbon footprint calculator */}
       <EcoImpactCalculator 
         trip={trip} 
         isEcoFriendly={isEcoFriendly}
@@ -316,6 +298,8 @@ const ViewTrip = () => {
           ))}
         </div>
       </div>
+
+      {/* activity timeline */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">📍 Activities Map</h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
