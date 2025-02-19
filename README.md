@@ -9,26 +9,9 @@ EcoTravels is an AI-driven itinerary generator that helps travelers plan multi-d
 
 ✅ Spontaneous & Pre-Built Itineraries for last-minute travelers.
 
+✅ Carbon Footprint Calculator.
 
-🚀 How to Start This Project
 
-1️⃣ Clone the Repository
-
-2️⃣ Install Dependencies
-
-3️⃣ Set Up Environment Variables
-Create a .env file in the root directory and add all the api keys and port from geo_api,gemini ai and firebase
-
-4️⃣ Start the Development Server
-npm run dev
-
-For backend:
-
-1️⃣ cd backend 
-
-2️⃣ Repeat step 3 
-
-3️⃣ npm run dev
 
 🔗 Tech Stack
 
