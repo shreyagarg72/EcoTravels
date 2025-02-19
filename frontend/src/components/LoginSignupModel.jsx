@@ -17,6 +17,7 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   
@@ -26,36 +27,21 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
   const toggleMode = () => {
     setIsSignup((prev) => !prev);
     setError("");
+    setUserName(""); // Clear username when toggling
   };
 
-  // const handleGoogleSignIn = async () => {
-  //   setLoading(true);
-  //   setError("");
+  const handleNavigation = () => {
+    const returnUrl = localStorage.getItem('returnUrl');
+    if (returnUrl) {
+      localStorage.removeItem('returnUrl');
+      navigate(returnUrl);
+    } else if (location.pathname === '/duration') {
+      // Only navigate to /duration if user is already on that page
+      navigate('/duration');
+    }
+    // Otherwise, stay on the current page
+  };
 
-  //   try {
-  //     const result = await signInWithPopup(auth, googleProvider);
-  //     const user = result.user;
-      
-  //     // Only save user data if signing up (not already in system)
-  //     await saveUserToMongoDB({
-  //       email: user.email,
-  //       firebaseUid: user.uid,
-  //     });
-      
-  //     toast.success("Signed in with Google successfully!", { position: "top-center" });
-  //     closeModal();
-      
-  //     // Redirect to itinerary if on duration page
-  //     if (location.pathname === '/duration') {
-  //       navigate('/itinerary');
-  //     }
-  //   } catch (err) {
-  //     console.error(err.message);
-  //     setError(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError("");
@@ -67,20 +53,13 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
       await saveUserToMongoDB({
         email: user.email,
         firebaseUid: user.uid,
+        userName: user.displayName || `user_${Math.random().toString(36).substr(2, 9)}`,
+        createdAt: new Date()
       });
       
       toast.success("Signed in with Google successfully!", { position: "top-center" });
       closeModal();
-      
-      // Get return URL from localStorage
-      const returnUrl = localStorage.getItem('returnUrl');
-      if (returnUrl) {
-        localStorage.removeItem('returnUrl'); // Clear the stored URL
-        navigate(returnUrl);
-      } else {
-        // Default fallback if no return URL
-        navigate('/duration');
-      }
+      handleNavigation();
     } catch (err) {
       console.error(err.message);
       setError(err.message);
@@ -97,10 +76,15 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
     try {
       let userCredential;
       if (isSignup) {
+        if (!userName.trim()) {
+          throw new Error("Username is required");
+        }
         userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await saveUserToMongoDB({
           email: userCredential.user.email,
           firebaseUid: userCredential.user.uid,
+          userName: userName.trim(),
+          createdAt: new Date()
         });
         toast.success("Signup Successful!", { position: "top-center" });
       } else {
@@ -109,16 +93,7 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
       }
 
       closeModal();
-      
-      // Get return URL from localStorage
-      const returnUrl = localStorage.getItem('returnUrl');
-      if (returnUrl) {
-        localStorage.removeItem('returnUrl'); // Clear the stored URL
-        navigate(returnUrl);
-      } else {
-        // Default fallback if no return URL
-        navigate('/duration');
-      }
+      handleNavigation();
     } catch (err) {
       console.error(err.message);
       setError(err.message);
@@ -126,48 +101,6 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
       setLoading(false);
     }
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   setError("");
-
-  //   try {
-  //     let userCredential;
-  //     if (isSignup) {
-  //       userCredential = await createUserWithEmailAndPassword(
-  //         auth,
-  //         email,
-  //         password
-  //       );
-  //       await saveUserToMongoDB({
-  //         email: userCredential.user.email,
-  //         firebaseUid: userCredential.user.uid,
-  //       });
-  //       toast.success("Signup Successful!", { position: "top-center" });
-  //     } else {
-  //       userCredential = await signInWithEmailAndPassword(
-  //         auth,
-  //         email,
-  //         password
-  //       );
-  //       toast.success("Logged in successfully!", { position: "top-center" });
-  //     }
-
-  //     closeModal();
-      
-  //     if (location.pathname === '/duration') {
-  //       navigate('/itinerary');
-  //     }
-
-  //   } catch (err) {
-  //     console.error(err.message);
-  //     setError(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const saveUserToMongoDB = async (userData) => {
     try {
       const response = await fetch("http://localhost:5000/api/users", {
@@ -184,8 +117,6 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
       return await response.json();
     } catch (error) {
       console.error("Error saving user to MongoDB:", error.message);
-      // Don't throw the error - if saving to MongoDB fails but Firebase auth succeeded,
-      // we still want to let the user proceed
     }
   };
 
@@ -211,7 +142,6 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
           <p className="text-red-500 text-sm text-center mb-4">{error}</p>
         )}
 
-        {/* Google Sign In Button */}
         <button
           onClick={handleGoogleSignIn}
           disabled={loading}
@@ -248,6 +178,20 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
         </div>
 
         <form onSubmit={handleSubmit}>
+          {isSignup && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Username
+              </label>
+              <input
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                className="w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                required
+              />
+            </div>
+          )}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">
               Email

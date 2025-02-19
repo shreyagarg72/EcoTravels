@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
+  userName: {type:String,required:true},
   firebaseUid: { type: String, required: true, unique: true },  // Ensure this field is unique
   createdAt: { type: Date, default: Date.now },
 });
