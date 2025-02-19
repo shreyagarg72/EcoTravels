@@ -70,7 +70,7 @@ import { ToastContainer } from "react-toastify";
 import ViewTrip from "./components/viewTrip.jsx";
 import Reviews from "./components/Reviews.jsx";
 import BudgetSelection from "./components/BudgetSelection.jsx";
-import PricingPlans from "./components/PricingPlans.jsx";
+import PricingPlans from "./components/Pricing/PricingPlans.jsx";
 function App() {
   const [showModal, setShowModal] = useState(false); // State for showing modal
   const [user, setUser] = useState(null);
