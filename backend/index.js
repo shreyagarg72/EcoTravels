@@ -6,6 +6,7 @@ import tripRoutes from './routes/TripRouter.js'
 
 import User from './model/User.js';
 import UserRouter from './routes/UserRouter.js';
+import RewardsRouter from './routes/RewadsRouter.js';
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -22,3 +23,5 @@ app.listen(process.env.PORT,()=>{
  // Adjust the path as necessary
  app.use("/trips", tripRoutes);
 app.use("/api",UserRouter);
+
+app.use("/api",RewardsRouter);

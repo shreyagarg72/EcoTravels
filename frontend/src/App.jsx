@@ -70,6 +70,7 @@ import { ToastContainer } from "react-toastify";
 import ViewTrip from "./components/viewTrip.jsx";
 import Reviews from "./components/Reviews.jsx";
 import BudgetSelection from "./components/BudgetSelection.jsx";
+import Rewards from "./components/Rewards.jsx";
 import PricingPlans from "./components/Pricing/PricingPlans.jsx";
 function App() {
   const [showModal, setShowModal] = useState(false); // State for showing modal
@@ -124,6 +125,8 @@ function App() {
           />
           <Route path="/budget" element={<BudgetSelection />} />
           <Route path="/pricing" element={<PricingPlans />} />
+          <Route path="/rewards" element={<Rewards />} />
+
         </Routes>
         <ToastContainer />
       </div>

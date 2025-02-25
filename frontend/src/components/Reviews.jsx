@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { CircleUserRound } from "lucide-react";
+import { toast } from "react-toastify";
 
 function Reviews({ handleLoginClick }) {
   const [reviews, setReviews] = useState([]);
@@ -21,6 +22,7 @@ function Reviews({ handleLoginClick }) {
   });
   const [user, setUser] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const sliderRef = useRef(null);
   const navigate = useNavigate();
 
@@ -45,6 +47,64 @@ function Reviews({ handleLoginClick }) {
       ...doc.data(),
     }));
     setReviews(fetchedReviews);
+  };
+
+  const updateUserPoints = async (points) => {
+    if (!user) return false;
+    
+    try {
+      // Using the endpoint for adding points
+      const response = await fetch(`http://localhost:5000/api/users/${user.uid}/addpoints`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          points: points,
+          activityType: "review_submission",
+          description: "Reward for submitting a review"
+        }),
+      });
+      
+      const responseData = await response.json();
+      console.log('Points update response data:', responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.error || `Server error: ${response.status}`);
+      }
+      
+      // Show toast notification for points with tier info if available
+      toast.success(`🪙 +${points} reward points earned!`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      
+  
+      return true;
+    } catch (error) {
+      console.error("Error updating user points:", error);
+      
+      // Store the points to be awarded later
+      const pendingPoints = JSON.parse(localStorage.getItem('pendingPoints') || '[]');
+      pendingPoints.push({
+        points,
+        activityType: "review_submission",
+        description: "Reward for submitting a review",
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('pendingPoints', JSON.stringify(pendingPoints));
+      
+      toast.warning("Points will be awarded when connection is restored.", {
+        position: "top-center",
+        autoClose: 4000,
+      });
+      
+      return false;
+    }
   };
 
   const scrollToIndex = (index) => {
@@ -83,6 +143,8 @@ function Reviews({ handleLoginClick }) {
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
       const userData = {
         displayName: user.displayName,
@@ -96,10 +158,20 @@ function Reviews({ handleLoginClick }) {
         timestamp: new Date(),
       });
 
+      // Award points to the user
+      if (user) {
+        await updateUserPoints(50);
+      }
+
       setNewReview({ rating: 0, feedback: "" });
       fetchReviews();
     } catch (error) {
       console.error("Error adding review: ", error);
+      toast.error("There was a problem submitting your review.", {
+        position: "top-center",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -132,6 +204,7 @@ function Reviews({ handleLoginClick }) {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Hear from fellow eco-travelers about their sustainable journeys and
             unforgettable moments.
+            {isLoggedIn && <span className="text-green-600 ml-1">Share your own experience and earn 50 eco points!</span>}
           </p>
         </div>
 
@@ -192,6 +265,7 @@ function Reviews({ handleLoginClick }) {
         <div className="bg-white rounded-xl shadow-lg p-8 border-t-4 border-green-600 mt-12">
           <h2 className="text-2xl font-semibold mb-6 text-center text-green-800">
             Share Your Eco-Journey
+            {isLoggedIn && <span className="text-sm text-green-600 block mt-1">(+50 points)</span>}
           </h2>
           <form onSubmit={handleSubmitReview}>
             <div className="mb-6 text-center">
@@ -224,11 +298,19 @@ function Reviews({ handleLoginClick }) {
             <div className="text-center">
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition-colors flex items-center justify-center mx-auto"
               >
-                Share Experience
+                {isSubmitting ? "Submitting..." : "Share Experience"}
               </button>
             </div>
+
+            {/* Login Notice (if not logged in) */}
+            {!isLoggedIn && (
+              <div className="text-center mt-4 text-sm text-blue-600">
+                Log in to earn 50 eco points for your review!
+              </div>
+            )}
           </form>
         </div>
       </div>
