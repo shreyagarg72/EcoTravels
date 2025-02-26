@@ -201,11 +201,11 @@ router.post("/users/:firebaseUid/addpoints", async (req, res) => {
     
     // Update user tier based on total points
     if (user.ecoPoints.total >= 5000) {
-      user.ecoPoints.tier = 'Gold';
+      user.ecoPoints.tier = 'Premium';
     } else if (user.ecoPoints.total >= 1000) {
-      user.ecoPoints.tier = 'Silver';
+      user.ecoPoints.tier = 'Standard';
     } else {
-      user.ecoPoints.tier = 'Basic';
+      user.ecoPoints.tier = 'Free';
     }
     
     // Save the updated user
@@ -236,7 +236,7 @@ router.get("/users/:firebaseUid/points", async (req, res) => {
     if (!user.ecoPoints) {
       user.ecoPoints = {
         total: 0,
-        tier: 'Basic',
+        tier: 'Free',
         history: []
       };
       await user.save();

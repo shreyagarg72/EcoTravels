@@ -1,102 +1,409 @@
-// RewardsPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Sparkles, Award, Trophy, Users, Activity, Calendar } from 'lucide-react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const Rewards = () => {
-  // Sample user data - replace with your actual data source
-  const [currentUser, setCurrentUser] = useState({
-    username: "YourUsername",
-    points: 1250,
-  });
+  const [userData, setUserData] = useState(null);
+  const [leaderboard, setLeaderboard] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [currentUser, setCurrentUser] = useState(null);
   
-  const [leaderboard, setLeaderboard] = useState([
-    { username: "TopGamer123", points: 5230 },
-    { username: "PointMaster", points: 4850 },
-    { username: "RewardHunter", points: 4210 },
-    { username: "PointCollector", points: 3890 },
-    { username: "GameWizard", points: 3540 },
-    { username: "RewardChaser", points: 3210 },
-    { username: "PointWinner", points: 2980 },
-  ]);
+  // Use Firebase auth to get current user
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+      }
+    });
+    
+    return () => unsubscribe();
+  }, []);
 
-  // Extract top 3 users for the podium
-  const topThree = leaderboard.slice(0, 3);
-  
-  // Rest of the leaderboard after top 3
-  const restOfLeaderboard = leaderboard.slice(3);
-
-  return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 text-indigo-700">Rewards Leaderboard</h1>
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        setLoading(true);
         
-        {/* Current User Card */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-700">Your Rewards</h2>
-              <p className="text-2xl font-bold text-indigo-600">{currentUser.username}</p>
-            </div>
-            <div className="bg-indigo-100 rounded-full px-6 py-3">
-              <p className="text-xl font-bold text-indigo-700">{currentUser.points.toLocaleString()} Points</p>
+        // Fetch user data using Firebase UID
+        const userRes = await axios.get(`http://localhost:5000/api/users/${currentUser.uid}/points`);
+        
+        // Fetch leaderboard data
+        const leaderboardRes = await axios.get('http://localhost:5000/api/leaderboard');
+        
+        setUserData(userRes.data.ecoPoints);
+        setLeaderboard(leaderboardRes.data.leaderboard);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError('Failed to load data. Please try again later.');
+        toast.error('Could not load rewards data', {
+          position: 'top-center'
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, [currentUser]);
+
+  // Helper function to determine tier color
+  const getTierColor = (tier) => {
+    switch(tier) {
+      case 'Free': return 'bg-free';
+      case 'Standard': return 'bg-standard';
+      case 'Premium': return 'bg-premium';
+      default: return 'bg-gray-500';
+    }
+  };
+  
+  // Helper function to get tier icon
+  const getTierIcon = (tier) => {
+    switch(tier) {
+      case 'Free': return <Award className="h-5 w-5" />;
+      case 'Standard': return <Trophy className="h-5 w-5" />;
+      case 'Premium': return <Sparkles className="h-5 w-5" />;
+      default: return <Award className="h-5 w-5" />;
+    }
+  };
+  
+  // Format date helper
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+  
+  // Next tier calculation
+  const getNextTierInfo = () => {
+    if (!userData) return { nextTier: null, remaining: 0, percentage: 0, color: 'bg-gray-300' };
+    
+    const currentTotal = userData.total;
+    
+    if (userData.tier === 'Free') {
+      const remaining = 1000 - currentTotal;
+      const percentage = (currentTotal / 1000) * 100;
+      return {
+        nextTier: 'Standard',
+        remaining,
+        percentage: Math.min(percentage, 100),
+        color: 'bg-standard'
+      };
+    } else if (userData.tier === 'Standard') {
+      const remaining = 5000 - currentTotal;
+      const percentage = ((currentTotal - 1000) / 4000) * 100;
+      return {
+        nextTier: 'Premium',
+        remaining,
+        percentage: Math.min(percentage, 100),
+        color: 'bg-premium'
+      };
+    }
+    
+    // Already premium
+    return {
+      nextTier: null,
+      remaining: 0,
+      percentage: 100,
+      color: 'bg-premium'
+    };
+  };
+  
+  const nextTierInfo = getNextTierInfo();
+
+  // Handle not logged in state
+  if (!currentUser && !loading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <Sparkles className="mx-auto h-12 w-12 text-primary mb-4" />
+          <h2 className="text-2xl font-bold mb-4">EcoPoints Rewards</h2>
+          <p className="mb-6">Please log in to view your rewards and leaderboard.</p>
+          <button 
+            onClick={() => toast.info('Please use the login button in the navigation bar', { position: 'top-center' })}
+            className="bg-primary text-white py-2 px-6 rounded-md hover:bg-primary-dark"
+          >
+            Login to Continue
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative m-4" role="alert">
+        <strong className="font-bold">Error! </strong>
+        <span className="block sm:inline">{error}</span>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8 flex items-center">
+        <Sparkles className="mr-2 h-8 w-8 text-primary" />
+        EcoPoints Rewards
+      </h1>
+      
+      {/* User Points Overview Card */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold">Your EcoPoints</h2>
+            <div className="flex items-center mt-2">
+              <span className="text-4xl font-bold text-primary">{userData?.total || 0}</span>
+              <div className="ml-4 px-3 py-1 rounded-full flex items-center text-white" 
+                   style={{backgroundColor: userData?.tier === 'Free' ? '#94a3b8' : 
+                          userData?.tier === 'Standard' ? '#60a5fa' : '#facc15'}}>
+                {getTierIcon(userData?.tier || 'Free')}
+                <span className="ml-1">{userData?.tier || 'Free'} Tier</span>
+              </div>
             </div>
           </div>
-        </div>
-        
-        {/* Top 3 Users */}
-        <h2 className="text-2xl font-semibold mb-4 text-gray-800">Top Performers</h2>
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          {topThree.map((user, index) => (
-            <div 
-              key={index} 
-              className={`relative bg-white rounded-lg shadow-md p-6 flex flex-col items-center ${
-                index === 0 ? 'bg-gradient-to-b from-amber-50 to-amber-100 border-2 border-amber-300' : 
-                index === 1 ? 'bg-gradient-to-b from-gray-50 to-gray-100 border-2 border-gray-300' : 
-                'bg-gradient-to-b from-orange-50 to-orange-100 border-2 border-orange-300'
-              }`}
-            >
-              <div className={`absolute -top-4 w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
-                index === 0 ? 'bg-amber-500' : 
-                index === 1 ? 'bg-gray-500' : 
-                'bg-orange-500'
-              }`}>
-                {index + 1}
+          
+          {nextTierInfo.nextTier && (
+            <div className="mt-4 md:mt-0 bg-gray-50 p-4 rounded-lg md:w-96">
+              <p className="text-sm text-gray-600 mb-1">
+                {nextTierInfo.remaining} more points to reach {nextTierInfo.nextTier} Tier
+              </p>
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div className={`h-2.5 rounded-full ${nextTierInfo.color}`} 
+                     style={{ width: `${nextTierInfo.percentage}%` }}></div>
               </div>
-              <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-3 mt-2">
-                <span className="text-2xl">{user.username.charAt(0)}</span>
-              </div>
-              <p className="font-semibold text-gray-800 text-lg">{user.username}</p>
-              <p className="text-xl font-bold text-indigo-600">{user.points.toLocaleString()} Points</p>
             </div>
-          ))}
+          )}
         </div>
         
-        {/* Rest of Leaderboard */}
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">Leaderboard</h2>
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {restOfLeaderboard.map((user, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{index + 4}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{user.username}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="text-sm font-bold text-indigo-600">{user.points.toLocaleString()}</div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Tab Navigation */}
+        <div className="border-b border-gray-200 mb-6">
+          <nav className="flex -mb-px">
+            <button 
+              onClick={() => setActiveTab('overview')}
+              className={`mr-8 py-4 text-sm font-medium ${activeTab === 'overview' 
+                ? 'border-b-2 border-primary text-primary' 
+                : 'text-gray-500 hover:text-gray-700'}`}>
+              <div className="flex items-center">
+                <Activity className="h-4 w-4 mr-1" />
+                Overview
+              </div>
+            </button>
+            <button 
+              onClick={() => setActiveTab('history')}
+              className={`mr-8 py-4 text-sm font-medium ${activeTab === 'history' 
+                ? 'border-b-2 border-primary text-primary' 
+                : 'text-gray-500 hover:text-gray-700'}`}>
+              <div className="flex items-center">
+                <Calendar className="h-4 w-4 mr-1" />
+                History
+              </div>
+            </button>
+            <button 
+              onClick={() => setActiveTab('leaderboard')}
+              className={`py-4 text-sm font-medium ${activeTab === 'leaderboard' 
+                ? 'border-b-2 border-primary text-primary' 
+                : 'text-gray-500 hover:text-gray-700'}`}>
+              <div className="flex items-center">
+                <Users className="h-4 w-4 mr-1" />
+                Leaderboard
+              </div>
+            </button>
+          </nav>
+        </div>
+        
+        {/* Tab Content */}
+        <div>
+          {/* Overview Tab */}
+          {activeTab === 'overview' && (
+            <div>
+              <h3 className="font-bold text-lg mb-4">Points Breakdown</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="font-medium text-gray-500 mb-1">This Month</div>
+                  <div className="text-2xl font-bold">
+                    {userData?.history?.reduce((sum, item) => {
+                      // Check if the timestamp is from the current month
+                      const itemDate = new Date(item.timestamp);
+                      const currentDate = new Date();
+                      return (itemDate.getMonth() === currentDate.getMonth() && 
+                              itemDate.getFullYear() === currentDate.getFullYear())
+                        ? sum + item.points
+                        : sum;
+                    }, 0) || 0}
+                  </div>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="font-medium text-gray-500 mb-1">Total Activities</div>
+                  <div className="text-2xl font-bold">{userData?.history?.length || 0}</div>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="font-medium text-gray-500 mb-1">Avg. Points/Activity</div>
+                  <div className="text-2xl font-bold">
+                    {userData?.history?.length
+                      ? Math.round(userData.total / userData.history.length)
+                      : 0}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* History Tab */}
+          {activeTab === 'history' && (
+            <div>
+              <h3 className="font-bold text-lg mb-4">Points History</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Activity
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Description
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Points
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {userData?.history?.map((item, index) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {formatDate(item.timestamp)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 capitalize">
+                          {item.activityType.replace('_', ' ')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {item.description}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-primary">
+                          +{item.points}
+                        </td>
+                      </tr>
+                    ))}
+                    {(!userData?.history || userData.history.length === 0) && (
+                      <tr>
+                        <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
+                          No activity yet
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          
+          {/* Leaderboard Tab */}
+          {activeTab === 'leaderboard' && (
+            <div>
+              <h3 className="font-bold text-lg mb-4">Top EcoPoints Earners</h3>
+              
+              {/* Premium Tier */}
+              <div className="mb-6">
+                <div className="flex items-center mb-2">
+                  <Sparkles className="h-5 w-5 text-premium mr-2" />
+                  <h4 className="text-md font-medium">Premium Tier</h4>
+                </div>
+                <div className="bg-gray-50 rounded-lg overflow-hidden">
+                  {leaderboard?.premium?.length > 0 ? (
+                    leaderboard.premium.map((user, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 last:border-b-0">
+                        <div className="flex items-center">
+                          <div className="bg-premium text-white rounded-full w-6 h-6 flex items-center justify-center mr-3">
+                            {index + 1}
+                          </div>
+                          <span className="font-medium">{user.userName}</span>
+                        </div>
+                        <span className="font-bold">{user.ecoPoints.total.toLocaleString()} pts</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 text-center text-gray-500">No users in Premium tier yet</div>
+                  )}
+                </div>
+              </div>
+              
+              {/* Standard Tier */}
+              <div className="mb-6">
+                <div className="flex items-center mb-2">
+                  <Trophy className="h-5 w-5 text-standard mr-2" />
+                  <h4 className="text-md font-medium">Standard Tier</h4>
+                </div>
+                <div className="bg-gray-50 rounded-lg overflow-hidden">
+                  {leaderboard?.standard?.length > 0 ? (
+                    leaderboard.standard.map((user, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 last:border-b-0">
+                        <div className="flex items-center">
+                          <div className="bg-standard text-white rounded-full w-6 h-6 flex items-center justify-center mr-3">
+                            {index + 1}
+                          </div>
+                          <span className="font-medium">{user.userName}</span>
+                        </div>
+                        <span className="font-bold">{user.ecoPoints.total.toLocaleString()} pts</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 text-center text-gray-500">No users in Standard tier yet</div>
+                  )}
+                </div>
+              </div>
+              
+              {/* Free Tier */}
+              <div>
+                <div className="flex items-center mb-2">
+                  <Award className="h-5 w-5 text-free mr-2" />
+                  <h4 className="text-md font-medium">Free Tier</h4>
+                </div>
+                <div className="bg-gray-50 rounded-lg overflow-hidden">
+                  {leaderboard?.free?.length > 0 ? (
+                    leaderboard.free.map((user, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 last:border-b-0">
+                        <div className="flex items-center">
+                          <div className="bg-free text-white rounded-full w-6 h-6 flex items-center justify-center mr-3">
+                            {index + 1}
+                          </div>
+                          <span className="font-medium">{user.userName}</span>
+                        </div>
+                        <span className="font-bold">{user.ecoPoints.total.toLocaleString()} pts</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 text-center text-gray-500">No users in Free tier yet</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

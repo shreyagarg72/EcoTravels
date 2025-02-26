@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   // EcoPoints system fields
   ecoPoints: { 
     total: { type: Number, default: 0 },
-    tier: { type: String, enum: ['Basic', 'Silver', 'Gold'], default: 'Basic' },
+    tier: { type: String, enum: ['Free', 'Standard', 'Premium'], default: 'Free' },
     history: [{
       points: Number,
       activityType: { 
