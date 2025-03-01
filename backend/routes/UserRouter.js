@@ -251,4 +251,88 @@ router.get("/users/:firebaseUid/points", async (req, res) => {
   }
 });
 
+// Add this route to your Express router file
+
+router.get("/users/:firebaseUid/tier", async (req, res) => {
+  const { firebaseUid } = req.params;
+  
+  try {
+    const user = await User.findOne({ firebaseUid });
+    
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    // If user exists but doesn't have ecoPoints field initialized yet
+    if (!user.ecoPoints) {
+      user.ecoPoints = {
+        total: 0,
+        tier: 'Free',
+        history: []
+      };
+      await user.save();
+    }
+    
+    // Return just the tier information
+    res.status(200).json({
+      tier: user.ecoPoints.tier
+    });
+  } catch (error) {
+    console.error("Error retrieving user tier:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+// Add this route to your Express router file
+
+router.post("/users/:firebaseUid/updateTier", async (req, res) => {
+  const { firebaseUid } = req.params;
+  const { tier, description } = req.body;
+  
+  // Validate tier input
+  if (!tier || !['Free', 'Standard', 'Premium'].includes(tier)) {
+    return res.status(400).json({ error: "Invalid tier. Must be 'Free', 'Standard', or 'Premium'" });
+  }
+  
+  try {
+    const user = await User.findOne({ firebaseUid });
+    
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    // Initialize ecoPoints if it doesn't exist
+    if (!user.ecoPoints) {
+      user.ecoPoints = {
+        total: 0,
+        tier: 'Free',
+        history: []
+      };
+    }
+    
+    // Get the previous tier before updating
+    const previousTier = user.ecoPoints.tier;
+    
+    // Update the user's tier
+    user.ecoPoints.tier = tier;
+    
+    // Add entry to history for tier change
+    user.ecoPoints.history.push({
+      points: 0, // No points for tier change, it's a subscription
+      activityType: "payments",
+      description: description || `Subscription changed from ${previousTier} to ${tier}`,
+      timestamp: new Date()
+    });
+    
+    await user.save();
+    
+    res.status(200).json({
+      success: true,
+      tier: user.ecoPoints.tier,
+      message: `Subscription updated to ${tier} plan`
+    });
+  } catch (error) {
+    console.error("Error updating user tier:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 export default router;
