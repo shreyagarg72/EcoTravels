@@ -16,7 +16,7 @@ const trips = [
     description: 'The "Pink City" is a gateway to India\'s royal history, featuring opulent palaces and majestic forts.',
     latitude: 26.9154576,
     longitude: 75.8189817,
-    image: "https://static.wanderon.in/wp-content/uploads/2024/01/4b93633f-cc7c-42de-94b2-5ce9ac735fce.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/East_facade_Hawa_Mahal_Jaipur_from_ground_level_%28July_2022%29_-_img_01.jpg/640px-East_facade_Hawa_Mahal_Jaipur_from_ground_level_%28July_2022%29_-_img_01.jpg",
   },
   {
     cityName: "Udaipur",

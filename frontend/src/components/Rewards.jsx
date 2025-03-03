@@ -37,10 +37,10 @@ const Rewards = () => {
         setLoading(true);
         
         // Fetch user data using Firebase UID
-        const userRes = await axios.get(`http://localhost:5000/api/users/${currentUser.uid}/points`);
+        const userRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/${currentUser.uid}/points`);
         
         // Fetch leaderboard data
-        const leaderboardRes = await axios.get('http://localhost:5000/api/leaderboard');
+        const leaderboardRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/leaderboard`);
         
         setUserData(userRes.data.ecoPoints);
         setLeaderboard(leaderboardRes.data.leaderboard);

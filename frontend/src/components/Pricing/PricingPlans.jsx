@@ -30,7 +30,7 @@ const PricingPlan = () => {
   const fetchUserTier = async (firebaseUid) => {
     try {
       // Using a dedicated endpoint to fetch just the tier
-      const response = await fetch(`http://localhost:5000/api/users/${firebaseUid}/tier`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${firebaseUid}/tier`);
       const data = await response.json();
       
       if (response.ok && data.tier) {
@@ -71,7 +71,7 @@ const PricingPlan = () => {
 
     try {
       // Update user tier endpoint
-      const response = await fetch(`http://localhost:5000/api/users/${currentUser.uid}/updateTier`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${currentUser.uid}/updateTier`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

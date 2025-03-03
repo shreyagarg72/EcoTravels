@@ -54,7 +54,7 @@ function Reviews({ handleLoginClick }) {
     
     try {
       // Using the endpoint for adding points
-      const response = await fetch(`http://localhost:5000/api/users/${user.uid}/addpoints`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${user.uid}/addpoints`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
