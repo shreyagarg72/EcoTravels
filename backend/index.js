@@ -10,7 +10,7 @@ import RewardsRouter from './routes/RewadsRouter.js';
 dotenv.config();
 const app = express();
 const corsOptions = {
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",  // Use frontend URL from environment
+    origin: process.env.BASE_URL || "http://localhost:5173",  // Use frontend URL from environment
     credentials: true,
 };
 
