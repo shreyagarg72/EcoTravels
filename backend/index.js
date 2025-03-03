@@ -9,7 +9,12 @@ import UserRouter from './routes/UserRouter.js';
 import RewardsRouter from './routes/RewadsRouter.js';
 dotenv.config();
 const app = express();
-app.use(cors());
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",  // Use frontend URL from environment
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 
 app.use(express.json());

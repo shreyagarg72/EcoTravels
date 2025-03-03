@@ -296,7 +296,7 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
 
       // Check if user already exists in database
       const checkResponse = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/users/check/${user.uid}`
+        `https://ecotravels.onrender.com/api/users/check/${user.uid}`
       );
       const userData = await checkResponse.json();
 
@@ -422,11 +422,14 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
 
   const saveUserToMongoDB = async (userData) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/users`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
