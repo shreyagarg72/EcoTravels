@@ -9,12 +9,26 @@ import UserRouter from './routes/UserRouter.js';
 import RewardsRouter from './routes/RewadsRouter.js';
 dotenv.config();
 const app = express();
+
+// Allow both localhost and Netlify frontend
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://ecotravels-journey.netlify.app",
+];
+
 const corsOptions = {
-    origin: process.env.BASE_URL || "http://localhost:5173",  // Use frontend URL from environment
-    credentials: true,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true, // Allow cookies/sessions if needed
 };
 
 app.use(cors(corsOptions));
+
 
 
 app.use(express.json());
