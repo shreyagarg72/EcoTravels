@@ -135,7 +135,7 @@ router.post("/users", async (req, res) => {
       createdAt: createdAt || new Date(),
       ecoPoints: ecoPoints || {
         total: 0,
-        tier: 'Basic',
+        tier: 'Free',
         history: []
       }
     });

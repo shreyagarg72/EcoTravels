@@ -11,23 +11,11 @@ dotenv.config();
 const app = express();
 
 // Allow both localhost and Netlify frontend
-const allowedOrigins = [
-    "http://localhost:5173",
-    "https://ecotravels-journey.netlify.app",
-];
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://ecotravels-journey.netlify.app']
+  }));
 
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true, // Allow cookies/sessions if needed
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 
 
