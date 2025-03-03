@@ -30,7 +30,6 @@ const ViewTrip = () => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setTrip(docSnap.data());
-        console.log("document:", docSnap.data());
         if (trip?.tripData?.travelPlans) {
           const hasEcoFriendlyHotels = trip.tripData.travelPlans.some(plan =>
             plan.hotelOptions?.some(hotel => 

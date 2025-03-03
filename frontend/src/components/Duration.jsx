@@ -237,7 +237,7 @@ Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Ima
 - Evening activity with dinner details
 Provide a daily plan with the best time to visit each place in JSON format.
 Please provide the response in the following strict JSON format:\n\"travelPlans\": [\n\n\"location\": \"Goa\",\n\"duration\": \"3 Days\",\"travelerType\": \"Solo\",\"budget\": \"cheap\",\n\"hotelOptions\": [{\"hotelName\": \"\",\"hotelAddress\": \"\",\"price\": \"\",\"hotelImageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"rating\": 0,\"description\": \"\"}],\n\"itinerary\": [{\"day\": 1,\"theme\": \"Day Theme\",\n\"morning\": {\n\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"breakfast\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"afternoon\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"lunch\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"evening\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"dinner\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}}}]\ntotalCostEstimation:\"\" for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount}}]Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use \"Not available\" if information is not applicable.\n\n`
-    console.log("Prompt:", FINAL_PROMPT);
+   
 
   //   try {
   //     const result = await chatSession.sendMessage(FINAL_PROMPT);
@@ -285,7 +285,6 @@ Please provide the response in the following strict JSON format:\n\"travelPlans\
   try {
     const result = await chatSession.sendMessage(FINAL_PROMPT);
     const responseText = result?.response?.text();
-    console.log("Response:", responseText);
     setLoading(false);
     
     // Save the trip and get the ID
@@ -324,7 +323,6 @@ const SaveAiTrip = async (TripData) => {
     });
     
     setLoading(false);
-    console.log("Trip saved successfully!");
     return docId; // Return the document ID
   } catch (error) {
     console.error("Error saving trip:", error);
