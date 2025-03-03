@@ -183,7 +183,7 @@ router.post("/users/:firebaseUid/addpoints", async (req, res) => {
     if (!user.ecoPoints) {
       user.ecoPoints = {
         total: 0,
-        tier: 'Basic',
+        tier: 'Free',
         history: []
       };
     }
