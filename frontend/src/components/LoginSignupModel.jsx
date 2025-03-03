@@ -296,7 +296,7 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
 
       // Check if user already exists in database
       const checkResponse = await fetch(
-        `https://ecotravels.onrender.com/api/users/check/${user.uid}`
+        `${import.meta.env.VITE_API_URL}/api/users/check/${user.uid}`
       );
       const userData = await checkResponse.json();
 
