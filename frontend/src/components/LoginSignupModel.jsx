@@ -311,7 +311,7 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
           createdAt: new Date(),
           ecoPoints: {
             total: 5,
-            tier: "Basic",
+            tier: "Free",
             history: [
               {
                 points: 5,
@@ -376,7 +376,7 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
           createdAt: new Date(),
           ecoPoints: {
             total: 5,
-            tier: "Basic",
+            tier: "Free",
             history: [
               {
                 points: 5,
