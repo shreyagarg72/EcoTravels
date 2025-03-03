@@ -358,7 +358,7 @@ const SearchBar = ({ showLoginModal }) => {
       if (currentUser) {
         try {
           // Add points using the API endpoint for adding EcoPoints
-          const response = await fetch(`http://localhost:5000/api/users/${currentUser.uid}/addpoints`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${currentUser.uid}/addpoints`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

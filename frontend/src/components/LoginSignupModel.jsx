@@ -296,7 +296,7 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
 
       // Check if user already exists in database
       const checkResponse = await fetch(
-        `http://localhost:5000/api/users/check/${user.uid}`
+        `${import.meta.env.VITE_API_URL}/api/users/check/${user.uid}`
       );
       const userData = await checkResponse.json();
 
@@ -422,7 +422,7 @@ const LoginSignupModel = ({ showModal, closeModal }) => {
 
   const saveUserToMongoDB = async (userData) => {
     try {
-      const response = await fetch("http://localhost:5000/api/users", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
