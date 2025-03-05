@@ -49,7 +49,7 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-gray-300 mt-8 pt-4 text-center text-sm text-gray-600">
+        <div className="border-t border-gray-300 text-center text-sm text-gray-600">
           © {currentYear} EcoTravels. All Rights Reserved.
         </div>
       </div>

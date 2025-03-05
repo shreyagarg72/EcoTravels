@@ -14,7 +14,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { chatSession } from "../service/AIModal";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-
+import { toast } from "react-toastify";
 
 const Duration = ({ handleLoginClick }) => {
   const [selectedCitiesData, setSelectedCitiesData] = useState({
@@ -86,24 +86,34 @@ const Duration = ({ handleLoginClick }) => {
       // Determine max days allowed based on number of selected cities
       const maxDays = selectedCitiesData.selectedCities.length > 2 ? 2 : 3;
       const maxDate = addDays(from || date, maxDays - 1);
-
+      
       if (!from || (from && to)) {
         newFrom = date;
         newTo = null;
       } else if (from && !to) {
         if (date > maxDate) {
+          if (selectedCitiesData.selectedCities.length > 2) {
+            toast.warning('For trips with more than 2 locations, you can select up to 2 days.', {
+              position: "top-center",
+              autoClose: 3000,
+            });
+          } else {
+            toast.info('For trips with 1-2 locations, you can select up to 3 days.', {
+              position: "top-center",
+              autoClose: 3000,
+            });
+          }
           alert(`Please select a date range of up to ${maxDays} days.`);
           return prevDates;
         }
         newTo = date;
-
+      
         const range = [];
         for (let d = newFrom; d <= newTo; d = addDays(d, 1)) {
           range.push(d);
         }
         setDisabledDates([...disabledDates, ...range]);
       }
-
       const duration =
         newTo && newFrom ? differenceInDays(newTo, newFrom) + 1 : 0;
 
@@ -341,6 +351,9 @@ useEffect(() => {
 
   return (
     <div className="container mx-auto">
+      <div className="text-center text-sb mt-4 text-green-800 ">
+        Select the start date and end date of your trip
+      </div>
       <div className="duration-container">
         {selectedCitiesData.selectedCities.map((location, index) => (
           <div key={index} className="location-section">
