@@ -1,7 +1,7 @@
 import React from "react";
 import SearchBar from "./SearchBar";
 import PopularTrips from "./PopularTrips/PopularTrips.jsx";
-
+import Footer from "./Footer.jsx";
 const Home = ({ showLoginModal }) => {
   return (
     <>
@@ -36,6 +36,7 @@ const Home = ({ showLoginModal }) => {
       <div className="flex items-center px-4 md:px-8 py-5">
         <PopularTrips showLoginModal={showLoginModal}/>
       </div>
+      <Footer/>
     </>
   );
 };
