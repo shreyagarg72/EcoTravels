@@ -23,19 +23,49 @@ function Reviews({ handleLoginClick }) {
   const [user, setUser] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
+
   const sliderRef = useRef(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setIsLoggedIn(!!currentUser);
-    });
+  const fetchUserProfile = async (uid) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${uid}`);
+      if (response.ok) {
+        return await response.json();
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      return null;
+    }
+  };
+  
+// useEffect(() => {
+//   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+//     if (currentUser) {
+//       setUser(currentUser);
+//       setIsLoggedIn(true);
+      
+//       // Try to fetch MongoDB user profile
+//       const userProfile = await fetchUserProfile(currentUser.uid);
+//       if (userProfile) {
+//         // Update user with MongoDB data
+//         setUser(prev => ({
+//           ...prev,
+//           mongoDbProfile: userProfile,
+//         }));
+//       }
+//     } else {
+//       setUser(null);
+//       setIsLoggedIn(false);
+//     }
+//   });
 
-    fetchReviews();
-    return () => unsubscribe();
-  }, []);
-
+//   fetchReviews();
+//   return () => unsubscribe();
+// }, []);
   const fetchReviews = async () => {
     const reviewsQuery = query(
       collection(db, "reviews"),
@@ -48,7 +78,30 @@ function Reviews({ handleLoginClick }) {
     }));
     setReviews(fetchedReviews);
   };
-
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setIsLoggedIn(true);
+        
+        // Try to fetch MongoDB user profile
+        const userProfile = await fetchUserProfile(currentUser.uid);
+        if (userProfile) {
+          // Update user with MongoDB data
+          setUser(prev => ({
+            ...prev,
+            mongoDbProfile: userProfile,
+          }));
+        }
+      } else {
+        setUser(null);
+        setIsLoggedIn(false);
+      }
+    });
+  
+    fetchReviews();
+    return () => unsubscribe();
+  }, []);
   const updateUserPoints = async (points) => {
     if (!user) return false;
     
@@ -146,23 +199,24 @@ function Reviews({ handleLoginClick }) {
     setIsSubmitting(true);
 
     try {
+      // Use MongoDB userName if available, otherwise fallback to Firebase
       const userData = {
-        displayName: user.displayName,
+        displayName: user.mongoDbProfile?.displayName || user.displayName || user.email?.split('@')[0] || 'Anonymous',
         photoURL: user.photoURL,
         email: user.email,
       };
-
+  
       await addDoc(collection(db, "reviews"), {
         ...newReview,
         user: userData,
         timestamp: new Date(),
       });
-
+  
       // Award points to the user
       if (user) {
         await updateUserPoints(50);
       }
-
+  
       setNewReview({ rating: 0, feedback: "" });
       fetchReviews();
     } catch (error) {

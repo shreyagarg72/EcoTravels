@@ -89,6 +89,36 @@ router.get("/users/check/:firebaseUid", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+router.get('/users/:uid', async (req, res) => {
+  try {
+    const { uid } = req.params;
+    
+    if (!uid) {
+      return res.status(400).json({ error: 'Firebase UID is required' });
+    }
+    
+    const user = await User.findOne({ firebaseUid: uid });
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Return user data with specifically formatted fields to match frontend expectations
+    return res.status(200).json({
+      id: user._id,
+      email: user.email,
+      displayName: user.userName, // Map userName from MongoDB to displayName for frontend
+      firebaseUid: user.firebaseUid,
+      ecoPoints: user.ecoPoints,
+      paymentMethods: user.paymentMethods,
+      createdAt: user.createdAt
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ error: 'Server error', details: error.message });
+  }
+});
+
 
 router.post("/users", async (req, res) => {
   const { email, firebaseUid, userName, createdAt, ecoPoints } = req.body;
