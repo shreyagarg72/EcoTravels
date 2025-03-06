@@ -84,7 +84,7 @@ const Header = ({ handleLoginClick, isLoggedIn, userEmail }) => {
               EcoTravels
             </span>
             <img
-              src="/ecotravel_globe.png"
+              src="/airplane-flight.png"
               alt="EcoTravels logo"
               className="w-10 h-10 ml-2"
             />
