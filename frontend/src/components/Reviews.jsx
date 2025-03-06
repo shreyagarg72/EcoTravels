@@ -297,10 +297,6 @@ function Reviews({ handleLoginClick }) {
                   "{review.feedback}"
                 </p>
                 <div className="text-sm text-gray-500 flex items-center">
-                  <MapPin className="w-5 h-5 mr-2 text-green-600" />
-                  <span>
-                    {review.user?.email?.split("@")[0] || "Eco Traveler"}
-                  </span>
                 </div>
               </div>
             ))}
