@@ -14,7 +14,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Description Column */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-gray-800">EcoTravel</h3>
+            <h3 className="text-lg font-bold mb-4 text-gray-800">EcoTravels</h3>
             <p className="text-sm text-gray-700 pr-8">
               Your sustainable travel companion for exploring, planning, and discovering unique destinations 
               across the country. We make travel simple, exciting, and memorable.
