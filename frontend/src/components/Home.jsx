@@ -33,7 +33,7 @@ const Home = ({ showLoginModal }) => {
       
       <SearchBar showLoginModal={showLoginModal} />
       
-      <div className="flex items-center px-4 md:px-8 py-5">
+      <div className="flex items-center px-2 md:px-2 py-5">
         <PopularTrips showLoginModal={showLoginModal}/>
       </div>
       <Footer/>
