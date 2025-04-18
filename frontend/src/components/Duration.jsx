@@ -39,8 +39,8 @@ const Duration = ({ handleLoginClick }) => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -74,7 +74,6 @@ const Duration = ({ handleLoginClick }) => {
     }
   }, [selectedDates]);
 
-
   const handleDateChange = (cityName, date) => {
     setSelectedDates((prevDates) => {
       const currentCityDates = prevDates[cityName] || {};
@@ -86,28 +85,34 @@ const Duration = ({ handleLoginClick }) => {
       // Determine max days allowed based on number of selected cities
       const maxDays = selectedCitiesData.selectedCities.length > 2 ? 2 : 3;
       const maxDate = addDays(from || date, maxDays - 1);
-      
+
       if (!from || (from && to)) {
         newFrom = date;
         newTo = null;
       } else if (from && !to) {
         if (date > maxDate) {
           if (selectedCitiesData.selectedCities.length > 2) {
-            toast.warning('For trips with more than 2 locations, you can select up to 2 days.', {
-              position: "top-center",
-              autoClose: 3000,
-            });
+            toast.warning(
+              "For trips with more than 2 locations, you can select up to 2 days.",
+              {
+                position: "top-center",
+                autoClose: 3000,
+              }
+            );
           } else {
-            toast.info('For trips with 1-2 locations, you can select up to 3 days.', {
-              position: "top-center",
-              autoClose: 3000,
-            });
+            toast.info(
+              "For trips with 1-2 locations, you can select up to 3 days.",
+              {
+                position: "top-center",
+                autoClose: 3000,
+              }
+            );
           }
-          alert(`Please select a date range of up to ${maxDays} days.`);
+          //alert(`Please select a date range of up to ${maxDays} days.`);
           return prevDates;
         }
         newTo = date;
-      
+
         const range = [];
         for (let d = newFrom; d <= newTo; d = addDays(d, 1)) {
           range.push(d);
@@ -206,24 +211,24 @@ const Duration = ({ handleLoginClick }) => {
   //   }
   //   setLoading(true);
   const handleBudgetChange = (budget) => {
-    setSelectedCitiesData(prev => ({
+    setSelectedCitiesData((prev) => ({
       ...prev,
-      budget
+      budget,
     }));
   };
 
   const handleEcoFriendlyToggle = () => {
-    setSelectedCitiesData(prev => ({
+    setSelectedCitiesData((prev) => ({
       ...prev,
-      isEcoFriendly: !prev.isEcoFriendly
+      isEcoFriendly: !prev.isEcoFriendly,
     }));
   };
 
   const handleNext = async () => {
     if (!isLoggedIn) {
       // Save current URL and dates before redirecting to login
-      localStorage.setItem('returnUrl', window.location.pathname);
-      localStorage.setItem('selectedDates', JSON.stringify(selectedDates));
+      localStorage.setItem("returnUrl", window.location.pathname);
+      localStorage.setItem("selectedDates", JSON.stringify(selectedDates));
       handleLoginClick();
       return;
     }
@@ -237,117 +242,130 @@ const Duration = ({ handleLoginClick }) => {
       )
       .join(", ");
 
-
-const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location:  ${citiesDetails} for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount} people with a ${selectedCitiesData.budget} budget${selectedCitiesData.isEcoFriendly ? ' and eco-friendly options' : ''}. 
-${selectedCitiesData.isEcoFriendly ? 'Please prioritize sustainable accommodations, eco-friendly activities, and environmentally conscious transportation options. ' : ''}
+    const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location:  ${citiesDetails} for ${
+      selectedCitiesData.travelType
+    } of ${selectedCitiesData.travelCount} people with a ${
+      selectedCitiesData.budget
+    } budget${
+      selectedCitiesData.isEcoFriendly ? " and eco-friendly options" : ""
+    }. 
+${
+  selectedCitiesData.isEcoFriendly
+    ? "Please prioritize sustainable accommodations, eco-friendly activities, and environmentally conscious transportation options. "
+    : ""
+}
 Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.\nSuggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.\nFor each day in the itinerary, provide:
 - Morning activity with breakfast details
 - Midday activity with lunch details
 - Afternoon activity 
 - Evening activity with dinner details
 Provide a daily plan with the best time to visit each place in JSON format.
-Please provide the response in the following strict JSON format:\n\"travelPlans\": [\n\n\"location\": \"Goa\",\n\"duration\": \"3 Days\",\"travelerType\": \"Solo\",\"budget\": \"cheap\",\n\"hotelOptions\": [{\"hotelName\": \"\",\"hotelAddress\": \"\",\"price\": \"\",\"hotelImageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"rating\": 0,\"description\": \"\"}],\n\"itinerary\": [{\"day\": 1,\"theme\": \"Day Theme\",\n\"morning\": {\n\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"breakfast\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"afternoon\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"lunch\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"evening\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"dinner\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}}}]\ntotalCostEstimation:\"\" for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount}}]Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use \"Not available\" if information is not applicable.\n\n`
-   
+Please provide the response in the following strict JSON format:\n\"travelPlans\": [\n\n\"location\": \"Goa\",\n\"duration\": \"3 Days\",\"travelerType\": \"Solo\",\"budget\": \"cheap\",\n\"hotelOptions\": [{\"hotelName\": \"\",\"hotelAddress\": \"\",\"price\": \"\",\"hotelImageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"rating\": 0,\"description\": \"\"}],\n\"itinerary\": [{\"day\": 1,\"theme\": \"Day Theme\",\n\"morning\": {\n\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"breakfast\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"afternoon\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"lunch\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"evening\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"dinner\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}}}]\ntotalCostEstimation:\"\" for ${
+      selectedCitiesData.travelType
+    } of ${
+      selectedCitiesData.travelCount
+    }}]Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use \"Not available\" if information is not applicable.\n\n`;
 
-  //   try {
-  //     const result = await chatSession.sendMessage(FINAL_PROMPT);
-  //     const responseText = result?.response?.text();
-  //     console.log("Response:", responseText);
-  //     setLoading(false);
-  //     SaveAiTrip(responseText);
-  //     // Store the response for use in the itinerary page
-  //     localStorage.setItem("generatedItinerary", responseText);
+    //   try {
+    //     const result = await chatSession.sendMessage(FINAL_PROMPT);
+    //     const responseText = result?.response?.text();
+    //     console.log("Response:", responseText);
+    //     setLoading(false);
+    //     SaveAiTrip(responseText);
+    //     // Store the response for use in the itinerary page
+    //     localStorage.setItem("generatedItinerary", responseText);
 
-  //     // Navigate to the itinerary page
-  //     // navigate("/itinerary");
-  //   } catch (error) {
-  //     console.error("Error fetching itinerary:", error);
-  //   }
-  // };
+    //     // Navigate to the itinerary page
+    //     // navigate("/itinerary");
+    //   } catch (error) {
+    //     console.error("Error fetching itinerary:", error);
+    //   }
+    // };
 
-  // const SaveAiTrip = async (TripData) => {
-  //   try {
-  //     const auth = getAuth();
-  //     const user = auth.currentUser;
+    // const SaveAiTrip = async (TripData) => {
+    //   try {
+    //     const auth = getAuth();
+    //     const user = auth.currentUser;
 
-  //     if (!user) {
-  //       console.error("User not authenticated.");
-  //       return;
-  //     }
-  //     setLoading(true);
-  //     const userEmail = user.email;
-  //     const docId = Date.now().toString(); // Unique ID for the trip
-  //     const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
-  //     await setDoc(doc(db, "AITrips", docId), {
-  //       id: docId,
-  //       userEmail: userEmail, // Save user's email
-  //       tripData: JSON.parse(TripData),
-  //       userSelection: data, // Save the itinerary data
-  //       createdAt: new Date().toISOString(), // Timestamp for tracking
-  //     });
-  //     setLoading(false);
-  //     console.log("Trip saved successfully!");
-  //     navigate("/view-trip/" + docId);
-  //   } catch (error) {
-  //     console.error("Error saving trip:", error);
-  //   }
-  // };
-  try {
-    const result = await chatSession.sendMessage(FINAL_PROMPT);
-    const responseText = result?.response?.text();
-    setLoading(false);
-    
-    // Save the trip and get the ID
-    const tripId = await SaveAiTrip(responseText);
-    
-    // Navigate to view-trip with the new trip ID
-    navigate(`/view-trip/${tripId}`);
-  } catch (error) {
-    console.error("Error generating itinerary:", error);
-    setLoading(false);
-    toast.error("Failed to generate itinerary. Please try again.");
-  }
-};
+    //     if (!user) {
+    //       console.error("User not authenticated.");
+    //       return;
+    //     }
+    //     setLoading(true);
+    //     const userEmail = user.email;
+    //     const docId = Date.now().toString(); // Unique ID for the trip
+    //     const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
+    //     await setDoc(doc(db, "AITrips", docId), {
+    //       id: docId,
+    //       userEmail: userEmail, // Save user's email
+    //       tripData: JSON.parse(TripData),
+    //       userSelection: data, // Save the itinerary data
+    //       createdAt: new Date().toISOString(), // Timestamp for tracking
+    //     });
+    //     setLoading(false);
+    //     console.log("Trip saved successfully!");
+    //     navigate("/view-trip/" + docId);
+    //   } catch (error) {
+    //     console.error("Error saving trip:", error);
+    //   }
+    // };
+    try {
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      const responseText = result?.response?.text();
+      console.log("Response:", responseText);
+      setLoading(false);
 
-const SaveAiTrip = async (TripData) => {
-  try {
-    const auth = getAuth();
-    const user = auth.currentUser;
+      // Save the trip and get the ID
+      const tripId = await SaveAiTrip(responseText);
 
-    if (!user) {
-      console.error("User not authenticated.");
+      // Navigate to view-trip with the new trip ID
+      navigate(`/view-trip/${tripId}`);
+    } catch (error) {
+      console.error("Error generating itinerary:", error);
+      setLoading(false);
+      toast.error("Failed to generate itinerary. Please try again.");
+    }
+  };
+
+  const SaveAiTrip = async (TripData) => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error("User not authenticated.");
+        return null;
+      }
+
+      setLoading(true);
+      const userEmail = user.email;
+      const docId = Date.now().toString();
+      const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
+
+      await setDoc(doc(db, "AITrips", docId), {
+        id: docId,
+        userEmail: userEmail,
+        tripData: JSON.parse(TripData),
+        userSelection: data,
+        createdAt: new Date().toISOString(),
+      });
+
+      setLoading(false);
+      return docId; // Return the document ID
+    } catch (error) {
+      console.error("Error saving trip:", error);
       return null;
     }
+  };
 
-    setLoading(true);
-    const userEmail = user.email;
-    const docId = Date.now().toString();
-    const data = JSON.parse(localStorage.getItem("selectedCitiesData"));
-    
-    await setDoc(doc(db, "AITrips", docId), {
-      id: docId,
-      userEmail: userEmail,
-      tripData: JSON.parse(TripData),
-      userSelection: data,
-      createdAt: new Date().toISOString(),
-    });
-    
-    setLoading(false);
-    return docId; // Return the document ID
-  } catch (error) {
-    console.error("Error saving trip:", error);
-    return null;
-  }
-};
-
-// Add useEffect to restore saved dates when component mounts
-useEffect(() => {
-  const savedDates = localStorage.getItem('selectedDates');
-  if (savedDates) {
-    setSelectedDates(JSON.parse(savedDates));
-    localStorage.removeItem('selectedDates'); // Clear saved dates after restoring
-  }
-}, []);
+  // Add useEffect to restore saved dates when component mounts
+  useEffect(() => {
+    const savedDates = localStorage.getItem("selectedDates");
+    if (savedDates) {
+      setSelectedDates(JSON.parse(savedDates));
+      localStorage.removeItem("selectedDates"); // Clear saved dates after restoring
+    }
+  }, []);
 
   return (
     <div className="container mx-auto">
