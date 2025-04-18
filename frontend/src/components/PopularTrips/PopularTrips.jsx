@@ -23,7 +23,7 @@ const trips = [
     description: "A lush haven with tranquil backwaters, serene hill stations, and tea-covered mountains.",
     latitude: 24.578721,
     longitude: 73.6862571,
-    image: "https://cdn.sanity.io/images/ocl5w36p/prod2/3d010a1e5876782d43c0a1f4c79df391e977a0ee-3840x1860.jpg",
+    image: "https://media.istockphoto.com/id/514102692/photo/udaipur-city-palace-in-rajasthan-state-of-india.jpg?s=612x612&w=0&k=20&c=bYRDPOuf6nFgghl6VAnCn__22SFyu_atC_fiSCzVNtY=",
   },
   {
     cityName: "Agra",
@@ -76,23 +76,23 @@ const PopularTrips = ({ showLoginModal }) => {
 
   return (
     <div className={`container mx-auto ${showLoginModal ? "blur-sm" : ""}`}>
-       <h2 className="text-3xl font-bold mb-6">Popular Trips</h2>
-      <div className="flex flex-wrap py-4 px-4 gap-4">
-        {trips.map((trip, index) => (
-          <div 
-            key={index} 
-            onClick={() => handleCardClick(trip)}
-            className="cursor-pointer"
-          >
-            <Card 
-              image={trip.image}
-              title={trip.cityName}
-              description={trip.description}
-            />
-          </div>
-        ))}
+  <h2 className="text-3xl font-bold mb-6 px-4">Popular Trips</h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4 px-4">
+    {trips.map((trip, index) => (
+      <div
+        key={index}
+        onClick={() => handleCardClick(trip)}
+        className="cursor-pointer w-full"
+      >
+        <Card
+          image={trip.image}
+          title={trip.cityName}
+          description={trip.description}
+        />
       </div>
-    </div>
+    ))}
+  </div>
+</div>
   );
 };
 

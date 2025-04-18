@@ -90,7 +90,7 @@ const Footer = () => {
           </div>
           {/* Social Media Column */}
           <div className="flex flex-col justify-start items-end h-full">
-            <h4 className="text-base font-bold mb-4 uppercase text-gray-800">Share</h4>
+            <h4 className="text-base font-bold mb-4 uppercase text-center px-5 text-gray-800">Share</h4>
             <div className="flex space-x-4">
               {/* Instagram Filled Icon - Corrected */}
               <a href="#" className="hover:opacity-80 transition">
