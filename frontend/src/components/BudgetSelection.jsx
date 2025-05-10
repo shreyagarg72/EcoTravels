@@ -308,7 +308,8 @@ const BudgetSelection = () => {
       }
       
       // Continue to next screen regardless of points success/failure
-      navigate('/duration');
+      navigate('/travel-preference');
+      // navigate('/duration');
     }
   };
 

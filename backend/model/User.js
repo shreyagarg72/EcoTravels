@@ -5,9 +5,11 @@ const userSchema = new mongoose.Schema({
   userName: { type: String, required: true },
   firebaseUid: { type: String, required: true, unique: true }, // Ensure this field is unique
   createdAt: { type: Date, default: Date.now },
-  savedTrips: [{ 
-    type: String 
-  }],
+  savedTrips: [
+    {
+      type: String,
+    },
+  ],
   // EcoPoints system fields
   ecoPoints: {
     total: { type: Number, default: 0 },
@@ -32,6 +34,7 @@ const userSchema = new mongoose.Schema({
             "payments",
             "signup",
             "travel_preference",
+            "travel_preferences",
           ],
         },
         description: String,
