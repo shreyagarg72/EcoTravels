@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Globe, 
@@ -13,8 +13,10 @@ import {
 const TravelOptions = ({ showLoginModal }) => {
   const navigate = useNavigate();
   const [showTravellersModal, setShowTravellersModal] = useState(false);
+  const [showStudentCountModal, setShowStudentCountModal] = useState(false);
   const [selectedType, setSelectedType] = useState(null);
   const [travellersCount, setTravellersCount] = useState(1);
+  const [studentCount, setStudentCount] = useState(100); // Default to 100 for school
 
   const travelOptions = [
     {
@@ -62,8 +64,12 @@ const TravelOptions = ({ showLoginModal }) => {
       localStorage.setItem('selectedCitiesData', JSON.stringify(updatedData));
       console.log('Updated data for Solo:', updatedData);
       navigate('/budget');
+    } else if (type === 'School') {
+      // For school, show student count input modal
+      setSelectedType(type);
+      setShowStudentCountModal(true);
     } else {
-      // For other types, show travellers modal
+      // For family and friends, show travellers modal
       setSelectedType(type);
       setShowTravellersModal(true);
     }
@@ -85,6 +91,34 @@ const TravelOptions = ({ showLoginModal }) => {
     localStorage.setItem('selectedCitiesData', JSON.stringify(updatedData));
     console.log('Updated data with travellers:', updatedData);
     navigate('/budget');
+  };
+
+  const handleStudentCountConfirm = () => {
+    // Get existing selectedCitiesData from localStorage
+    const existingData = JSON.parse(localStorage.getItem('selectedCitiesData') || '{"selectedCities": []}');
+    
+    // Update the data with travel type and student count
+    const updatedData = {
+      ...existingData,
+      travelType: 'School',
+      travelCount: parseInt(studentCount, 10) || 100 // Default to 100 if invalid input
+    };
+
+    // Save updated data back to localStorage
+    localStorage.setItem('selectedCitiesData', JSON.stringify(updatedData));
+    console.log('Updated data with student count:', updatedData);
+    
+    // Close modal and navigate
+    setShowStudentCountModal(false);
+    navigate('/budget');
+  };
+
+  const handleStudentCountChange = (e) => {
+    const value = e.target.value;
+    // Only allow positive numbers
+    if (value === '' || /^\d+$/.test(value)) {
+      setStudentCount(value);
+    }
   };
 
   return (
@@ -131,6 +165,7 @@ const TravelOptions = ({ showLoginModal }) => {
         </div>
       </div>
 
+      {/* Regular Travellers Modal */}
       {showTravellersModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
@@ -140,14 +175,14 @@ const TravelOptions = ({ showLoginModal }) => {
             <div className="flex items-center justify-center space-x-6 mb-6">
               <button 
                 onClick={() => setTravellersCount(Math.max(1, travellersCount - 1))}
-                className="bg-gray-200 p-2 rounded-full"
+                className="bg-gray-200 p-2 rounded-full h-10 w-10 flex items-center justify-center text-xl font-bold"
               >
                 -
               </button>
               <span className="text-3xl font-bold">{travellersCount}</span>
               <button 
                 onClick={() => setTravellersCount(travellersCount + 1)}
-                className="bg-gray-200 p-2 rounded-full"
+                className="bg-gray-200 p-2 rounded-full h-10 w-10 flex items-center justify-center text-xl font-bold"
               >
                 +
               </button>
@@ -161,6 +196,44 @@ const TravelOptions = ({ showLoginModal }) => {
               </button>
               <button 
                 onClick={handleTravellersConfirm}
+                className="w-full bg-gradient-to-r from-yellow-500 to-orange-600 text-white py-3 rounded-lg hover:opacity-90"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Student Count Input Modal */}
+      {showStudentCountModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <h3 className="text-2xl font-bold mb-6 text-center">
+              Number of Students
+            </h3>
+            <div className="mb-6">
+              <div className="flex items-center justify-center mb-2">
+                <School className="text-yellow-600 w-8 h-8 mr-2" />
+                <span className="text-lg font-medium">Enter student count:</span>
+              </div>
+              <input
+                type="text"
+                value={studentCount}
+                onChange={handleStudentCountChange}
+                className="w-full p-4 text-center text-2xl font-bold border-2 border-yellow-300 rounded-lg focus:outline-none focus:border-yellow-500"
+                placeholder="Number of students"
+              />
+            </div>
+            <div className="flex space-x-4">
+              <button 
+                onClick={() => setShowStudentCountModal(false)}
+                className="w-full bg-gray-200 py-3 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleStudentCountConfirm}
                 className="w-full bg-gradient-to-r from-yellow-500 to-orange-600 text-white py-3 rounded-lg hover:opacity-90"
               >
                 Confirm
