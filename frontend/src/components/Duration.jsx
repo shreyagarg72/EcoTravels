@@ -310,7 +310,8 @@ Please provide the response in the following strict JSON format:
 "dinner": {"restaurantName": "","cuisine": "","priceRange": "","location": ""}}}]
 totalCostEstimation:"" for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount}}]
 
-Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use "Not available" if information is not applicable. Also make sure the activities provided are incorporated into the itinerary if possible.`;
+Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use "Not available" if information is not applicable. Also make sure the activities provided are incorporated into the itinerary if possible.
+Also make sure daywise activities are near to each other like day 1 activities are close to travel`;
     try {
       const result = await chatSession.sendMessage(FINAL_PROMPT);
       const responseText = result?.response?.text();

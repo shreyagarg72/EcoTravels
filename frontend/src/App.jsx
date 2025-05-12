@@ -59,6 +59,12 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+// import { Suspense } from "react"; // Import Suspense for i18next
+
+// // Import i18n instance
+// import "./i18n"; // Import the i18n config file we created
+
 import Header from "./components/Header";
 import Home from "./components/Home";
 import TravelOptions from "./components/TravelOptions";
@@ -73,6 +79,15 @@ import BudgetSelection from "./components/BudgetSelection.jsx";
 import Rewards from "./components/Rewards.jsx";
 import PricingPlans from "./components/Pricing/PricingPlans.jsx";
 import TravelPreferences from "./components/TravelPreferences.jsx";
+
+// // Loading component to display while language resources are loading
+// const LoadingFallback = () => (
+//   <div className="h-screen flex items-center justify-center">
+//     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+//     <p className="ml-3 text-lg text-gray-700">Loading...</p>
+//   </div>
+// );
+
 function App() {
   const [showModal, setShowModal] = useState(false); // State for showing modal
   const [user, setUser] = useState(null);
