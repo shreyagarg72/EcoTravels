@@ -672,7 +672,7 @@ const FlightDetails = () => {
   const [airports, setAirports] = useState({});
   
   // AeroDataBox API credentials
-  const RAPID_API_KEY = "d30cb59e3amsh3b90c450af3cdf7p1de5e3jsn27da58a468c9";
+  const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
   const RAPID_API_HOST = "aerodatabox.p.rapidapi.com";
 
   const location = useLocation();
