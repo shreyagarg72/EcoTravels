@@ -79,6 +79,7 @@ import BudgetSelection from "./components/BudgetSelection.jsx";
 import Rewards from "./components/Rewards.jsx";
 import PricingPlans from "./components/Pricing/PricingPlans.jsx";
 import TravelPreferences from "./components/TravelPreferences.jsx";
+import FlightDetails from "./components/FlightDetails.jsx";
 
 // // Loading component to display while language resources are loading
 // const LoadingFallback = () => (
@@ -142,6 +143,8 @@ function App() {
           <Route path="/budget" element={<BudgetSelection />} />
           <Route path="/travel-preference" element={<TravelPreferences />} />
           <Route path="/pricing" element={<PricingPlans />} />
+          <Route path="/flight-details" element={<FlightDetails />} />
+
           <Route path="/rewards" element={<Rewards />} />
         </Routes>
         <ToastContainer />
