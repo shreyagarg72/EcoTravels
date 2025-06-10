@@ -1,6 +1,3 @@
-
-
-
 // import React, { useState, useEffect } from "react";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faPlus, faMapMarkerAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -123,9 +120,9 @@
 //         city => city.cityName !== cityToRemove
 //       )
 //     };
-  
+
 //     setSelectedCitiesData(updatedCitiesData);
-    
+
 //     // Remove the input field for the deleted city and ensure at least one empty field
 //     setInputFields(prevFields => {
 //       const remainingFields = prevFields.filter(field => field.value !== cityToRemove);
@@ -135,7 +132,7 @@
 //       }
 //       return remainingFields;
 //     });
-  
+
 //     // Update localStorage with the updated cities data
 //     localStorage.setItem("selectedCitiesData", JSON.stringify(updatedCitiesData));
 //   };
@@ -167,7 +164,7 @@
 // {field.value && selectedCitiesData.selectedCities.some(
 //               city => city.cityName === field.value
 //             ) && (
-//               <div 
+//               <div
 //                 className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer hover:scale-110 transition-transform duration-200 text-red-500"
 //                 onClick={() => handleCityRemove(field.value)}
 //               >
@@ -176,7 +173,7 @@
 //             )}
 //             {/* Plus icon */}
 //             {field.value && (
-//               <div 
+//               <div
 //                 className="absolute left-4 top-1/2 transform -translate-y-1/2 cursor-pointer hover:scale-110 transition-transform duration-200"
 //                 onClick={handlePlusClick}
 //               >
@@ -217,8 +214,8 @@
 
 //         {selectedCitiesData.selectedCities.length > 0 && (
 //           <>
-//             <button 
-//               onClick={handleSearchClick} 
+//             <button
+//               onClick={handleSearchClick}
 //               className="mt-4 bg-green-700 text-white py-2 px-4 rounded-full text-sm md:text-base w-full md:w-auto"
 //             >
 //               Search
@@ -352,10 +349,10 @@
 //   const handleSearchClick = async () => {
 //     if (selectedCitiesData.selectedCities.length > 0) {
 //       localStorage.setItem("selectedCitiesData", JSON.stringify(selectedCitiesData));
-      
+
 //       // Add 5 points to the user's account for clicking search if logged in
 //       const currentUser = auth.currentUser;
-      
+
 //       if (currentUser) {
 //         try {
 //           // Add points using the API endpoint for adding EcoPoints
@@ -370,12 +367,12 @@
 //               description: "Reward for performing a city search"
 //             }),
 //           });
-          
+
 //           if (response.ok) {
 //             const data = await response.json();
 //             toast.success("🪙 +5 reward points earned!", {
 //               position: "top-center",
-//               autoClose: 3000, 
+//               autoClose: 3000,
 //               hideProgressBar: false,
 //               closeOnClick: true,
 //               pauseOnHover: true,
@@ -393,7 +390,7 @@
 //       } else {
 //         console.log("User not logged in, points not added");
 //       }
-      
+
 //       // Navigate to travel options page
 //       navigate("/travel-options", { state: { selectedCitiesData } });
 //     }
@@ -405,9 +402,9 @@
 //         city => city.cityName !== cityToRemove
 //       )
 //     };
-  
+
 //     setSelectedCitiesData(updatedCitiesData);
-    
+
 //     // Remove the input field for the deleted city and ensure at least one empty field
 //     setInputFields(prevFields => {
 //       const remainingFields = prevFields.filter(field => field.value !== cityToRemove);
@@ -417,7 +414,7 @@
 //       }
 //       return remainingFields;
 //     });
-  
+
 //     // Update localStorage with the updated cities data
 //     localStorage.setItem("selectedCitiesData", JSON.stringify(updatedCitiesData));
 //   };
@@ -449,7 +446,7 @@
 // {field.value && selectedCitiesData.selectedCities.some(
 //               city => city.cityName === field.value
 //             ) && (
-//               <div 
+//               <div
 //                 className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer hover:scale-110 transition-transform duration-200 text-red-500"
 //                 onClick={() => handleCityRemove(field.value)}
 //               >
@@ -458,7 +455,7 @@
 //             )}
 //             {/* Plus icon */}
 //             {field.value && (
-//               <div 
+//               <div
 //                 className="absolute left-4 top-1/2 transform -translate-y-1/2 cursor-pointer hover:scale-110 transition-transform duration-200"
 //                 onClick={handlePlusClick}
 //               >
@@ -499,8 +496,8 @@
 
 //         {selectedCitiesData.selectedCities.length > 0 && (
 //           <>
-//             <button 
-//               onClick={handleSearchClick} 
+//             <button
+//               onClick={handleSearchClick}
 //               className="mt-4 bg-green-700 text-white py-2 px-4 rounded-full text-sm md:text-base w-full md:w-auto"
 //             >
 //               Search
@@ -519,9 +516,13 @@
 // export default SearchBar;
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faMapMarkerAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faMapMarkerAlt,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { Trash } from 'lucide-react';
+import { Trash } from "lucide-react";
 import { auth } from "../../firebaseConfig";
 import { toast } from "react-toastify";
 
@@ -531,7 +532,7 @@ const SearchBar = ({ showLoginModal }) => {
     { id: Date.now(), value: "", showDropdown: false },
   ]);
   const [selectedCitiesData, setSelectedCitiesData] = useState({
-    selectedCities: []
+    selectedCities: [],
   });
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -609,16 +610,21 @@ const SearchBar = ({ showLoginModal }) => {
     const cityCoordinates = await fetchCoordinates(cityName);
     if (cityCoordinates) {
       const updatedCitiesData = {
-        selectedCities: [...selectedCitiesData.selectedCities, cityCoordinates]
+        selectedCities: [...selectedCitiesData.selectedCities, cityCoordinates],
       };
       setSelectedCitiesData(updatedCitiesData);
       setInputFields(
         inputFields.map((field) =>
-          field.id === id ? { ...field, value: cityName, showDropdown: false } : field
+          field.id === id
+            ? { ...field, value: cityName, showDropdown: false }
+            : field
         )
       );
 
-      localStorage.setItem("selectedCitiesData", JSON.stringify(updatedCitiesData));
+      localStorage.setItem(
+        "selectedCitiesData",
+        JSON.stringify(updatedCitiesData)
+      );
       console.log("Selected Cities Data:", updatedCitiesData);
     }
   };
@@ -631,38 +637,110 @@ const SearchBar = ({ showLoginModal }) => {
   };
 
   // Updated handleSearchClick to prevent multiple clicks and rewards
+  // const handleSearchClick = async () => {
+  //   // Prevent multiple clicks by checking if search is already in progress
+  //   if (isSearching || selectedCitiesData.selectedCities.length === 0) return;
+
+  //     setIsSearching(true); // Set searching state to true to prevent additional clicks
+
+  //     localStorage.setItem("selectedCitiesData", JSON.stringify(selectedCitiesData));
+
+  //     // Add 5 points to the user's account for clicking search if logged in
+  //     const currentUser = auth.currentUser;
+
+  //     if (currentUser) {
+  //       try {
+  //         // Add points using the API endpoint for adding EcoPoints
+  //         const response = await fetch(`https://ecotravels.onrender.com/api/users/${currentUser.uid}/addpoints`, {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             points: 5,
+  //             activityType: "search",
+  //             description: "Reward for performing a city search"
+  //           }),
+  //         });
+
+  //         if (response.ok) {
+  //           const data = await response.json();
+  //           toast.success("🪙 +5 reward points earned!", {
+  //             position: "top-center",
+  //             autoClose: 3000,
+  //             hideProgressBar: false,
+  //             closeOnClick: true,
+  //             pauseOnHover: true,
+  //             draggable: true,
+  //             progress: undefined,
+  //             theme: "light",
+  //           });
+  //           console.log("Points added successfully:", data);
+  //         } else {
+  //           console.error("Failed to add points");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error adding EcoPoints:", error);
+  //       }
+  //     } else {
+  //       console.log("User not logged in, points not added");
+  //     }
+
+  //     // Navigate to travel options page
+  //     navigate("/travel-options", { state: { selectedCitiesData } });
+  //     setIsSearching(false);
+  //   } catch (error) {
+  //     console.error("Error during search:", error);
+  //     setIsSearching(false); // Reset searching state if there's an error
+  //   }
+  // };
   const handleSearchClick = async () => {
-    // Prevent multiple clicks by checking if search is already in progress
     if (isSearching || selectedCitiesData.selectedCities.length === 0) return;
-    
+
+    setIsSearching(true);
+    localStorage.setItem(
+      "selectedCitiesData",
+      JSON.stringify(selectedCitiesData)
+    );
+
+    // Handle points in background, don't wait for it
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      // Don't await this - let it run in background
+      addPointsInBackground(currentUser.uid);
+    }
+
+    // Navigate immediately
+    navigate("/travel-options", { state: { selectedCitiesData } });
+    setIsSearching(false);
+  };
+
+  // Add this helper function
+  const addPointsInBackground = async (uid) => {
     try {
-      setIsSearching(true); // Set searching state to true to prevent additional clicks
-      
-      localStorage.setItem("selectedCitiesData", JSON.stringify(selectedCitiesData));
-      
-      // Add 5 points to the user's account for clicking search if logged in
-      const currentUser = auth.currentUser;
-      
-      if (currentUser) {
-        try {
-          // Add points using the API endpoint for adding EcoPoints
-          const response = await fetch(`https://ecotravels.onrender.com/api/users/${currentUser.uid}/addpoints`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              points: 5,
-              activityType: "search",
-              description: "Reward for performing a city search"
-            }),
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            toast.success("🪙 +5 reward points earned!", {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+      const response = await fetch(
+        `https://ecotravels.onrender.com/api/users/${uid}/addpoints`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            points: 5,
+            activityType: "search",
+            description: "Reward for performing a city search",
+          }),
+          signal: controller.signal,
+        }
+      );
+
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        toast.success("🪙 +5 reward points earned!", {
               position: "top-center",
-              autoClose: 3000, 
+              autoClose: 3000,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
@@ -670,50 +748,46 @@ const SearchBar = ({ showLoginModal }) => {
               progress: undefined,
               theme: "light",
             });
-            console.log("Points added successfully:", data);
-          } else {
-            console.error("Failed to add points");
-          }
-        } catch (error) {
-          console.error("Error adding EcoPoints:", error);
-        }
-      } else {
-        console.log("User not logged in, points not added");
       }
-      
-      // Navigate to travel options page
-      navigate("/travel-options", { state: { selectedCitiesData } });
     } catch (error) {
-      console.error("Error during search:", error);
-      setIsSearching(false); // Reset searching state if there's an error
+      console.log("Points API failed, but continuing:", error.message);
     }
   };
 
   const handleCityRemove = (cityToRemove) => {
     const updatedCitiesData = {
       selectedCities: selectedCitiesData.selectedCities.filter(
-        city => city.cityName !== cityToRemove
-      )
+        (city) => city.cityName !== cityToRemove
+      ),
     };
-  
+
     setSelectedCitiesData(updatedCitiesData);
-    
+
     // Remove the input field for the deleted city and ensure at least one empty field
-    setInputFields(prevFields => {
-      const remainingFields = prevFields.filter(field => field.value !== cityToRemove);
+    setInputFields((prevFields) => {
+      const remainingFields = prevFields.filter(
+        (field) => field.value !== cityToRemove
+      );
       // If no fields remain, add an empty one
       if (remainingFields.length === 0) {
         return [{ id: Date.now(), value: "", showDropdown: false }];
       }
       return remainingFields;
     });
-  
+
     // Update localStorage with the updated cities data
-    localStorage.setItem("selectedCitiesData", JSON.stringify(updatedCitiesData));
+    localStorage.setItem(
+      "selectedCitiesData",
+      JSON.stringify(updatedCitiesData)
+    );
   };
 
   return (
-    <div className={`mt-5 mb-5 flex flex-col items-center px-4 ${showLoginModal ? 'blur-sm' : ''}`}>
+    <div
+      className={`mt-5 mb-5 flex flex-col items-center px-4 ${
+        showLoginModal ? "blur-sm" : ""
+      }`}
+    >
       <div className="relative w-full md:w-1/3 flex flex-col items-center">
         {inputFields.map((field, index) => (
           <div key={field.id} className="relative w-full mb-4">
@@ -737,19 +811,20 @@ const SearchBar = ({ showLoginModal }) => {
               </div>
             )}
             {/* Delete icon for selected cities */}
-            {field.value && selectedCitiesData.selectedCities.some(
-              city => city.cityName === field.value
-            ) && (
-              <div 
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer hover:scale-110 transition-transform duration-200 text-red-500"
-                onClick={() => handleCityRemove(field.value)}
-              >
-               <Trash/>
-              </div>
-            )}
+            {field.value &&
+              selectedCitiesData.selectedCities.some(
+                (city) => city.cityName === field.value
+              ) && (
+                <div
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer hover:scale-110 transition-transform duration-200 text-red-500"
+                  onClick={() => handleCityRemove(field.value)}
+                >
+                  <Trash />
+                </div>
+              )}
             {/* Plus icon */}
             {field.value && (
-              <div 
+              <div
                 className="absolute left-4 top-1/2 transform -translate-y-1/2 cursor-pointer hover:scale-110 transition-transform duration-200"
                 onClick={handlePlusClick}
               >
@@ -770,8 +845,12 @@ const SearchBar = ({ showLoginModal }) => {
                     .filter(
                       (city) =>
                         city.name &&
-                        city.name.toLowerCase().includes(field.value.toLowerCase()) &&
-                        !selectedCitiesData.selectedCities.some((selectedCity) => selectedCity.cityName === city.name)
+                        city.name
+                          .toLowerCase()
+                          .includes(field.value.toLowerCase()) &&
+                        !selectedCitiesData.selectedCities.some(
+                          (selectedCity) => selectedCity.cityName === city.name
+                        )
                     )
                     .map((city) => (
                       <div
@@ -790,12 +869,14 @@ const SearchBar = ({ showLoginModal }) => {
 
         {selectedCitiesData.selectedCities.length > 0 && (
           <>
-            <button 
+            <button
               onClick={handleSearchClick}
               disabled={isSearching}
-              className={`mt-4 bg-green-700 text-white py-2 px-4 rounded-full text-sm md:text-base w-full md:w-auto ${isSearching ? 'opacity-75 cursor-not-allowed' : ''}`}
+              className={`mt-4 bg-green-700 text-white py-2 px-4 rounded-full text-sm md:text-base w-full md:w-auto ${
+                isSearching ? "opacity-75 cursor-not-allowed" : ""
+              }`}
             >
-              {isSearching ? 'Searching...' : 'Search'}
+              {isSearching ? "Searching..." : "Search"}
             </button>
 
             <div className="mt-4 text-center text-sm md:text-base">
