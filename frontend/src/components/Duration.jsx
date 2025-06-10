@@ -234,84 +234,202 @@ const Duration = ({ handleLoginClick }) => {
     }
 
     setLoading(true);
-    // Generate travel plan prompt
-//     const citiesDetails = selectedCitiesData.selectedCities
-//       .map(
-//         (city) =>
-//           `{${city.cityName}, for ${city.duration} Days, latitude of ${city.latitude}, longitude of ${city.longitude}}`
-//       )
-//       .join(", ");
 
-//     const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location:  ${citiesDetails} for ${
-//       selectedCitiesData.travelType
-//     } of ${selectedCitiesData.travelCount} people with a ${
-//       selectedCitiesData.budget
-//     } budget${
-//       selectedCitiesData.isEcoFriendly ? " and eco-friendly options" : ""
-//     }. 
-// ${
-//   selectedCitiesData.isEcoFriendly
-//     ? "Please prioritize sustainable accommodations, eco-friendly activities, and environmentally conscious transportation options. "
-//     : ""
-// }
-// Give me a list of hotel options with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.\nSuggest an itinerary including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.\nFor each day in the itinerary, provide:
-// - Morning activity with breakfast details
-// - Midday activity with lunch details
-// - Afternoon activity 
-// - Evening activity with dinner details
+
+// const citiesDetails = selectedCitiesData.selectedCities
+// .map(
+//   (city) =>
+//     `{${city.cityName}, for ${city.duration} Days, latitude of ${city.latitude}, longitude of ${city.longitude}}`
+// )
+// .join(", ");
+
+// // Format activities array as a string for JSON inclusion
+// const activitiesString = JSON.stringify(selectedCitiesData.activities);
+
+// const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${
+// selectedCitiesData.travelType
+// } of ${selectedCitiesData.travelCount} people with a ${
+// selectedCitiesData.budget
+// } budget${
+// selectedCitiesData.isEcoFriendly ? " and eco-friendly options" : ""
+// }. ${
+// selectedCitiesData.isEcoFriendly
+//   ? "Please prioritize sustainable accommodations, eco-friendly activities, and environmentally conscious transportation options. "
+//   : ""
+// } Give me a list of hotel options based on ${selectedCitiesData.locationPreference} with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
+// Suggest an itinerary based on ${selectedCitiesData.pacePreference} including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.
+// For each day in the itinerary, provide: - Morning activity with breakfast details - Midday activity with lunch details - Afternoon activity - Evening activity with dinner details
 // Provide a daily plan with the best time to visit each place in JSON format.
-// Please provide the response in the following strict JSON format:\n\"travelPlans\": [\n\n\"location\": \"Goa\",\n\"duration\": \"3 Days\",\"travelerType\": \"Solo\",\"budget\": \"cheap\",\n\"hotelOptions\": [{\"hotelName\": \"\",\"hotelAddress\": \"\",\"price\": \"\",\"hotelImageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"rating\": 0,\"description\": \"\"}],\n\"itinerary\": [{\"day\": 1,\"theme\": \"Day Theme\",\n\"morning\": {\n\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"breakfast\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"afternoon\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"lunch\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}},\n\"evening\": {\"activity\": {\"placeName\": \"\",\"placeDetails\": \"\",\"imageUrl\": \"\",\"coordinates\": {\"latitude\": 0,\"longitude\": 0},\"ticketPrice\": \"\",\"rating\": 0,\"bestTimeToVisit\": \"\",\"travelTime\": \"\"},\n\"dinner\": {\"restaurantName\": \"\",\"cuisine\": \"\",\"priceRange\": \"\",\"location\": \"\"}}}]\ntotalCostEstimation:\"\" for ${
-//       selectedCitiesData.travelType
-//     } of ${
-//       selectedCitiesData.travelCount
-//     }}]Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use \"Not available\" if information is not applicable.\n\n`;
+
+// Please provide the response in the following strict JSON format:
+// "travelPlans": [
+
+// "location": "Goa",
+// "duration": "3 Days","travelerType": "Solo","budget": "cheap",
+// "activities": ${activitiesString},
+// "locationPreference": "${selectedCitiesData.locationPreference}",
+// "pacePreference": "${selectedCitiesData.pacePreference}",
+// "hotelOptions": [{"hotelName": "","hotelAddress": "","price": "","hotelImageUrl": "","coordinates": {"latitude": 0,"longitude": 0},"rating": 0,"description": ""}],
+// "itinerary": [{"day": 1,"theme": "Day Theme",
+// "morning": {
+// "activity": {"placeName": "","placeDetails": "","imageUrl": "","coordinates": {"latitude": 0,"longitude": 0},"ticketPrice": "","rating": 0,"bestTimeToVisit": "","travelTime": ""},
+// "breakfast": {"restaurantName": "","cuisine": "","priceRange": "","location": ""}},
+// "afternoon": {"activity": {"placeName": "","placeDetails": "","imageUrl": "","coordinates": {"latitude": 0,"longitude": 0},"ticketPrice": "","rating": 0,"bestTimeToVisit": "","travelTime": ""},
+// "lunch": {"restaurantName": "","cuisine": "","priceRange": "","location": ""}},
+// "evening": {"activity": {"placeName": "","placeDetails": "","imageUrl": "","coordinates": {"latitude": 0,"longitude": 0},"ticketPrice": "","rating": 0,"bestTimeToVisit": "","travelTime": ""},
+// "dinner": {"restaurantName": "","cuisine": "","priceRange": "","location": ""}}}]
+// totalCostEstimation:"" for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount}}]
+
+// Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use "Not available" if information is not applicable. Also make sure the activities provided are incorporated into the itinerary if possible.
+// Also make sure daywise activities are near to each other like day 1 activities are close to travel`;
 
 const citiesDetails = selectedCitiesData.selectedCities
-.map(
-  (city) =>
-    `{${city.cityName}, for ${city.duration} Days, latitude of ${city.latitude}, longitude of ${city.longitude}}`
-)
-.join(", ");
+  .map(
+    (city) =>
+      `{${city.cityName}, for ${city.duration} Days, latitude of ${city.latitude}, longitude of ${city.longitude}}`
+  )
+  .join(", ");
 
 // Format activities array as a string for JSON inclusion
 const activitiesString = JSON.stringify(selectedCitiesData.activities);
 
+// Format cuisine preferences as a string
+const cuisinePreferencesString = selectedCitiesData.cuisinePreferences && selectedCitiesData.cuisinePreferences.length > 0 
+  ? JSON.stringify(selectedCitiesData.cuisinePreferences)
+  : JSON.stringify(["Local cuisine"]);
+
 const FINAL_PROMPT = `Generate Travel Plan for multiple locations based on length of cities - for each Location: ${citiesDetails} for ${
-selectedCitiesData.travelType
+  selectedCitiesData.travelType
 } of ${selectedCitiesData.travelCount} people with a ${
-selectedCitiesData.budget
+  selectedCitiesData.budget
 } budget${
-selectedCitiesData.isEcoFriendly ? " and eco-friendly options" : ""
+  selectedCitiesData.isEcoFriendly ? " and eco-friendly options" : ""
 }. ${
-selectedCitiesData.isEcoFriendly
-  ? "Please prioritize sustainable accommodations, eco-friendly activities, and environmentally conscious transportation options. "
-  : ""
-} Give me a list of hotel options based on ${selectedCitiesData.locationPreference} with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description.
-Suggest an itinerary based on ${selectedCitiesData.pacePreference} including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration.
-For each day in the itinerary, provide: - Morning activity with breakfast details - Midday activity with lunch details - Afternoon activity - Evening activity with dinner details
+  selectedCitiesData.isEcoFriendly
+    ? "Please prioritize sustainable accommodations, eco-friendly activities, and environmentally conscious transportation options. "
+    : ""
+} 
+
+CUISINE PREFERENCES: Please prioritize restaurants and food recommendations that serve these cuisines when available in each city: ${cuisinePreferencesString}. If these specific cuisines are not available in a particular city, suggest the best local cuisine alternatives.
+
+Give me a list of hotel options based on ${selectedCitiesData.locationPreference} with Hotel Name, Hotel Address, Price, Hotel Image URL, Geo Coordinates, Rating, and Description. 
+
+Suggest an itinerary based on ${selectedCitiesData.pacePreference} including Place Name, Place Details, Place Image URL, Geo Coordinates, Ticket Pricing, Rating, Travel Time, and include daily food recommendations for meals (breakfast, lunch, dinner) for each location per city duration. 
+
+For each day in the itinerary, provide:
+- Morning activity with breakfast details (prioritize preferred cuisines: ${cuisinePreferencesString})
+- Midday activity with lunch details (prioritize preferred cuisines: ${cuisinePreferencesString})
+- Afternoon activity
+- Evening activity with dinner details (prioritize preferred cuisines: ${cuisinePreferencesString})
+
+IMPORTANT: Ensure daywise activities are geographically close to each other (e.g., day 1 activities should be in the same area/district to minimize travel time). Group nearby attractions together for each day.
+
 Provide a daily plan with the best time to visit each place in JSON format.
 
 Please provide the response in the following strict JSON format:
-"travelPlans": [
+{
+  "travelPlans": [
+    {
+      "location": "Goa",
+      "duration": "3 Days",
+      "travelerType": "Solo",
+      "budget": "cheap",
+      "activities": ${activitiesString},
+      "cuisinePreferences": ${cuisinePreferencesString},
+      "locationPreference": "${selectedCitiesData.locationPreference}",
+      "pacePreference": "${selectedCitiesData.pacePreference}",
+      "hotelOptions": [
+        {
+          "hotelName": "",
+          "hotelAddress": "",
+          "price": "",
+          "hotelImageUrl": "",
+          "coordinates": {
+            "latitude": 0,
+            "longitude": 0
+          },
+          "rating": 0,
+          "description": ""
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "theme": "Day Theme",
+          "morning": {
+            "activity": {
+              "placeName": "",
+              "placeDetails": "",
+              "imageUrl": "",
+              "coordinates": {
+                "latitude": 0,
+                "longitude": 0
+              },
+              "ticketPrice": "",
+              "rating": 0,
+              "bestTimeToVisit": "",
+              "travelTime": ""
+            },
+            "breakfast": {
+              "restaurantName": "",
+              "cuisine": "",
+              "priceRange": "",
+              "location": "",
+              "matchesPreference": true
+            }
+          },
+          "afternoon": {
+            "activity": {
+              "placeName": "",
+              "placeDetails": "",
+              "imageUrl": "",
+              "coordinates": {
+                "latitude": 0,
+                "longitude": 0
+              },
+              "ticketPrice": "",
+              "rating": 0,
+              "bestTimeToVisit": "",
+              "travelTime": ""
+            },
+            "lunch": {
+              "restaurantName": "",
+              "cuisine": "",
+              "priceRange": "",
+              "location": "",
+              "matchesPreference": true
+            }
+          },
+          "evening": {
+            "activity": {
+              "placeName": "",
+              "placeDetails": "",
+              "imageUrl": "",
+              "coordinates": {
+                "latitude": 0,
+                "longitude": 0
+              },
+              "ticketPrice": "",
+              "rating": 0,
+              "bestTimeToVisit": "",
+              "travelTime": ""
+            },
+            "dinner": {
+              "restaurantName": "",
+              "cuisine": "",
+              "priceRange": "",
+              "location": "",
+              "matchesPreference": true
+            }
+          }
+        }
+      ],
+      "totalCostEstimation": ""
+    }
+  ]
+}
 
-"location": "Goa",
-"duration": "3 Days","travelerType": "Solo","budget": "cheap",
-"activities": ${activitiesString},
-"locationPreference": "${selectedCitiesData.locationPreference}",
-"pacePreference": "${selectedCitiesData.pacePreference}",
-"hotelOptions": [{"hotelName": "","hotelAddress": "","price": "","hotelImageUrl": "","coordinates": {"latitude": 0,"longitude": 0},"rating": 0,"description": ""}],
-"itinerary": [{"day": 1,"theme": "Day Theme",
-"morning": {
-"activity": {"placeName": "","placeDetails": "","imageUrl": "","coordinates": {"latitude": 0,"longitude": 0},"ticketPrice": "","rating": 0,"bestTimeToVisit": "","travelTime": ""},
-"breakfast": {"restaurantName": "","cuisine": "","priceRange": "","location": ""}},
-"afternoon": {"activity": {"placeName": "","placeDetails": "","imageUrl": "","coordinates": {"latitude": 0,"longitude": 0},"ticketPrice": "","rating": 0,"bestTimeToVisit": "","travelTime": ""},
-"lunch": {"restaurantName": "","cuisine": "","priceRange": "","location": ""}},
-"evening": {"activity": {"placeName": "","placeDetails": "","imageUrl": "","coordinates": {"latitude": 0,"longitude": 0},"ticketPrice": "","rating": 0,"bestTimeToVisit": "","travelTime": ""},
-"dinner": {"restaurantName": "","cuisine": "","priceRange": "","location": ""}}}]
-totalCostEstimation:"" for ${selectedCitiesData.travelType} of ${selectedCitiesData.travelCount}}]
-
-Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use "Not available" if information is not applicable. Also make sure the activities provided are incorporated into the itinerary if possible.
-Also make sure daywise activities are near to each other like day 1 activities are close to travel`;
+Please ensure each field follows this exact structure and naming convention. Fields should not be empty - use "Not available" if information is not applicable. Also make sure the activities provided are incorporated into the itinerary if possible. Prioritize cuisine preferences from ${cuisinePreferencesString} when suggesting restaurants, and indicate with "matchesPreference": true/false whether each restaurant matches the user's cuisine preferences.`;
     try {
       const result = await chatSession.sendMessage(FINAL_PROMPT);
       const responseText = result?.response?.text();
